@@ -17,13 +17,18 @@ NAME			=	arcade
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 
-all: graphicals $(NAME)
+MAKE_GAMES	=	make -C./games
+
+all: graphicals games $(NAME)
 
 $(NAME):
 	$(CC) $(CFLAGS) -o $(NAME) $(SRC)
 
 graphicals:
 	$(MAKE_SFMLAPI)
+
+games:
+	$(MAKE_GAMES)
 
 clean:
 	$(MAKE_SFMLAPI) clean

@@ -15,12 +15,10 @@ extern "C"
 {
     void play()
     {
-
+       IGraphAPI *graphApi =  getGraphAPI();
+       graphApi->initDisplay("It's work !");
+       while (graphApi->isActive()) {
+           graphApi->display();
+       }
     }
-}
-
-int main()
-{
-    play();
-    return 0;
 }
