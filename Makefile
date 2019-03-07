@@ -5,25 +5,32 @@
 ## Build Makefile.
 ##
 
-CC		=	g++
+CC				=	g++
 
-CFLAGS	=	-Wall -Wextra -shared -fPIC
+CXXFLAGS		=	-std=c++11 -Wall -Wextra -shared -fPIC
 
-SRC		=	core/main.cpp
+SRC				=	core/main.cpp
 
-OBJ		=	$(SRC:.cpp=.o)
+OBJ				=	$(SRC:.cpp=.o)
 
-NAME	=	arcade
+NAME			=	arcade
 
-all: $(NAME)
+MAKE_SFMLAPI	=	make -C./lib/SFML
+
+all: graphicals $(NAME)
 
 $(NAME):
 	$(CC) $(CFLAGS) -o $(NAME) $(SRC)
 
+graphicals:
+	$(MAKE_SFMLAPI)
+
 clean:
+	$(MAKE_SFMLAPI) clean
 	rm -f $(OBJ)
 
 fclean: clean
+	$(MAKE_SFMLAPI) fclean
 	rm -f $(NAME)
 
 re: fclean all

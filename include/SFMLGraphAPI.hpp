@@ -11,6 +11,7 @@
 
 class SFMLGraphAPI : public IGraphAPI {
 
+	public:
 	SFMLGraphAPI() = default;
 	~SFMLGraphAPI() = default;
 

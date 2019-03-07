@@ -7,8 +7,15 @@
 
 #include "../../include/SFMLGraphAPI.hpp"
 
+extern "C" {
+	IGraphAPI *getGraphAPI() {
+		return (new SFMLGraphAPI());
+	}
+}
+
 void SFMLGraphAPI::initDisplay()
 {
+
 }
 
 void SFMLGraphAPI::addText()
