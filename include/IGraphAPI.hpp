@@ -10,8 +10,11 @@
 class IGraphAPI {
 
 	virtual void initDisplay(const std::string &) = 0;
-	virtual void addText() = 0;
+	virtual void display() = 0;
 	virtual void abortDisplay() = 0;
+
+	virtual void setTitle(const std::string &) = 0;
+	virtual bool isActive() = 0;
 
 };
 

@@ -17,11 +17,15 @@ class SFMLGraphAPI : public IGraphAPI {
 	~SFMLGraphAPI() = default;
 
 	void initDisplay(const std::string &) override;
-	void addText() override;
+	void display() override;
 	void abortDisplay() override;
+
+	void setTitle(const std::string &) override;
+	bool isActive() override;
 
 	private:
 	sf::RenderWindow *_win;
+	bool _active;
 
 };
 
