@@ -5,3 +5,4 @@ a.out
 .DS_Store
 arcade
 lib_arcade_sfml.so
+lib_arcade_test.so

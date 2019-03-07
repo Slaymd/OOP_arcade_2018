@@ -9,18 +9,16 @@ CXX		=	g++
 
 CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC
 
-SFML	=	-lsfml-graphics -lsfml-system -lsfml-audio -lsfml-window
-
-SRC		=	SFMLGraphAPI.cpp
+SRC		=	test.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
-NAME	=	lib_arcade_sfml.so
+NAME	=	lib_arcade_test.so
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(SFML) -o $(NAME) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
 	mv $(NAME) ..
 
 clean:

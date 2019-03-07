@@ -7,8 +7,11 @@
 #ifndef ARCADE_IGRAPHAPI_HPP
 #define ARCADE_IGRAPHAPI_HPP
 
-class IGraphAPI {
+#include <string>
 
+class IGraphAPI
+{
+	public:
 	virtual void initDisplay(const std::string &) = 0;
 	virtual void display() = 0;
 	virtual void abortDisplay() = 0;
