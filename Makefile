@@ -5,9 +5,9 @@
 ## Build Makefile.
 ##
 
-CC				=	g++
+CXX				=	g++
 
-CXXFLAGS		=	-std=c++11 -Wall -Wextra -shared -fPIC
+CXXFLAGS		=	-std=c++11 -Wall -Wextra -W -ldl
 
 SRC				=	core/main.cpp
 
@@ -17,10 +17,10 @@ NAME			=	arcade
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 
-all: graphicals $(NAME)
+all: core graphicals
 
-$(NAME):
-	$(CC) $(CFLAGS) -o $(NAME) $(SRC)
+core:
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(SRC)
 
 graphicals:
 	$(MAKE_SFMLAPI)

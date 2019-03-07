@@ -27,7 +27,7 @@ void SFMLGraphAPI::display()
 	while (_win->pollEvent(event))
 		if (event.type == sf::Event::Closed)
 			abortDisplay();
-	_win->clear(sf::Color::Black);
+	_win->clear(sf::Color::Red);
 	//TODO: display elements
 	_win->display();
 }
@@ -44,7 +44,7 @@ bool SFMLGraphAPI::isActive()
 	return _active;
 }
 
-void SFMLGraphAPI::setTitle(const std::string &)
+void SFMLGraphAPI::setTitle(const std::string &title)
 {
-
+	_win->setTitle(title);
 }
