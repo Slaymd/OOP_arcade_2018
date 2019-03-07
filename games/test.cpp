@@ -13,12 +13,11 @@
 
 extern "C"
 {
-    void play()
+    void play(IGraphAPI *graphAPI)
     {
-       IGraphAPI *graphApi =  getGraphAPI();
-       graphApi->initDisplay("It's work !");
-       while (graphApi->isActive()) {
-           graphApi->display();
+       graphAPI->initDisplay("It's work !");
+       while (graphAPI->isActive()) {
+           graphAPI->display();
        }
     }
 }
