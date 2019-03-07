@@ -9,10 +9,12 @@
 
 class IGraphAPI {
 
-	virtual void initDisplay() = 0;
+	virtual void initDisplay(const std::string &) = 0;
 	virtual void addText() = 0;
 	virtual void abortDisplay() = 0;
 
 };
+
+extern "C" IGraphAPI *getGraphAPI();
 
 #endif //ARCADE_IGRAPHAPI_HPP
