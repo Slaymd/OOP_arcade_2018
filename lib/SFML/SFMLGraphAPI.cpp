@@ -34,9 +34,11 @@ void SFMLGraphAPI::display()
 
 void SFMLGraphAPI::abortDisplay()
 {
+	printf("cc\n");
 	_win->close();
 	delete _win;
 	_active = false;
+	printf("abort disp\n");
 }
 
 bool SFMLGraphAPI::isActive()

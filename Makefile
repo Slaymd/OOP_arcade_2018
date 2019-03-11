@@ -14,9 +14,9 @@ MAKE_GAME		=	make -C./games/test
 MAKE_SFMLAPI	=	make -C./lib/SFML
 
 all:
-	make game
-	make graphicals
-	make core
+	$(MAKE_GAME)
+	$(MAKE_SFMLAPI)
+	$(MAKE_CORE)
 
 core:
 	$(MAKE_CORE)
