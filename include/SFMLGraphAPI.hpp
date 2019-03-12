@@ -24,8 +24,8 @@ class SFMLGraphAPI : public IGraphAPI {
 	bool isActive() override;
 
 	private:
-	sf::RenderWindow *_win;
-	bool _active;
+	sf::RenderWindow *_win = nullptr;
+	bool _active = false;
 
 };
 
