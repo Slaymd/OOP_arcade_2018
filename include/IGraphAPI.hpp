@@ -9,6 +9,9 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <iostream>
+#include <string>
 
 namespace ui {
 
@@ -35,7 +38,7 @@ namespace ui {
 
 	struct rect_attributes {
 		ui::color backgroundColor;
-		std::string imagePath = nullptr;
+		std::string imagePath;
 	};
 
 	class IGraphAPI {
