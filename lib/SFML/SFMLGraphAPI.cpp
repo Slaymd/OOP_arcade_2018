@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2022
 ** arcade
 ** File description:
-** Darius
+** Maxime
 */
 
 #include "../../include/SFMLGraphAPI.hpp"
@@ -20,15 +20,13 @@ void SFMLGraphAPI::initDisplay(const std::string &title)
 	_active = true;
 }
 
+void SFMLGraphAPI::clear()
+{
+	_win->clear(sf::Color::White);
+}
+
 void SFMLGraphAPI::display()
 {
-	sf::Event event;
-
-	while (_win->pollEvent(event))
-		if (event.type == sf::Event::Closed)
-			abortDisplay();
-	_win->clear(sf::Color::Red);
-	//TODO: display elements
 	_win->display();
 }
 
@@ -41,8 +39,19 @@ void SFMLGraphAPI::abortDisplay()
 	printf("abort disp\n");
 }
 
-bool SFMLGraphAPI::isActive()
+void SFMLGraphAPI::drawSquare(int x, int y, std::string color)
 {
+	sf::Color colorSfml = colorList[color];
+	sf::RectangleShape rectangle(sf::Vector2f(x, y));
+	rectangle.setFillColor(colorSfml);
+	_win->draw(rectangle);
+}
+
+bool SFMLGraphAPI::isActive(sf::Event event)
+{
+	while (_win->pollEvent(event))
+	    if (event.type == sf::Event::Closed)
+		    return !_active;
 	return _active;
 }
 

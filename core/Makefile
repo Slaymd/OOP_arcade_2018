@@ -7,7 +7,7 @@
 
 CXX				=	g++
 
-CXXFLAGS		=	-std=c++11 -Wall -Wextra -W -ldl
+CXXFLAGS		=	-std=c++11 -Wall -Wextra -W
 
 SRC				=	main.cpp
 
@@ -18,7 +18,7 @@ NAME			=	arcade
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -ldl
 	mv $(NAME) ..
 
 clean:

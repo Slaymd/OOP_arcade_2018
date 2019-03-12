@@ -16,12 +16,18 @@ extern "C" {
 	void play(IGraphAPI *graphAPI)
 	{
 		int i = 0;
+		sf::Event event;
+
+
 		graphAPI->initDisplay("It's work !");
-		while (graphAPI->isActive()) {
+		while (graphAPI->isActive(event)) {
+            graphAPI->clear();
 			graphAPI->setTitle("iterator: " + std::to_string(i));
-			graphAPI->display();
+			graphAPI->drawSquare(100, 500, "Red");
+            graphAPI->drawSquare(500, 100, "Green");
+            graphAPI->display();
 			i++;
 		}
-		sleep(5);
+		graphAPI->abortDisplay();
 	}
 }
