@@ -33,10 +33,12 @@ extern "C" {
 		while (graphAPI->isActive()) {
 			graphAPI->clear();
 			graphAPI->setTitle("iterator: " + std::to_string(i));
+
 			graphAPI->drawFrame(map, {{ui::color::BLUE, ""}});
 			graphAPI->drawText({150, 150}, "Travaille!");
+//			graphAPI->drawFrame(map, {{ui::color::BLUE, ""}});
 //			graphAPI->drawRect({0, 0}, {100, 100}, {ui::color::WHITE, ""});
-//			graphAPI->drawRect({100, 100}, {100, 100}, {ui::color::BLUE, "/assets/viatransit_180x180.png"});
+//			graphAPI->drawRect({100, 100}, {100, 100}, {ui::color::BLUE,            "/assets/viatransit_180x180.png"});
 //			graphAPI->drawSquare(100, 500, "Red");
 //                      graphAPI->drawSquare(500, 100, "Green");
                         graphAPI->display();
