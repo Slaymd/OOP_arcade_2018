@@ -94,28 +94,32 @@ void ui::SFMLGraphAPI::drawRect(ui::position position, ui::size size,
 	_win->draw(rectangle);
 }
 
-void ui::SFMLGraphAPI::drawText(ui::position position1, std::string string,
-	ui::color color1, ui::color color2
-)
+void ui::SFMLGraphAPI::drawText(ui::position position, std::string string,
+	ui::color color, ui::color bgcolor)
 {
+	sf::Text text;
+
+	(void)bgcolor;
 	if (!_active)
 		return;
-	(void)position1;
-	(void)string;
-	(void)color1;
-	(void)color2;
+	if (_font == nullptr) {
+		_font = new sf::Font();
+		_font->loadFromFile("./assets/UbuntuMono-B.ttf");
+	}
+	text = sf::Text(string, *_font, 24);
+	text.setFillColor(getSFMLColor(color));
+	text.setPosition(position.x, position.y);
+	_win->draw(text);
 }
 
-void ui::SFMLGraphAPI::drawFrame(int **frame,
+void ui::SFMLGraphAPI::drawFrame(int frame[3][3],
 	std::vector<ui::rect_attributes> attributes
 )
 {
 	if (!_active)
 		return;
-	printf("drawFrame\n");
-	for (int y = 0; frame[y] != nullptr; y++) {
-		printf("y: %d\n", y);
-		for (int x = 0; frame[y][x] != -1; x++) { //TODO: NEEDS TO GIVE SIZE OF EACH !!
+	for (int y = 0; y < 3; y++) {
+		for (int x = 0; x < 3; x++) {
 			printf("x: %d\n", frame[y][x]);
 			if (frame[y][x] != 0)
 				drawRect({x * 50, y * 50}, {50, 50}, attributes[frame[y][x] - 1]);
@@ -133,7 +137,6 @@ void ui::SFMLGraphAPI::playSound(const std::string &string)
 
 sf::Color ui::SFMLGraphAPI::getSFMLColor(const ui::color &color)
 {
-//	return _colors[color];
 	switch (color) {
 	case WHITE:
 		return sf::Color::White;
@@ -141,6 +144,14 @@ sf::Color ui::SFMLGraphAPI::getSFMLColor(const ui::color &color)
 		return sf::Color::Blue;
 	case RED:
 		return sf::Color::Red;
+	case YELLOW:
+		return sf::Color::Yellow;
+	case GREEN:
+		return sf::Color::Green;
+	case CYAN:
+		return sf::Color::Cyan;
+	case MAGENTA:
+		return sf::Color::Magenta;
 	default:
 		return sf::Color::Black;
 	}

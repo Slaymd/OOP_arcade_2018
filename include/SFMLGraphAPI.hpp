@@ -36,7 +36,7 @@ namespace ui {
 		void drawText(position position1, std::string string,
 			ui::color color1, ui::color color2
 		) override;
-		void drawFrame(int **pInt, std::vector<rect_attributes> vector
+		void drawFrame(int map[3][3], std::vector<rect_attributes> vector
 		) override;
 
 		/*
@@ -57,6 +57,7 @@ namespace ui {
 		 */
 
 		sf::RenderWindow *_win = nullptr;
+		sf::Font *_font = nullptr;
 		bool _active = false;
 
 //		std::unordered_map<color, sf::Color> _colors = {

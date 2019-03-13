@@ -59,7 +59,7 @@ namespace ui {
 
 		virtual void drawText(ui::position, std::string, ui::color = WHITE, ui::color = BLACK) = 0;
 		virtual void drawRect(ui::position, ui::size, ui::rect_attributes) = 0;
-		virtual void drawFrame(int **, std::vector<rect_attributes>) = 0;
+		virtual void drawFrame(int [3][3], std::vector<rect_attributes>) = 0;
 
 		/*
 		 * MISC
