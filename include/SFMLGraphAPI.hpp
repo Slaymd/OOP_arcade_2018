@@ -38,6 +38,8 @@ namespace ui {
 		) override;
 		void drawFrame(int map[3][3], std::vector<rect_attributes> vector
 		) override;
+		int getKeyboard() override;
+
 
 		/*
 		 * MISC
@@ -60,16 +62,6 @@ namespace ui {
 		sf::Font *_font = nullptr;
 		bool _active = false;
 
-//		std::unordered_map<color, sf::Color> _colors = {
-//			{BLACK, sf::Color::Black},
-//			{BLUE, sf::Color::Blue},
-//			{RED, sf::Color::Red},
-//			{YELLOW, sf::Color::Yellow},
-//			{WHITE, sf::Color::White},
-//			{MAGENTA, sf::Color::Magenta},
-//			{CYAN, sf::Color::Cyan},
-//			{GREEN, sf::Color::Green}
-//		};
 		std::unordered_map<std::string, sf::Texture> _assets;
 	};
 }

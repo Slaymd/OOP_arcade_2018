@@ -127,6 +127,15 @@ void ui::SFMLGraphAPI::drawFrame(int frame[3][3],
 	}
 }
 
+int ui::SFMLGraphAPI::getKeyboard()
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		return (1);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		return (2);
+	return 0;
+}
+
 void ui::SFMLGraphAPI::playSound(const std::string &string)
 {
 	if (!_active)

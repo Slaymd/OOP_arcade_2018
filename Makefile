@@ -9,7 +9,7 @@ NAME			=	arcade
 
 MAKE_CORE		=	make -C./core
 
-MAKE_GAME		=	make -C./games/test
+MAKE_GAME		=	make -C./games/nibbler
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 

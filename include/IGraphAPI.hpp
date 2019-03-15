@@ -52,6 +52,7 @@ namespace ui {
 		virtual void clear() = 0;
 		virtual void display() = 0;
 		virtual void abortDisplay() = 0;
+		virtual int getKeyboard() = 0;
 
 		/*
 		 * DRAW
