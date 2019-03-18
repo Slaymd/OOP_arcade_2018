@@ -32,27 +32,31 @@ void core::Loader::load(std::string defaultLib)
 {
 	std::vector<std::string> tmpGame = getSharedLibPaths("./games/");
 	std::vector<std::string> tmpLib = getSharedLibPaths("./lib/", defaultLib);
+	void *handleGame = nullptr;
+	void *handleGraph = nullptr;
+	ui::IApi *(*graphEntryPoint)();
 
-	for (std::string tmp : tmpLib) {
-		std::cout << "> " << tmp << std::endl;
-	}
-
-	void *handleGame;
-	void *handleGraph;
-
-	for(size_t i = 0; i < _pathGame.size(); i++) {
-		handleGame = dlopen(_pathGame[i].c_str(), RTLD_LAZY);
-		if (!handleGame)
+//	for(size_t i = 0; i < _pathGame.size(); i++) {
+//		handleGame = dlopen(_pathGame[i].c_str(), RTLD_LAZY);
+//		if (!handleGame)
+//			//TODO throw an error
+//			return;
+//		_gameLib.emplace_back(reinterpret_cast<IGameApi *>(dlsym(handleGame, findName(_pathGame[i]).c_str())));
+//	}
+	for (const std::string &libPath : tmpLib) {
+		std::cout << libPath << std::endl;
+		handleGraph = dlopen(libPath.c_str(), RTLD_LAZY);
+		if (!handleGraph)
 			//TODO throw an error
 			return;
-		_gameLib.emplace_back(reinterpret_cast<IGameApi *>(dlsym(handleGame, findName(_pathGame[i]).c_str())));
-	}
-	for(size_t i = 0; i < _pathGraph.size(); i++) {
-		handleGraph = dlopen(_pathGraph[i].c_str(), RTLD_LAZY);
-		if (!handleGame)
-			//TODO throw an error
-			return;
-		_graphLib.emplace_back(reinterpret_cast<ui::IApi *>(dlsym(handleGraph, findName(_pathGraph[i]).c_str())));
+		graphEntryPoint = reinterpret_cast<ui::IApi *(*)()>(dlsym(handleGraph, "entryPoint"));
+		ui::IApi *api = graphEntryPoint();
+//		api->init();
+//		while (true) {
+//			api->clear();
+//			api->render();
+//		}
+		_graphLib.emplace_back(api);
 	}
 
 	dlclose(handleGame);

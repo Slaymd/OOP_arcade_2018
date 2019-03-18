@@ -24,9 +24,17 @@ void ui::SFMLApi::render()
 
 void ui::SFMLApi::clear()
 {
+	sf::Event event;
+
 	if (_win == nullptr)
 		return;
 	_win->clear(sf::Color::Black);
+	while (_win->pollEvent(event)) //TODO: handle events here
+		if (event.type == sf::Event::Closed) {
+			printf("close\n");
+			return;
+		}
+
 }
 
 void ui::SFMLApi::close()
@@ -119,7 +127,7 @@ sf::Color ui::SFMLApi::getSFMLColor(ui::color color)
 		static_cast<sf::Uint8>(color.b)};
 }
 
-ui::IApi *entryPoint()
+extern "C" ui::IApi *entryPoint()
 {
 	return new ui::SFMLApi();
 }
