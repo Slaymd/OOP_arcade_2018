@@ -20,6 +20,7 @@ namespace core {
 	};
 
 	class Menu {
+
 	};
 
 	class Game {

@@ -6,29 +6,38 @@
 */
 
 #include "../include/IGraphAPI.hpp"
-#include "core.hpp"
+#include "Core.hpp"
 #include <dlfcn.h>
 
-int main(void)
+int main(int ac, char **av)
 {
-	ui::IGraphAPI *graphAPI;
-	core::Game *game;
+	core::Loader loader;
 
-	void *handleAPI = dlopen("./lib/lib_arcade_sfml.so", RTLD_LAZY);
-	void *handleGame = dlopen("./games/lib_arcade_nibbler.so", RTLD_LAZY);
-
-	ui::IGraphAPI *(*getGraphAPI)();
-
-	void (*play)(ui::IGraphAPI *);
-
-	if (!handleAPI || !handleGame)
+	if (ac != 2)
 		return (84);
-	getGraphAPI = reinterpret_cast<ui::IGraphAPI *(*)()>(dlsym(handleAPI, "getGraphAPI"));
-	play = reinterpret_cast<void (*)(ui::IGraphAPI *)>(dlsym(handleGame, "play"));
-	graphAPI = getGraphAPI();
-
-
-	dlclose(handleAPI);
-	dlclose(handleGame);
-	return (0);
+	loader.load(av[1]);
 }
+
+//int main(void)
+//{
+//	ui::IGraphAPI *graphAPI;
+//	core::Game *game;
+//
+//	void *handleAPI = dlopen("./lib/lib_arcade_sfml.so", RTLD_LAZY);
+//	void *handleGame = dlopen("./games/lib_arcade_nibbler.so", RTLD_LAZY);
+//
+//	ui::IGraphAPI *(*getGraphAPI)();
+//
+//	void (*play)(ui::IGraphAPI *);
+//
+//	if (!handleAPI || !handleGame)
+//		return (84);
+//	getGraphAPI = reinterpret_cast<ui::IGraphAPI *(*)()>(dlsym(handleAPI, "getGraphAPI"));
+//	play = reinterpret_cast<void (*)(ui::IGraphAPI *)>(dlsym(handleGame, "play"));
+//	graphAPI = getGraphAPI();
+//
+//
+//	dlclose(handleAPI);
+//	dlclose(handleGame);
+//	return (0);
+//}
