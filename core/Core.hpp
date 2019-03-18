@@ -32,6 +32,11 @@ namespace core {
 
 		void init();
 		void load();
+		void init();
+		void rotateGames();
+		void rotateGraph();
+		IGameApi* getGameLib() { return _gameLib[0]; };
+		ui::IApi* getGraphLib() { return _graphLib[0]; };
 
 		private:
 		std::vector<std::string> getSharedLibPaths(

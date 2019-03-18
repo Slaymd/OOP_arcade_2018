@@ -1,8 +1,8 @@
 /*
-** EPITECH PROJECT, 2022
-** arcade
+** EPITECH PROJECT, 2018
+** Aiguier Maxime
 ** File description:
-** Darius
+** .cpp
 */
 
 #include <iostream>
@@ -31,6 +31,17 @@ void core::Loader::load()
 
 	dlclose(handleGame);
 	dlclose(handleGraph);
+}
+
+void core::Loader::rotateGames()
+{
+	std::rotate(_gameLib.begin(), _gameLib.begin()+1, _gameLib.end());
+
+}
+
+void core::Loader::rotateGraph()
+{
+	std::rotate(_graphLib.begin(), _graphLib.begin()+1, _graphLib.end());
 }
 
 std::vector<std::string> core::Loader::getSharedLibPaths(
