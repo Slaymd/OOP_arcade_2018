@@ -6,11 +6,13 @@
 */
 
 #include "../include/IGraphAPI.hpp"
+#include "core.hpp"
 #include <dlfcn.h>
 
 int main(void)
 {
 	ui::IGraphAPI *graphAPI;
+	core::Game *game;
 
 	void *handleAPI = dlopen("./lib/lib_arcade_sfml.so", RTLD_LAZY);
 	void *handleGame = dlopen("./games/lib_arcade_nibbler.so", RTLD_LAZY);
@@ -25,12 +27,6 @@ int main(void)
 	play = reinterpret_cast<void (*)(ui::IGraphAPI *)>(dlsym(handleGame, "play"));
 	graphAPI = getGraphAPI();
 
-
-
-//	graphAPI->isActive();
-	play(graphAPI);
-
-	printf("in main\n");
 
 	dlclose(handleAPI);
 	dlclose(handleGame);
