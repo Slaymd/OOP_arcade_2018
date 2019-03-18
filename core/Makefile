@@ -9,8 +9,7 @@ CXX				=	g++
 
 CXXFLAGS		=	-std=c++11 -Wall -Wextra -W
 
-SRC				=	main.cpp				\
-					elements/AElement.cpp
+SRC				=	main.cpp
 
 OBJ				=	$(SRC:.cpp=.o)
 

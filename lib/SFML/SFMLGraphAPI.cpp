@@ -5,6 +5,8 @@
 ** Maxime
 */
 
+#include "IApi.hpp"
+
 #include "../../include/SFMLGraphAPI.hpp"
 
 extern "C" {
