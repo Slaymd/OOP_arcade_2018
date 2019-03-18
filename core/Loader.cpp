@@ -6,13 +6,7 @@
 */
 
 #include <iostream>
-#include "core.hpp"
-
-void core::Loader::init()
-{
-	_pathGame.emplace_back("./games/lib_arcade_nibbler.so");
-	_pathGraph.emplace_back("./lib/lib_arcade_sfml.so");
-}
+#include "Core.hpp"
 
 std::string findName(std::string path)
 {
@@ -30,16 +24,14 @@ std::string findName(std::string path)
 	if (!path[i])
 		//TODO throw an error
 		return nullptr;
+	std::cout << name << std::endl;
 	return name;
 }
 
 void core::Loader::load(std::string defaultLib)
 {
-
-	_pathGame.emplace_back(defaultLib);
-	init();
-	std::vector<std::string> tmpGame = _pathGame;
-	std::vector<std::string> tmpLib = _pathGraph;
+	std::vector<std::string> tmpGame = getSharedLibPaths("./games/");
+	std::vector<std::string> tmpLib = getSharedLibPaths("./lib/", defaultLib);
 
 	void *handleGame;
 	void *handleGraph;
@@ -74,3 +66,25 @@ void core::Loader::rotateGraph()
 	std::rotate(_graphLib.begin(), _graphLib.begin()+1, _graphLib.end());
 }
 
+std::vector<std::string> core::Loader::getSharedLibPaths(
+	const std::string &pathToDirectory, std::string defaultPath
+) const
+{
+	std::vector<std::string> sharedLibs;
+	DIR *dir = nullptr;
+	struct dirent *ent = nullptr;
+	char *ext = nullptr;
+
+	if ((dir = opendir(pathToDirectory.c_str())) != nullptr) {
+		while ((ent = readdir(dir)) != nullptr) {
+			ext = strrchr(ent->d_name, '.');
+
+			if (ext != nullptr && strcmp(ext, ".so") == 0) {
+				sharedLibs.push_back(pathToDirectory +
+					std::string(ent->d_name));
+			}
+		}
+		closedir(dir);
+	}
+	return sharedLibs;
+}

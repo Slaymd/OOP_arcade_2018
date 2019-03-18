@@ -5,7 +5,7 @@
 ** Darius
 */
 
-#include "core.hpp"
+#include "Core.hpp"
 #include <dlfcn.h>
 
 int main(int ac, char **av)
