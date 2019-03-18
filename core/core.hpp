@@ -7,9 +7,10 @@
 #ifndef ARCADE_CORE_HPP
 #define ARCADE_CORE_HPP
 
-#include "../include/IGraphAPI.hpp"
 #include "../games/IGameApi.hpp"
 #include "../lib/IApi.hpp"
+#include <dirent.h>
+#include <dlfcn.h>
 
 namespace core {
 
@@ -28,12 +29,16 @@ namespace core {
 
 	class Loader {
 		public:
-		void loadLib();
-		void initLib(); //with frame
+		Loader() = default;
+		~Loader() = default;
+		void load();
+		void init(); //with frame
 
 		private:
 		std::vector <IGameApi*> _gameLib;
+		std::vector <std::string> _pathGame;
 		std::vector <ui::IApi*> _graphLib;
+		std::vector <std::string> _pathLib;
 	};
 }
 
