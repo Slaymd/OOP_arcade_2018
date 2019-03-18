@@ -8,6 +8,8 @@
 #define ARCADE_CORE_HPP
 
 #include "../include/IGraphAPI.hpp"
+#include "../games/IGameApi.hpp"
+#include "../lib/IApi.hpp"
 
 namespace core {
 
@@ -30,7 +32,8 @@ namespace core {
 		void initLib(); //with frame
 
 		private:
-
+		std::vector <IGameApi*> _gameLib;
+		std::vector <ui::IApi*> _graphLib;
 	};
 }
 

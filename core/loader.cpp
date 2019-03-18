@@ -9,6 +9,7 @@
 
 void core::Loader::loadLib()
 {
+
 	dlopen("./lib/lib_arcade_sfml.so", RTLD_LAZY);
 }
 
