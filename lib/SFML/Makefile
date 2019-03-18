@@ -7,11 +7,11 @@
 
 CXX		=	g++
 
-CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC
+CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC -I..
 
 SFML	=	-lsfml-graphics -lsfml-system -lsfml-audio -lsfml-window
 
-SRC		=	SFMLGraphAPI.cpp
+SRC		=	SFMLApi.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
