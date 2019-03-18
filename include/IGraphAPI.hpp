@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <string>
+#include <dlfcn.h>
 
 namespace ui {
 

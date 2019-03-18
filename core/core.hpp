@@ -26,13 +26,11 @@ namespace core {
 
 	class Loader {
 		public:
-		void loadGraphLib();
-
-		void loadGameLib();
-
-		void iniGame(); //with frame
+		void loadLib();
+		void initLib(); //with frame
 
 		private:
+
 	};
 }
 
