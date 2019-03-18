@@ -5,11 +5,21 @@
 ** Darius
 */
 
-#include "core.hpp"
+#include "../include/IGraphAPI.hpp"
+#include "Core.hpp"
 #include <dlfcn.h>
 
-int main(void)
+int main(int ac, char **av)
 {
+	core::Loader loader;
+
+	if (ac != 2)
+		return (84);
+	loader.load(av[1]);
+}
+
+//int main(void)
+//{
 //	ui::IGraphAPI *graphAPI;
 //	core::Game *game;
 //
@@ -29,10 +39,5 @@ int main(void)
 //
 //	dlclose(handleAPI);
 //	dlclose(handleGame);
-
-	core::Loader loader;
-
-	loader.load();
-
-	return (0);
-}
+//	return (0);
+//}

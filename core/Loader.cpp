@@ -1,8 +1,8 @@
 /*
-** EPITECH PROJECT, 2018
-** Aiguier Maxime
+** EPITECH PROJECT, 2022
+** arcade
 ** File description:
-** .cpp
+** Darius
 */
 
 #include <iostream>
@@ -31,4 +31,20 @@ void core::Loader::load()
 
 	dlclose(handleGame);
 	dlclose(handleGraph);
+}
+
+std::vector<std::string> core::Loader::getSharedLibPaths(
+	const std::string &pathToDirectory
+) const
+{
+	std::vector<std::string> sharedLibs;
+	DIR *dir = nullptr;
+	struct dirent *ent = nullptr;
+
+	if ((dir = opendir(pathToDirectory.c_str())) != nullptr) {
+		while ((ent = readdir(dir)) != nullptr)
+			sharedLibs.push_back(pathToDirectory + std::string(ent->d_name));
+		closedir(dir);
+	}
+	return sharedLibs;
 }

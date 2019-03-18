@@ -11,30 +11,32 @@
 #include "../lib/IApi.hpp"
 #include <dirent.h>
 #include <dlfcn.h>
+#include <dirent.h>
 
 namespace core {
 
-	class Event {
+	class EventHandler {
 		public:
 
 		private:
 	};
 
-	class Menu {
-	};
+	class Menu : public IGameApi {
 
-	class Game {
-		public:
 	};
 
 	class Loader {
 		public:
 		Loader() = default;
 		~Loader() = default;
+
+		void init();
 		void load();
-		void init(); //with frame
 
 		private:
+		std::vector<std::string> getSharedLibPaths(
+			const std::string &pathToDirectory) const;
+
 		std::vector <IGameApi*> _gameLib;
 		std::vector <std::string> _pathGame;
 		std::vector <ui::IApi*> _graphLib;
