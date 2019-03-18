@@ -31,7 +31,7 @@ namespace core {
 		public:
 		Loader() = default;
 		~Loader() = default;
-		void load();
+		void load(std::string);
 		void init();
 		void rotateGames();
 		void rotateGraph();
@@ -42,7 +42,7 @@ namespace core {
 		std::vector <IGameApi*> _gameLib;
 		std::vector <std::string> _pathGame;
 		std::vector <ui::IApi*> _graphLib;
-		std::vector <std::string> _pathLib;
+		std::vector <std::string> _pathGraph;
 	};
 }
 

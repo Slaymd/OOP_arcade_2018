@@ -8,7 +8,7 @@
 #include "core.hpp"
 #include <dlfcn.h>
 
-int main(void)
+int main(int ac, char **av)
 {
 //	ui::IGraphAPI *graphAPI;
 //	core::Game *game;
@@ -29,10 +29,12 @@ int main(void)
 //
 //	dlclose(handleAPI);
 //	dlclose(handleGame);
+	if (ac != 2)
+		return 84;
 
 	core::Loader loader;
 
-	loader.load();
+	loader.load(av[1]);
 
 	return (0);
 }
