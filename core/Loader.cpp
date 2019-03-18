@@ -6,7 +6,7 @@
 */
 
 #include <iostream>
-#include "core.hpp"
+#include "Core.hpp"
 
 void core::Loader::init()
 {
@@ -18,8 +18,8 @@ void core::Loader::load()
 {
 
 	init();
-	std::vector<std::string> tmpGame = _pathGame;
-	std::vector<std::string> tmpLib = _pathLib;
+	std::vector<std::string> tmpGame = getSharedLibPaths("./games/");
+	std::vector<std::string> tmpLib = getSharedLibPaths("./lib/");
 
 	void *handleGame = dlopen(_pathGame[0].c_str(), RTLD_LAZY);
 	void *handleGraph = dlopen(_pathLib[0].c_str(), RTLD_LAZY);
@@ -51,10 +51,17 @@ std::vector<std::string> core::Loader::getSharedLibPaths(
 	std::vector<std::string> sharedLibs;
 	DIR *dir = nullptr;
 	struct dirent *ent = nullptr;
+	char *ext = nullptr;
 
 	if ((dir = opendir(pathToDirectory.c_str())) != nullptr) {
-		while ((ent = readdir(dir)) != nullptr)
-			sharedLibs.push_back(pathToDirectory + std::string(ent->d_name));
+		while ((ent = readdir(dir)) != nullptr) {
+			ext = strrchr(ent->d_name, '.');
+
+			if (ext != nullptr && strcmp(ext, ".so") == 0) {
+				sharedLibs.push_back(pathToDirectory +
+					std::string(ent->d_name));
+			}
+		}
 		closedir(dir);
 	}
 	return sharedLibs;

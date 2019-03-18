@@ -32,7 +32,6 @@ namespace core {
 
 		void init();
 		void load();
-		void init();
 		void rotateGames();
 		void rotateGraph();
 		IGameApi* getGameLib() { return _gameLib[0]; };

@@ -7,7 +7,7 @@
 
 CXX				=	g++
 
-CXXFLAGS		=	-std=c++11 -Wall -Wextra -W
+CXXFLAGS		=	-std=c++11 -Wall -Wextra -W -I.
 
 SRC				=	main.cpp    \
                     Loader.cpp

@@ -5,7 +5,6 @@
 ** Darius
 */
 
-#include "../include/IGraphAPI.hpp"
 #include "Core.hpp"
 #include <dlfcn.h>
 
@@ -15,7 +14,8 @@ int main(int ac, char **av)
 
 	if (ac != 2)
 		return (84);
-	loader.load(av[1]);
+	//loader.load(av[1]);
+	loader.load();
 }
 
 //int main(void)
