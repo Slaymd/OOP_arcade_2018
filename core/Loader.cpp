@@ -77,6 +77,7 @@ std::vector<std::string> core::Loader::getSharedLibPaths(
 	std::vector<std::string> sharedLibs;
 	DIR *dir = nullptr;
 	struct dirent *ent = nullptr;
+	bool defaultExist = false;
 
 	if ((dir = opendir(pathToDirectory.c_str())) != nullptr) {
 		while ((ent = readdir(dir)) != nullptr) {
@@ -89,12 +90,16 @@ std::vector<std::string> core::Loader::getSharedLibPaths(
 
 			if (ext == nullptr || strcmp(ext, ".so") != 0)
 				continue;
-			if (defslash && patslash && strcmp(defslash, patslash) == 0)
+			if (defslash && patslash && strcmp(defslash, patslash) == 0) {
 				sharedLibs.insert(sharedLibs.begin(), path);
-			else
+				defaultExist = true;
+			} else
 				sharedLibs.push_back(path);
 		}
 		closedir(dir);
 	}
+	defaultExist = defaultPath.length() == 0 ? true : defaultExist;
+	if (!defaultExist)
+		throw std::exception();
 	return sharedLibs;
 }
