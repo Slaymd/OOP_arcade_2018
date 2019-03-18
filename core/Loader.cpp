@@ -33,6 +33,10 @@ void core::Loader::load(std::string defaultLib)
 	std::vector<std::string> tmpGame = getSharedLibPaths("./games/");
 	std::vector<std::string> tmpLib = getSharedLibPaths("./lib/", defaultLib);
 
+	for (std::string tmp : tmpLib) {
+		std::cout << "> " << tmp << std::endl;
+	}
+
 	void *handleGame;
 	void *handleGraph;
 
@@ -73,16 +77,22 @@ std::vector<std::string> core::Loader::getSharedLibPaths(
 	std::vector<std::string> sharedLibs;
 	DIR *dir = nullptr;
 	struct dirent *ent = nullptr;
-	char *ext = nullptr;
 
 	if ((dir = opendir(pathToDirectory.c_str())) != nullptr) {
 		while ((ent = readdir(dir)) != nullptr) {
-			ext = strrchr(ent->d_name, '.');
+			char *ext = strrchr(ent->d_name, '.');
+			std::string path = pathToDirectory +
+				std::string(ent->d_name);
+			const char *defslash = strrchr(defaultPath.c_str(), '/');
+			const char *patslash = strrchr(path.c_str(), '/');
 
-			if (ext != nullptr && strcmp(ext, ".so") == 0) {
-				sharedLibs.push_back(pathToDirectory +
-					std::string(ent->d_name));
-			}
+
+			if (ext == nullptr || strcmp(ext, ".so") != 0)
+				continue;
+			if (defslash && patslash && strcmp(defslash, patslash) == 0)
+				sharedLibs.insert(sharedLibs.begin(), path);
+			else
+				sharedLibs.push_back(path);
 		}
 		closedir(dir);
 	}
