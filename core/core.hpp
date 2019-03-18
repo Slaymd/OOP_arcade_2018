@@ -32,7 +32,11 @@ namespace core {
 		Loader() = default;
 		~Loader() = default;
 		void load();
-		void init(); //with frame
+		void init();
+		void rotateGames();
+		void rotateGraph();
+		IGameApi* getGameLib() { return _gameLib[0]; };
+		ui::IApi* getGraphLib() { return _graphLib[0]; };
 
 		private:
 		std::vector <IGameApi*> _gameLib;
