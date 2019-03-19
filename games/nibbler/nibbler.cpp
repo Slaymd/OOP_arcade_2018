@@ -4,38 +4,31 @@
 ** File description:
 ** .cpp
 */
-#include "nibbler.hpp"
+#include "Nibbler.hpp"
 
-void drawSnake(ui::IGraphAPI *graphAPI, nibbler *snake)
+void Nibbler::init()
 {
-	int array[3][3] = {{0, 0, 0}, {1, 1, 1}, {2, 2, 2}};
+	_name = new ui::UIText({100, 100}, "TEST");
+	_name->setColor({255, 255, 255});
 
-	for (int i = 0; i < snake->getSize(); i += 3) {
-		graphAPI->drawRect(snake->getPos(), {20 + i, 20},
-		{ui::color::GREEN, ""});
-//		graphAPI->drawFrame(array, {ui::color::WHITE, ""});
-	}
+	_input = new ui::UIText({100, 150}, "INPUT");
+	_input->setColor({255, 100, 100});
 }
 
-void moveSnake(ui::IGraphAPI *graphAPI, nibbler *snake)
+void Nibbler::tick()
 {
+	auto *g = new ui::SFMLApi;
 
-	if (graphAPI->getKeyboard() == 1) {
-		snake->setPos({snake->getPos().x - 5, snake->getPos().y});
-		snake->setSize(snake->getSize() + 3);
-	} if (graphAPI->getKeyboard() == 2)
-		snake->setPos({snake->getPos().x + 5, snake->getPos().y});
+	g->drawText(*_name);
+	g->drawText(*_input);
 }
 
-extern "C" {
-	void play(ui::IGraphAPI *graphAPI) {
-		nibbler *snake = new nibbler();
-		graphAPI->initDisplay("It's work !");
-		while (graphAPI->isActive()) {
-			graphAPI->clear();
-			drawSnake(graphAPI, snake);
-			moveSnake(graphAPI, snake);
-			graphAPI->display();
-		}
-	}
+void Nibbler::close()
+{
+	//TODO close ce qui a était open
+}
+
+extern "C" Nibbler *entryPoint()
+{
+	return new Nibbler();
 }
