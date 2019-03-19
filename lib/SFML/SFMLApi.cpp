@@ -48,7 +48,9 @@ void ui::SFMLApi::close()
 
 int ui::SFMLApi::getEvent()
 {
-	return 0;
+	int lastEvent = _lastEvent;
+	_lastEvent = 0;
+	return lastEvent;
 }
 
 void ui::SFMLApi::drawText(ui::UIText text)

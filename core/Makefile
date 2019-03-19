@@ -10,7 +10,8 @@ CXX				=	g++
 CXXFLAGS		=	-std=c++11 -Wall -Wextra -W -I.
 
 SRC				=	main.cpp    \
-                    Loader.cpp
+                    Loader.cpp	\
+                    Engine.cpp
 
 OBJ				=	$(SRC:.cpp=.o)
 

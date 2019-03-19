@@ -5,25 +5,28 @@
 ** Darius
 */
 
-#include "Core.hpp"
+#include "Engine.hpp"
 #include "../lib/IApi.hpp"
 #include <dlfcn.h>
 
 int main(int ac, char **av)
 {
-	core::Loader loader;
+	arcade::Engine engine;
 	ui::IApi *graphAPI = nullptr;
 
 	if (ac != 2)
 		return 84;
-	loader.load(av[1]);
-	printf("1\n");
-	graphAPI = loader.getGraphLib();
-	printf("2\n");
+	printf("[A] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
+	engine.load(av[1]);
+	printf("[B] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
+	graphAPI = engine.getGraphLib();
+	printf("[C] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
 	graphAPI->init();
-	printf("3\n");
+	printf("[D] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
 	while (graphAPI) {
-		printf("cc\n");
+		graphAPI->clear();
+		graphAPI->render();
 	}
+	engine.closeHandlers();
 	return (0);
 }

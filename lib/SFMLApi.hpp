@@ -41,9 +41,10 @@ namespace ui {
 		sf::Texture *getSFMLTexture(const std::string &);
 		sf::Color getSFMLColor(color);
 
-		sf::RenderWindow *_win;
-		sf::Font *_font;
+		sf::RenderWindow *_win = nullptr;
+		sf::Font *_font = nullptr;
 		std::unordered_map<std::string, sf::Texture> _assets;
+		int _lastEvent = 0;
 	};
 
 	extern "C" IApi *entryPoint();
