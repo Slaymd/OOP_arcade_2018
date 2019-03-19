@@ -8,11 +8,11 @@
 #ifndef ARCADE_NIBBLER_HPP
 #define ARCADE_NIBBLER_HPP
 
-#include "../../lib/IApi.hpp"
-#include "../../lib/IElement.hpp"
-#include "../../lib/AElement.hpp"
-#include "../../lib/SFMLApi.hpp"
-#include "../IGameApi.hpp"
+#include "IApi.hpp"
+#include "IElement.hpp"
+#include "AElement.hpp"
+#include "IGameApi.hpp"
+#include "Engine.hpp"
 
 class Nibbler : public IGameApi {
 
@@ -21,13 +21,14 @@ class Nibbler : public IGameApi {
 	~Nibbler() = default;
 
 	//functions
-	void init() override;
+	void init(arcade::Engine) override;
 	void tick() override;
 	void close() override;
 
 	private:
 	ui::UIText *_name;
 	ui::UIText *_input;
+	arcade::Engine _engine;
 };
 
 #endif //ARCADE_NIBBLER_HPP

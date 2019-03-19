@@ -19,7 +19,7 @@ namespace ui {
 		~Frame() = default;
 
 		private:
-		int _pixels[500][500]; //TODO: decide size
+//		int _pixels[500][500]; //TODO: decide size
 		std::vector<IElement *> _elements;
 	};
 

@@ -46,13 +46,13 @@ void arcade::Engine::load(std::string defaultLib)
 	IGameApi *(*gameEntryPoint)();
 
 	for (const std::string &gamePath : tmpGame) {
-		continue;
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
 		if (!handleGame)
 			//TODO throw an error
 			return;
 		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
 		IGameApi *game = gameEntryPoint();
+		game->init(arcade::Engine::instance());
 		_gameLib.emplace_back(game);
 		_handlers.emplace_back(handleGame);
 	}
