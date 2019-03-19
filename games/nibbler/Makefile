@@ -9,7 +9,7 @@ CXX		=	g++
 
 CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC
 
-SRC		=	nibbler.cpp
+SRC		=	Nibbler.cpp
 
 OBJ		=	$(SRC:.cpp=.o)
 

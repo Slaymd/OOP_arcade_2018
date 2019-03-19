@@ -28,7 +28,7 @@ void Nibbler::close()
 	//TODO close ce qui a était open
 }
 
-extern "C" Nibbler *entryPoint()
+extern "C" IGameApi *entryPoint()
 {
 	return new Nibbler();
 }

@@ -17,5 +17,4 @@ class IGameApi {
 	virtual void close() = 0;
 
 };
-
 #endif //ARCADE_IGAMEAPI_HPP

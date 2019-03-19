@@ -46,8 +46,6 @@ namespace ui {
 		std::unordered_map<std::string, sf::Texture> _assets;
 		int _lastEvent = 0;
 	};
-
-	extern "C" IApi *entryPoint();
 }
 
 #endif //ARCADE_SFMLAPI_HPP
