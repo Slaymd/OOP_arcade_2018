@@ -13,6 +13,8 @@
 #include "../../lib/AElement.hpp"
 #include "../../lib/SFMLApi.hpp"
 #include "../IGameApi.hpp"
+#include "../../core/Engine.hpp"
+#include "../../lib/UIRect.hpp"
 
 class Nibbler : public IGameApi {
 

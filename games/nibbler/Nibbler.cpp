@@ -17,10 +17,8 @@ void Nibbler::init()
 
 void Nibbler::tick()
 {
-	auto *g = new ui::SFMLApi;
-
-	g->drawText(*_name);
-	g->drawText(*_input);
+	arcade::Engine::Graphic().drawText(*_name);
+	arcade::Engine::Graphic().drawText(*_input);
 }
 
 void Nibbler::close()

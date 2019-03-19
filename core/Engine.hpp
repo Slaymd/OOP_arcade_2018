@@ -46,6 +46,7 @@ namespace arcade {
 
 		ui::IApi *getGraphLib()
 		{
+
 			return _graphLib[0];
 		};
 

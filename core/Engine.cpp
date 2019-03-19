@@ -47,14 +47,14 @@ void arcade::Engine::load(std::string defaultLib)
 
 	for (const std::string &gamePath : tmpGame) {
 		continue;
-		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
-		if (!handleGame)
-			//TODO throw an error
-			return;
-		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
-		IGameApi *game = gameEntryPoint();
-		_gameLib.emplace_back(game);
-		_handlers.emplace_back(handleGame);
+//		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
+//		if (!handleGame)
+//			//TODO throw an error
+//			return;
+//		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
+//		IGameApi *game = gameEntryPoint();
+//		_gameLib.emplace_back(game);
+//		_handlers.emplace_back(handleGame);
 	}
 	for (const std::string &libPath : tmpLib) {
 		void *handleGraph = dlopen(libPath.c_str(), RTLD_LAZY);

@@ -14,9 +14,9 @@ MAKE_GAME		=	make -C./games/nibbler
 MAKE_SFMLAPI	=	make -C./lib/SFML
 
 all:
-	$(MAKE_GAME)
 	$(MAKE_SFMLAPI)
 	$(MAKE_CORE)
+	$(MAKE_GAME)
 
 core:
 	$(MAKE_CORE)
