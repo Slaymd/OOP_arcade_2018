@@ -14,7 +14,7 @@ class IGameApi {
 	public:
 	~IGameApi() = default;
 
-	virtual void init(arcade::Engine) = 0;
+	virtual void init() = 0;
 	virtual void tick() = 0;
 	virtual void close() = 0;
 

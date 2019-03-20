@@ -11,22 +11,18 @@
 
 int main(int ac, char **av)
 {
-	arcade::Engine engine = arcade::Engine::instance();
 	ui::IApi *graphAPI = nullptr;
 
 	if (ac != 2)
 		return 84;
-	printf("main1\n");
-	engine.load(av[1]);
-	printf("main2\n");
-	graphAPI = engine.getGraphLib();
-	printf("main3\n");
+	arcade::Engine::instance().load(av[1]);
+	graphAPI = arcade::Engine::instance().getGraphLib();
 	graphAPI->init();
-	printf("main4\n");
+	arcade::Engine::instance().getGameLib()->init();
 	while (true) {
 		printf("wesh\n");
-		engine.getGameLib()->tick();
+		arcade::Engine::instance().getGameLib()->tick();
 	}
-	engine.closeHandlers();
+	arcade::Engine::instance().closeHandlers();
 	return (0);
 }

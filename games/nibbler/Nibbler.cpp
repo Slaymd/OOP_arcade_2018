@@ -7,9 +7,8 @@
 
 #include "Nibbler.hpp"
 
-void Nibbler::init(arcade::Engine engine)
+void Nibbler::init()
 {
-	_engine = engine;
 	_name = new ui::UIText({100, 100}, "TEST");
 	_name->setColor({255, 255, 255});
 
@@ -19,13 +18,10 @@ void Nibbler::init(arcade::Engine engine)
 
 void Nibbler::tick()
 {
-	printf("tick\n");
-	_engine.Graphic().clear();
-//	_engine.Graphic().render();
-//	auto *g = new ui::SFMLApi;
-
-//	g->drawText(*_name);
-//	g->drawText(*_input);
+	arcade::Engine::Graphic().clear();
+	arcade::Engine::Graphic().drawText(*_name);
+	arcade::Engine::Graphic().drawText(*_input);
+	arcade::Engine::Graphic().render();
 }
 
 void Nibbler::close()

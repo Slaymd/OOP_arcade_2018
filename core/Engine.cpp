@@ -52,7 +52,6 @@ void arcade::Engine::load(std::string defaultLib)
 			return;
 		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
 		IGameApi *game = gameEntryPoint();
-		game->init(arcade::Engine::instance());
 		_gameLib.emplace_back(game);
 		_handlers.emplace_back(handleGame);
 	}
