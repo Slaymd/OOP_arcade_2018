@@ -11,21 +11,21 @@
 
 int main(int ac, char **av)
 {
-	arcade::Engine engine;
+	arcade::Engine engine = arcade::Engine::instance();
 	ui::IApi *graphAPI = nullptr;
 
 	if (ac != 2)
 		return 84;
-	printf("[A] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
+	printf("main1\n");
 	engine.load(av[1]);
-	printf("[B] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
+	printf("main2\n");
 	graphAPI = engine.getGraphLib();
-	printf("[C] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
+	printf("main3\n");
 	graphAPI->init();
-	printf("[D] Max tu me casses les couilles putain de merde connard jvais t'enculer je le sais\n");
-	while (graphAPI) {
-		graphAPI->clear();
-		graphAPI->render();
+	printf("main4\n");
+	while (true) {
+		printf("wesh\n");
+		engine.getGameLib()->tick();
 	}
 	engine.closeHandlers();
 	return (0);

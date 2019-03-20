@@ -4,10 +4,12 @@
 ** File description:
 ** .cpp
 */
+
 #include "Nibbler.hpp"
 
-void Nibbler::init()
+void Nibbler::init(arcade::Engine engine)
 {
+	_engine = engine;
 	_name = new ui::UIText({100, 100}, "TEST");
 	_name->setColor({255, 255, 255});
 
@@ -17,8 +19,13 @@ void Nibbler::init()
 
 void Nibbler::tick()
 {
-	arcade::Engine::Graphic().drawText(*_name);
-	arcade::Engine::Graphic().drawText(*_input);
+	printf("tick\n");
+	_engine.Graphic().clear();
+//	_engine.Graphic().render();
+//	auto *g = new ui::SFMLApi;
+
+//	g->drawText(*_name);
+//	g->drawText(*_input);
 }
 
 void Nibbler::close()

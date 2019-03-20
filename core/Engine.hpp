@@ -7,8 +7,8 @@
 #ifndef ARCADE_CORE_HPP
 #define ARCADE_CORE_HPP
 
-#include "../games/IGameApi.hpp"
-#include "../lib/IApi.hpp"
+#include "IGameApi.hpp"
+#include "IApi.hpp"
 #include <iostream>
 #include <dirent.h>
 #include <dlfcn.h>
@@ -23,14 +23,15 @@ namespace arcade {
 			private:
 		};
 
-		class Menu : public IGameApi {
-		};
+//		class Menu : public IGameApi {
+//		};
 
 		public:
 		Engine() = default;
 		~Engine() = default;
 
 		static Engine &instance();
+
 		static ui::IApi &Graphic();
 
 		void load(std::string);

@@ -30,11 +30,11 @@ graphicals:
 clean:
 	$(MAKE_CORE) clean
 	$(MAKE_SFMLAPI) clean
-	$(MAKE_GAMES) clean
+	$(MAKE_GAME) clean
 
 fclean: clean
 	$(MAKE_CORE) fclean
 	$(MAKE_SFMLAPI) fclean
-	$(MAKE_GAMES) fclean
+	$(MAKE_GAME) fclean
 
 re: fclean all

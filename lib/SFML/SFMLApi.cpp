@@ -5,7 +5,7 @@
 ** Darius
 */
 
-#include "../SFMLApi.hpp"
+#include "SFMLApi.hpp"
 
 void ui::SFMLApi::init()
 {
@@ -92,11 +92,13 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 
 void ui::SFMLApi::drawFrame(ui::Frame frame)
 {
+	(void)frame;
 	printf("SFML: drawFrame not implemented.\n");
 }
 
 void ui::SFMLApi::playSound(const std::string &string)
 {
+	(void)string;
 	printf("SFML: playSound not implemented.\n");
 }
 
