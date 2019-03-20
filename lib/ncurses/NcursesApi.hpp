@@ -4,15 +4,15 @@
 ** File description:
 ** Darius
 */
-#ifndef ARCADE_SFMLAPI_HPP
-#define ARCADE_SFMLAPI_HPP
+#ifndef ARCADE_NCURSESAPI_HPP
+#define ARCADE_NCURSESAPI_HPP
 
-#include <SFML/Graphics.hpp>
-#include <unordered_map>
 #include "IApi.hpp"
+#include <ncurses.h>
 
 namespace ui {
-	class SFMLApi : public IApi {
+
+	class NcursesApi : public IApi {
 
 		public:
 		void init(void) override;
@@ -38,14 +38,9 @@ namespace ui {
 		bool isActive(void) override;
 
 		private:
-		sf::Texture *getSFMLTexture(const std::string &);
-		sf::Color getSFMLColor(color);
-
-		sf::RenderWindow *_win = nullptr;
-		sf::Font *_font = nullptr;
-		std::unordered_map<std::string, sf::Texture> _assets;
 		int _lastEvent = 0;
 	};
+
 }
 
-#endif //ARCADE_SFMLAPI_HPP
+#endif //ARCADE_NCURSESAPI_HPP

@@ -20,7 +20,6 @@ int main(int ac, char **av)
 	graphAPI->init();
 	arcade::Engine::instance().getGameLib()->init();
 	while (true) {
-		printf("wesh\n");
 		arcade::Engine::instance().getGameLib()->tick();
 	}
 	arcade::Engine::instance().closeHandlers();

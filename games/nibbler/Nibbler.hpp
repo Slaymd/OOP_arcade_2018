@@ -28,6 +28,7 @@ class Nibbler : public IGameApi {
 	private:
 	ui::UIText *_name;
 	ui::UIText *_input;
+	ui::UIRect *_rect;
 	arcade::Engine _engine;
 };
 
