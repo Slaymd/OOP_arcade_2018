@@ -21,7 +21,7 @@ class Nibbler : public IGameApi {
 	~Nibbler() = default;
 
 	//functions
-	void init(arcade::Engine) override;
+	void init() override;
 	void tick() override;
 	void close() override;
 

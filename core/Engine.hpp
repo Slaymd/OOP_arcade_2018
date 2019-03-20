@@ -12,6 +12,8 @@
 #include <iostream>
 #include <dirent.h>
 #include <dlfcn.h>
+#include <algorithm>
+#include <cstring>
 
 namespace arcade {
 
