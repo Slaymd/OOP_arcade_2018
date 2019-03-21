@@ -14,6 +14,12 @@ namespace ui {
 
 	class NcursesApi : public IApi {
 
+		struct color_asset {
+			color fgColor;
+			color bgColor;
+			short pairNb;
+		};
+
 		public:
 		void init(void) override;
 
@@ -38,7 +44,11 @@ namespace ui {
 		bool isActive(void) override;
 
 		private:
+		short getColorPair(color fgColor, color bgColor);
+		void initColor(short, color);
+
 		int _lastEvent = 0;
+		std::vector<color_asset> _colorAssets;
 	};
 
 }

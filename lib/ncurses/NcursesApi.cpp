@@ -13,12 +13,18 @@ void ui::NcursesApi::init()
 	nodelay(stdscr, TRUE);
 	keypad(stdscr, TRUE);
 	start_color();
+	noecho();
+	cbreak();
+	curs_set(0);
 	init_pair(1, COLOR_RED, COLOR_RED);
 	init_pair(2, COLOR_GREEN, COLOR_GREEN);
+	init_pair(3, 9, COLOR_BLACK);
+	init_pair(4, 9, COLOR_GREEN);
 }
 
 void ui::NcursesApi::render()
 {
+	_lastEvent = getch();
 	refresh();
 }
 
@@ -43,36 +49,24 @@ int ui::NcursesApi::getEvent()
 
 void ui::NcursesApi::drawText(ui::UIText text)
 {
-	(void)text;
-//	printf("ncurses: drawText not implemented.\n");
-}
+	short colorId = getColorPair(text.getColor(), text.getBackgroundColor());
 
-//changeColor()
-//{
-//	can_change_color();
-//}
+	attron(COLOR_PAIR(colorId));
+	mvprintw(text.getPosition().y, text.getPosition().x * 2, text.getString().c_str());
+	attroff(COLOR_PAIR(colorId));
+}
 
 void ui::NcursesApi::drawRect(ui::UIRect rect)
 {
-	size scaledSize = {rect.getSize().width / 10, rect.getSize().height / 20};
-	color bgcolor = rect.getBackgroundColor();
-	color bdcolor = rect.getBorderColor();
-	init_color(COLOR_RED,
-		static_cast<short>((1000/255) * bgcolor.r),
-		static_cast<short>((1000/255) * bgcolor.g),
-		static_cast<short>((1000/255) * bgcolor.b));
-	init_color(COLOR_GREEN,
-		static_cast<short>((1000/255) * bdcolor.r),
-		static_cast<short>((1000/255) * bdcolor.g),
-		static_cast<short>((1000/255) * bdcolor.b));
+	short bgColorId = getColorPair(rect.getBackgroundColor(), rect.getBackgroundColor());
+	short bdColorId = getColorPair(rect.getBorderColor(), rect.getBorderColor());
 
-	for (int y = rect.getPosition().y; y < scaledSize.height; y++) {
-		for (int x = rect.getPosition().x; x < scaledSize.width; x += 2) {
-			attron(COLOR_PAIR(y < rect.getBorderWeight() || y >= scaledSize.height - rect.getBorderWeight() ? 2 : x < rect.getBorderWeight() || x >= scaledSize.width - rect.getBorderWeight() * 2 ? 2 : 1));
+	for (int y = rect.getPosition().y; y < rect.getSize().height; y++) {
+		for (int x = rect.getPosition().x; x < rect.getSize().width * 2; x += 2) {
+			attron(COLOR_PAIR(y < rect.getBorderWeight() || y >= rect.getSize().height - rect.getBorderWeight() ? bdColorId : x < rect.getBorderWeight() * 2 || x >= rect.getSize().width * 2 - rect.getBorderWeight() * 2 ? bdColorId : bgColorId));
 			mvprintw(y, x, " ");
 			mvprintw(y, x+1, " ");
-			attroff(COLOR_PAIR(1));
-			attroff(COLOR_PAIR(2));
+			attroff(COLOR_PAIR(y < rect.getBorderWeight() || y >= rect.getSize().height - rect.getBorderWeight() ? bdColorId : x < rect.getBorderWeight() * 2 || x >= rect.getSize().width * 2 - rect.getBorderWeight() * 2 ? bdColorId : bgColorId));
 		}
 	}
 }
@@ -98,6 +92,34 @@ void ui::NcursesApi::setTitle(const std::string &string)
 bool ui::NcursesApi::isActive()
 {
 	return false;
+}
+
+void ui::NcursesApi::initColor(short id, ui::color color)
+{
+	init_color(id,
+		static_cast<short>((1000/255) * color.r),
+		static_cast<short>((1000/255) * color.g),
+		static_cast<short>((1000/255) * color.b));
+}
+
+short ui::NcursesApi::getColorPair(ui::color fgColor, ui::color bgColor)
+{
+	static short lastColorId = 9;
+	static short lastPairId = 0;
+
+	for (color_asset asset : _colorAssets) {
+		if (asset.fgColor.b == fgColor.b && asset.fgColor.g == fgColor.g && asset.fgColor.r == fgColor.r &&
+		asset.bgColor.b == bgColor.b && asset.bgColor.g == bgColor.g && asset.bgColor.r == bgColor.r)
+			return asset.pairNb;
+	}
+	lastColorId++;
+	initColor(lastColorId, fgColor);
+	lastColorId++;
+	initColor(lastColorId, bgColor);
+	lastPairId++;
+	init_pair(lastPairId, lastColorId - (short)1, lastColorId);
+	_colorAssets.emplace_back((color_asset){fgColor, bgColor, lastPairId});
+	return lastPairId;
 }
 
 extern "C" ui::IApi *entryPoint()

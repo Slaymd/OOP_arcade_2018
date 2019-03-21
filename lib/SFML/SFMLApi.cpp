@@ -59,7 +59,7 @@ void ui::SFMLApi::drawText(ui::UIText text)
 	position pos = text.getPosition();
 
 	sfText.setFont(*_font);
-	sfText.setPosition(pos.x, pos.y);
+	sfText.setPosition(pos.x * _scale, pos.y * _scale);
 	sfText.setString(text.getString());
 	if (_win == nullptr)
 		return;
@@ -70,8 +70,8 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 {
 	sf::RectangleShape sfRect;
 	sf::Texture *sfTexture;
-	position pos = rect.getPosition();
-	size size = rect.getSize();
+	position pos = { rect.getPosition().x * _scale, rect.getPosition().y * _scale };
+	size size = { rect.getSize().width * _scale, rect.getSize().height * _scale };
 	color bgColor = rect.getBackgroundColor();
 	color bdColor = rect.getBorderColor();
 
@@ -83,7 +83,7 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 		sfRect.setTexture(sfTexture);
 	} else
 		sfRect.setFillColor(getSFMLColor(bgColor));
-	sfRect.setOutlineThickness(rect.getBorderWeight());
+	sfRect.setOutlineThickness(rect.getBorderWeight() * _scale);
 	sfRect.setOutlineColor(getSFMLColor(bdColor));
 	if (_win == nullptr)
 		return;

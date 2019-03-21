@@ -7,6 +7,7 @@
 
 #include "Engine.hpp"
 
+
 arcade::Engine &arcade::Engine::instance()
 {
 	static arcade::Engine instance;
@@ -16,27 +17,32 @@ arcade::Engine &arcade::Engine::instance()
 
 ui::IApi &arcade::Engine::Graphic()
 {
-	return (*arcade::Engine::instance().getGraphLib());
+	return (*arcade::Engine::instance().getCurrentGraphLib());
 }
 
-std::string arcade::Engine::findName(std::string path)
+
+/*
+ *      ENGINE MAIN
+ */
+
+void arcade::Engine::start(int ac, char **av)
 {
-	std::string name;
-	size_t i = 0;
-
-	i = path.size();
-	for(; i > 0 && path[i - 1] != '_'; i--);
-	if (i == 0)
-		//TODO throw an error
-		return nullptr;
-	for (size_t j = 0; path[i] != '.' && path[i]; i++, j++) {
-		name.insert(j, 1, path[i]);
+	if (ac != 2)
+		return; //TODO: exception
+	arcade::Engine::instance().load(av[1]);
+	arcade::Engine::instance().Graphic().init();
+	arcade::Engine::instance().getCurrentGame()->init();
+	while (true) {
+		arcade::Engine::instance().getCurrentGame()->tick();
+		//arcade::Engine::instance().getGameLib()->tick();
 	}
-	if (!path[i])
-		//TODO throw an error
-		return nullptr;
-	return name;
+	arcade::Engine::instance().closeHandlers();
+	return;
 }
+
+/*
+ *      LOADER
+ */
 
 void arcade::Engine::load(std::string defaultLib)
 {
@@ -52,7 +58,7 @@ void arcade::Engine::load(std::string defaultLib)
 			return;
 		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
 		IGameApi *game = gameEntryPoint();
-		_gameLib.emplace_back(game);
+		_gameLibs.emplace_back(game);
 		_handlers.emplace_back(handleGame);
 	}
 	for (const std::string &libPath : tmpLib) {
@@ -62,21 +68,45 @@ void arcade::Engine::load(std::string defaultLib)
 			return;
 		graphEntryPoint = reinterpret_cast<ui::IApi *(*)()>(dlsym(handleGraph, "entryPoint"));
 		ui::IApi *api = graphEntryPoint();
-		_graphLib.emplace_back(api);
+		_graphLibs.emplace_back(api);
 		_handlers.emplace_back(handleGraph);
 	}
 }
 
-void arcade::Engine::rotateGames()
+void arcade::Engine::closeHandlers()
 {
-	std::rotate(_gameLib.begin(), _gameLib.begin()+1, _gameLib.end());
-
+	for (void *handler : _handlers) {
+		dlclose(handler);
+	}
 }
 
-void arcade::Engine::rotateGraph()
+/*
+ *      LIB/GAME SWITCHER
+ */
+
+void arcade::Engine::rotateGames(bool reversed)
 {
-	std::rotate(_graphLib.begin(), _graphLib.begin()+1, _graphLib.end());
+	_gameIndex += reversed ? -1 : 1;
+
+	if (_gameIndex < 0)
+		_gameIndex = (int)_gameLibs.size() - 1;
+	else if (_gameIndex >= (int)_gameLibs.size())
+		_gameIndex = 0;
 }
+
+void arcade::Engine::rotateGraphLibs(bool reversed)
+{
+	_graphLibIndex += reversed ? -1 : 1;
+
+	if (_graphLibIndex < 0)
+		_graphLibIndex = (int)_graphLibs.size() - 1;
+	else if (_graphLibIndex >= (int)_graphLibs.size())
+		_graphLibIndex = 0;
+}
+
+/*
+ *      UTILS
+ */
 
 std::vector<std::string> arcade::Engine::getSharedLibPaths(
 	const std::string &pathToDirectory, std::string defaultPath
@@ -110,9 +140,35 @@ std::vector<std::string> arcade::Engine::getSharedLibPaths(
 	return sharedLibs;
 }
 
-void arcade::Engine::closeHandlers()
+std::string arcade::Engine::findName(std::string path)
 {
-	for (void *handler : _handlers) {
-		dlclose(handler);
+	std::string name;
+	size_t i = 0;
+
+	i = path.size();
+	for(; i > 0 && path[i - 1] != '_'; i--);
+	if (i == 0)
+		//TODO throw an error
+		return nullptr;
+	for (size_t j = 0; path[i] != '.' && path[i]; i++, j++) {
+		name.insert(j, 1, path[i]);
 	}
+	if (!path[i])
+		//TODO throw an error
+		return nullptr;
+	return name;
+}
+
+/*
+ *      LIB GETTERS
+ */
+
+IGameApi *arcade::Engine::getCurrentGame()
+{
+	return _gameLibs.empty() ? nullptr : _gameLibs[0];
+}
+
+ui::IApi *arcade::Engine::getCurrentGraphLib()
+{
+	return _graphLibs.empty() ? nullptr : _graphLibs[0];
 }

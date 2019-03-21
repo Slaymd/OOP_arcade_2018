@@ -19,15 +19,6 @@ namespace arcade {
 
 	class Engine {
 
-		class EventHandler {
-			public:
-
-			private:
-		};
-
-//		class Menu : public IGameApi {
-//		};
-
 		public:
 		Engine() = default;
 		~Engine() = default;
@@ -36,38 +27,35 @@ namespace arcade {
 
 		static ui::IApi &Graphic();
 
+		void start(int ac, char **av);
+
+		private:
+		IGameApi *getCurrentGame();
+		ui::IApi *getCurrentGraphLib();
+
 		void load(std::string);
-
-		void rotateGames();
-
-		void rotateGraph();
-
-		IGameApi *getGameLib()
-		{
-			return _gameLib[0];
-		};
-
-		ui::IApi *getGraphLib()
-		{
-			return _graphLib[0];
-		};
-
+		void rotateGames(bool = false);
+		void rotateGraphLibs(bool = false);
 		void closeHandlers();
 
 		private:
-		std::vector<std::string> getSharedLibPaths(
-			const std::string &pathToDirectory,
-			std::string defaultPath = ""
-		) const;
+		std::vector<std::string> getSharedLibPaths(const std::string &pathToDirectory, std::string defaultPath = "") const;
 		std::string findName(std::string);
 
-		std::vector<IGameApi *> _gameLib;
-		std::vector<std::string> _pathGame;
-		std::vector<ui::IApi *> _graphLib;
-		std::vector<std::string> _pathGraph;
+		//Lists
+
+		std::vector<IGameApi *> _gameLibs;
+		std::vector<ui::IApi *> _graphLibs;
 		std::vector<void *> _handlers;
 
+		//Indexes
+
+		int _gameIndex = 0;
+		int _graphLibIndex = 0;
+
+
 	};
+
 }
 
 #endif //ARCADE_CORE_HPP
