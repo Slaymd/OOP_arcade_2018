@@ -7,24 +7,67 @@
 
 #include "NcursesApi.hpp"
 
+/*
+ * EVENTS
+ */
+
+static const arcade::event::event_t _events[] = {
+	{arcade::event::Key::A, 97},
+	{arcade::event::Key::B, 98},
+	{arcade::event::Key::C, 99},
+	{arcade::event::Key::D, 100},
+	{arcade::event::Key::E, 101},
+	{arcade::event::Key::F, 102},
+	{arcade::event::Key::G, 103},
+	{arcade::event::Key::H, 104},
+	{arcade::event::Key::I, 105},
+	{arcade::event::Key::J, 106},
+	{arcade::event::Key::K, 107},
+	{arcade::event::Key::L, 108},
+	{arcade::event::Key::M, 109},
+	{arcade::event::Key::N, 110},
+	{arcade::event::Key::O, 111},
+	{arcade::event::Key::P, 112},
+	{arcade::event::Key::Q, 113},
+	{arcade::event::Key::R, 114},
+	{arcade::event::Key::S, 115},
+	{arcade::event::Key::T, 116},
+	{arcade::event::Key::U, 117},
+	{arcade::event::Key::V, 118},
+	{arcade::event::Key::W, 119},
+	{arcade::event::Key::X, 120},
+	{arcade::event::Key::Y, 121},
+	{arcade::event::Key::Z, 122},
+	{arcade::event::Key::ARROW_DOWN, KEY_DOWN},
+	{arcade::event::Key::ARROW_UP, KEY_UP},
+	{arcade::event::Key::ARROW_LEFT, KEY_LEFT},
+	{arcade::event::Key::ARROW_RIGHT, KEY_RIGHT},
+	{arcade::event::Key::ENTER, KEY_ENTER},
+	{arcade::event::Key::SPACE, ' '},
+	{arcade::event::Key::BACKSPACE, KEY_BACKSPACE},
+	{arcade::event::Key::ESCAPE, 27},
+	{arcade::event::Key::UNKNOWN, -1}
+};
+
+/*
+ *      MAIN FUNCTIONS
+ */
+
 void ui::NcursesApi::init()
 {
 	initscr();
+	if (!can_change_color() || !has_colors())
+		throw std::exception();
 	nodelay(stdscr, TRUE);
 	keypad(stdscr, TRUE);
 	start_color();
 	noecho();
 	cbreak();
 	curs_set(0);
-	init_pair(1, COLOR_RED, COLOR_RED);
-	init_pair(2, COLOR_GREEN, COLOR_GREEN);
-	init_pair(3, 9, COLOR_BLACK);
-	init_pair(4, 9, COLOR_GREEN);
 }
 
 void ui::NcursesApi::render()
 {
-	_lastEvent = getch();
 	refresh();
 }
 
@@ -35,16 +78,12 @@ void ui::NcursesApi::clear()
 
 void ui::NcursesApi::close()
 {
-	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_GREEN, 0, 1000, 0);
 	endwin();
 }
 
 int ui::NcursesApi::getEvent()
 {
-	int lastEvent = _lastEvent;
-	_lastEvent = 0;
-	return lastEvent;
+	return getEventKey(getch());
 }
 
 void ui::NcursesApi::drawText(ui::UIText text)
@@ -94,6 +133,10 @@ bool ui::NcursesApi::isActive()
 	return false;
 }
 
+/*
+ *      UTILS
+ */
+
 void ui::NcursesApi::initColor(short id, ui::color color)
 {
 	init_color(id,
@@ -120,6 +163,15 @@ short ui::NcursesApi::getColorPair(ui::color fgColor, ui::color bgColor)
 	init_pair(lastPairId, lastColorId - (short)1, lastColorId);
 	_colorAssets.emplace_back((color_asset){fgColor, bgColor, lastPairId});
 	return lastPairId;
+}
+
+arcade::event::Key ui::NcursesApi::getEventKey(int ncursesEventCode)
+{
+	for (int i = 0; _events[i].base != -1; i++) {
+		if (_events[i].base == ncursesEventCode)
+			return (_events[i].key);
+	}
+	return (arcade::event::UNKNOWN);
 }
 
 extern "C" ui::IApi *entryPoint()

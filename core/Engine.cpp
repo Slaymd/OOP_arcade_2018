@@ -27,17 +27,21 @@ ui::IApi &arcade::Engine::Graphic()
 
 void arcade::Engine::start(int ac, char **av)
 {
+	int e;
+
 	if (ac != 2)
 		return; //TODO: exception
 	arcade::Engine::instance().load(av[1]);
 	arcade::Engine::instance().Graphic().init();
 	arcade::Engine::instance().getCurrentGame()->init();
-	while (true) {
-		arcade::Engine::instance().getCurrentGame()->tick();
-		//arcade::Engine::instance().getGameLib()->tick();
+
+	while (_isActive) {
+		e = arcade::Engine::instance().getCurrentGraphLib()->getEvent();
+		eventHandler((arcade::event::Key)e);
+
+		arcade::Engine::instance().getCurrentGame()->tick(e);
 	}
 	arcade::Engine::instance().closeHandlers();
-	return;
 }
 
 /*
@@ -81,6 +85,29 @@ void arcade::Engine::closeHandlers()
 }
 
 /*
+ *      EVENTS
+ */
+
+void arcade::Engine::eventHandler(arcade::event::Key e)
+{
+	switch (e) {
+	case event::ESCAPE:
+		Graphic().close();
+//		getCurrentGraphLib()->close();
+		_isActive = false;
+		break;
+	case event::ARROW_UP:
+		rotateGraphLibs();
+		break;
+	case event::ARROW_DOWN:
+		rotateGraphLibs(true);
+		break;
+	default:
+		break;
+	}
+}
+
+/*
  *      LIB/GAME SWITCHER
  */
 
@@ -96,12 +123,16 @@ void arcade::Engine::rotateGames(bool reversed)
 
 void arcade::Engine::rotateGraphLibs(bool reversed)
 {
+	getCurrentGraphLib()->close();
+
 	_graphLibIndex += reversed ? -1 : 1;
 
 	if (_graphLibIndex < 0)
 		_graphLibIndex = (int)_graphLibs.size() - 1;
 	else if (_graphLibIndex >= (int)_graphLibs.size())
 		_graphLibIndex = 0;
+
+	getCurrentGraphLib()->init();
 }
 
 /*
@@ -165,10 +196,10 @@ std::string arcade::Engine::findName(std::string path)
 
 IGameApi *arcade::Engine::getCurrentGame()
 {
-	return _gameLibs.empty() ? nullptr : _gameLibs[0];
+	return _gameLibs.empty() ? nullptr : _gameLibs[_gameIndex];
 }
 
 ui::IApi *arcade::Engine::getCurrentGraphLib()
 {
-	return _graphLibs.empty() ? nullptr : _graphLibs[0];
+	return _graphLibs.empty() ? nullptr : _graphLibs[_graphLibIndex];
 }

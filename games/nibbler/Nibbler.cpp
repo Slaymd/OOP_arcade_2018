@@ -21,7 +21,7 @@ void Nibbler::init()
 	_rect->setBorders(1, {255, 255, 255});
 }
 
-void Nibbler::tick()
+void Nibbler::tick(int event)
 {
 	arcade::Engine::Graphic().clear();
 	arcade::Engine::Graphic().drawRect(*_rect);

@@ -44,10 +44,10 @@ namespace ui {
 		bool isActive(void) override;
 
 		private:
+		arcade::event::Key getEventKey(int);
 		short getColorPair(color fgColor, color bgColor);
 		void initColor(short, color);
 
-		int _lastEvent = 0;
 		std::vector<color_asset> _colorAssets;
 	};
 

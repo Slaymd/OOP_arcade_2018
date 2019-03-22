@@ -38,7 +38,8 @@ namespace arcade {
 		void rotateGraphLibs(bool = false);
 		void closeHandlers();
 
-		private:
+		void eventHandler(arcade::event::Key);
+
 		std::vector<std::string> getSharedLibPaths(const std::string &pathToDirectory, std::string defaultPath = "") const;
 		std::string findName(std::string);
 
@@ -52,6 +53,7 @@ namespace arcade {
 
 		int _gameIndex = 0;
 		int _graphLibIndex = 0;
+		bool _isActive = true;
 
 
 	};

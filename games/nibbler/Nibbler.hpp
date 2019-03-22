@@ -22,7 +22,7 @@ class Nibbler : public IGameApi {
 
 	//functions
 	void init() override;
-	void tick() override;
+	void tick(int) override;
 	void close() override;
 
 	private:
