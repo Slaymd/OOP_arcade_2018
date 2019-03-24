@@ -8,3 +8,6 @@ lib_arcade_sfml.so
 lib_arcade_test.so
 lib_arcade_nibbler.so
 lib_arcade_ncurses.so
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake

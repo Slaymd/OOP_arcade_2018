@@ -9,7 +9,6 @@ NAME			=	arcade
 
 MAKE_CORE		=	make -C./core
 
-MAKE_NIBBLER	=	make -C./games/nibbler
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 MAKE_NCURSESAPI	=	make -C./lib/ncurses
@@ -20,15 +19,10 @@ all:
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE)
 
-core:
-	$(MAKE_CORE)
 
 game:
 	$(MAKE_NIBBLER)
 
-graphicals:
-	$(MAKE_SFMLAPI)
-	$(MAKE_NCURSESAPI)
 
 clean:
 	$(MAKE_CORE) clean

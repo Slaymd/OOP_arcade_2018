@@ -155,7 +155,7 @@ std::vector<std::string> arcade::Engine::getSharedLibPaths(
 				std::string(ent->d_name);
 			const char *defslash = strrchr(defaultPath.c_str(), '/');
 			const char *patslash = strrchr(path.c_str(), '/');
-			if (ext == nullptr || strcmp(ext, ".so") != 0)
+			if (ext == nullptr || (strcmp(ext, ".so") != 0 && strcmp(ext, ".dylib") != 0))
 				continue;
 			if (defslash && patslash && strcmp(defslash, patslash) == 0) {
 				sharedLibs.insert(sharedLibs.begin(), path);
