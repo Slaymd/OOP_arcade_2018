@@ -9,8 +9,28 @@
 
 #include "IApi.hpp"
 #include <QApplication>
+#include <QWidget>
+#include <QKeyEvent>
 
 namespace ui {
+
+	class QtApi;
+
+	class QtApiWindow : public QWidget {
+
+		Q_OBJECT
+
+		public:
+		explicit QtApiWindow(QtApi *);
+
+		protected:
+		void closeEvent(QCloseEvent *event) override;
+
+		void keyPressEvent(QKeyEvent *event) override;
+
+		private:
+		QtApi *_apiRef;
+	};
 
 	class QtApi : public IApi {
 
@@ -37,10 +57,15 @@ namespace ui {
 
 		bool isActive() override;
 
-		private:
-//		QApplication *_app = nullptr;
-	};
+		void setLastEvent(int);
 
+		private:
+		arcade::event::Key getEventKey(int qtEventCode);
+
+		QtApiWindow *_win = nullptr;
+		QApplication *_app = nullptr;
+		int _lastEvent = -1;
+	};
 }
 
 #endif //ARCADE_QTAPI_HPP

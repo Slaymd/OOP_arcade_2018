@@ -138,6 +138,9 @@
 		<Unit filename="/Users/slaymd/Epitech/B4-OOP/OOP_arcade_2018/lib/Qt/QtApi.hpp">
 			<Option target="arcade"/>
 		</Unit>
+		<Unit filename="/Users/slaymd/Epitech/B4-OOP/OOP_arcade_2018/lib/Qt/QtApiWindow.cpp">
+			<Option target="arcade"/>
+		</Unit>
 		<Unit filename="/Users/slaymd/Epitech/B4-OOP/OOP_arcade_2018/lib/SFML/SFMLApi.cpp">
 			<Option target="arcade"/>
 		</Unit>

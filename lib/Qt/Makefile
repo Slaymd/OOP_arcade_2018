@@ -123,6 +123,19 @@ arcade-qt/fast:
 	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/build
 .PHONY : arcade-qt/fast
 
+#=============================================================================
+# Target rules for targets named arcade-qt_autogen
+
+# Build rule for target.
+arcade-qt_autogen: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arcade-qt_autogen
+.PHONY : arcade-qt_autogen
+
+# fast build rule for target.
+arcade-qt_autogen/fast:
+	$(MAKE) -f CMakeFiles/arcade-qt_autogen.dir/build.make CMakeFiles/arcade-qt_autogen.dir/build
+.PHONY : arcade-qt_autogen/fast
+
 QtApi.o: QtApi.cpp.o
 
 .PHONY : QtApi.o
@@ -150,6 +163,60 @@ QtApi.cpp.s:
 	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/QtApi.cpp.s
 .PHONY : QtApi.cpp.s
 
+QtApiWindow.o: QtApiWindow.cpp.o
+
+.PHONY : QtApiWindow.o
+
+# target to build an object file
+QtApiWindow.cpp.o:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/QtApiWindow.cpp.o
+.PHONY : QtApiWindow.cpp.o
+
+QtApiWindow.i: QtApiWindow.cpp.i
+
+.PHONY : QtApiWindow.i
+
+# target to preprocess a source file
+QtApiWindow.cpp.i:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/QtApiWindow.cpp.i
+.PHONY : QtApiWindow.cpp.i
+
+QtApiWindow.s: QtApiWindow.cpp.s
+
+.PHONY : QtApiWindow.s
+
+# target to generate assembly for a file
+QtApiWindow.cpp.s:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/QtApiWindow.cpp.s
+.PHONY : QtApiWindow.cpp.s
+
+arcade-qt_autogen/mocs_compilation.o: arcade-qt_autogen/mocs_compilation.cpp.o
+
+.PHONY : arcade-qt_autogen/mocs_compilation.o
+
+# target to build an object file
+arcade-qt_autogen/mocs_compilation.cpp.o:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/arcade-qt_autogen/mocs_compilation.cpp.o
+.PHONY : arcade-qt_autogen/mocs_compilation.cpp.o
+
+arcade-qt_autogen/mocs_compilation.i: arcade-qt_autogen/mocs_compilation.cpp.i
+
+.PHONY : arcade-qt_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+arcade-qt_autogen/mocs_compilation.cpp.i:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/arcade-qt_autogen/mocs_compilation.cpp.i
+.PHONY : arcade-qt_autogen/mocs_compilation.cpp.i
+
+arcade-qt_autogen/mocs_compilation.s: arcade-qt_autogen/mocs_compilation.cpp.s
+
+.PHONY : arcade-qt_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+arcade-qt_autogen/mocs_compilation.cpp.s:
+	$(MAKE) -f CMakeFiles/arcade-qt.dir/build.make CMakeFiles/arcade-qt.dir/arcade-qt_autogen/mocs_compilation.cpp.s
+.PHONY : arcade-qt_autogen/mocs_compilation.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -159,9 +226,16 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... arcade-qt"
+	@echo "... arcade-qt_autogen"
 	@echo "... QtApi.o"
 	@echo "... QtApi.i"
 	@echo "... QtApi.s"
+	@echo "... QtApiWindow.o"
+	@echo "... QtApiWindow.i"
+	@echo "... QtApiWindow.s"
+	@echo "... arcade-qt_autogen/mocs_compilation.o"
+	@echo "... arcade-qt_autogen/mocs_compilation.i"
+	@echo "... arcade-qt_autogen/mocs_compilation.s"
 .PHONY : help
 
 

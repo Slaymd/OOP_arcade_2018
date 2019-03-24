@@ -5,20 +5,71 @@
 ** Darius
 */
 
+#include <QPushButton>
+#include <QMainWindow>
 #include "QtApi.hpp"
+
+/*
+ * EVENTS
+ */
+
+static const arcade::event::event_t _events[] = {
+	{arcade::event::Key::A, Qt::Key::Key_A},
+	{arcade::event::Key::B, Qt::Key::Key_B},
+	{arcade::event::Key::C, Qt::Key::Key_C},
+	{arcade::event::Key::D, Qt::Key::Key_D},
+	{arcade::event::Key::E, Qt::Key::Key_E},
+	{arcade::event::Key::F, Qt::Key::Key_F},
+	{arcade::event::Key::G, Qt::Key::Key_G},
+	{arcade::event::Key::H, Qt::Key::Key_H},
+	{arcade::event::Key::I, Qt::Key::Key_I},
+	{arcade::event::Key::J, Qt::Key::Key_J},
+	{arcade::event::Key::K, Qt::Key::Key_K},
+	{arcade::event::Key::L, Qt::Key::Key_L},
+	{arcade::event::Key::M, Qt::Key::Key_M},
+	{arcade::event::Key::N, Qt::Key::Key_N},
+	{arcade::event::Key::O, Qt::Key::Key_O},
+	{arcade::event::Key::P, Qt::Key::Key_P},
+	{arcade::event::Key::Q, Qt::Key::Key_Q},
+	{arcade::event::Key::R, Qt::Key::Key_R},
+	{arcade::event::Key::S, Qt::Key::Key_S},
+	{arcade::event::Key::T, Qt::Key::Key_T},
+	{arcade::event::Key::U, Qt::Key::Key_U},
+	{arcade::event::Key::V, Qt::Key::Key_V},
+	{arcade::event::Key::W, Qt::Key::Key_W},
+	{arcade::event::Key::X, Qt::Key::Key_X},
+	{arcade::event::Key::Y, Qt::Key::Key_Y},
+	{arcade::event::Key::Z, Qt::Key::Key_Z},
+	{arcade::event::Key::ARROW_DOWN, Qt::Key::Key_Down},
+	{arcade::event::Key::ARROW_UP, Qt::Key::Key_Up},
+	{arcade::event::Key::ARROW_LEFT, Qt::Key::Key_Left},
+	{arcade::event::Key::ARROW_RIGHT, Qt::Key::Key_Right},
+	{arcade::event::Key::ENTER, Qt::Key::Key_Enter},
+	{arcade::event::Key::SPACE, Qt::Key::Key_Space},
+	{arcade::event::Key::BACKSPACE, Qt::Key::Key_Backspace},
+	{arcade::event::Key::ESCAPE, Qt::Key::Key_Escape},
+	{arcade::event::Key::UNKNOWN, -1}
+};
+
+/*
+ * MAIN FUNCTIONS
+ */
 
 void ui::QtApi::init()
 {
-//	int argc = 0;
-//	char *argv[] = {};
-//
-//	_app = new QApplication(argc, argv);
-//	_app->exec();
+	int argc = 0;
+	char *argv[] = {};
+
+	_app = new QApplication(argc, argv);
+
+	_win = new QtApiWindow(this);
+	_win->show();
 }
 
 void ui::QtApi::render()
 {
-//	_app->setApplicationName("salut");
+	_win->show();
+	qApp->processEvents();
 }
 
 void ui::QtApi::clear()
@@ -27,11 +78,14 @@ void ui::QtApi::clear()
 
 void ui::QtApi::close()
 {
+	_app->closingDown();
 }
 
 int ui::QtApi::getEvent()
 {
-	return 0;
+	int lastEvent = _lastEvent;
+	_lastEvent = -1;
+	return lastEvent;
 }
 
 void ui::QtApi::drawText(ui::UIText text)
@@ -62,4 +116,29 @@ void ui::QtApi::setTitle(const std::string &string)
 bool ui::QtApi::isActive()
 {
 	return false;
+}
+
+/*
+ * UTILS
+ */
+
+void ui::QtApi::setLastEvent(int e)
+{
+	if (_lastEvent != -1)
+		return;
+	_lastEvent = getEventKey(e);
+}
+
+arcade::event::Key ui::QtApi::getEventKey(int qtEventCode)
+{
+	for (int i = 0; _events[i].base != -1; i++) {
+		if (_events[i].base == qtEventCode)
+			return (_events[i].key);
+	}
+	return (arcade::event::UNKNOWN);
+}
+
+extern "C" ui::QtApi *entryPoint()
+{
+	return new ui::QtApi();
 }

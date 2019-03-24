@@ -9,16 +9,23 @@ NAME			=	arcade
 
 MAKE_CORE		=	make -C./core
 
+MAKE_NIBBLER	=	make -C./games/nibbler
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 MAKE_NCURSESAPI	=	make -C./lib/ncurses
+MAKE_QTAPI		=	cmake ./lib/Qt && make -C./lib/Qt
 
 all:
 	$(MAKE_NIBBLER)
 	$(MAKE_SFMLAPI)
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE)
+	$(MAKE_QTAPI)
 
+graphicals:
+	$(MAKE_SFMLAPI)
+	$(MAKE_NCURSESAPI)
+	$(MAKE_QTAPI)
 
 game:
 	$(MAKE_NIBBLER)
