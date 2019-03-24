@@ -47,6 +47,8 @@ namespace arcade {
 			return _gameLib[0];
 		};
 
+		std::vector<std::string> getGameName() {return _gameName; };
+
 		ui::IApi *getGraphLib()
 		{
 
@@ -63,7 +65,7 @@ namespace arcade {
 		std::string findName(std::string);
 
 		std::vector<IGameApi *> _gameLib;
-		std::vector<std::string> _pathGame;
+		std::vector<std::string> _gameName;
 		std::vector<ui::IApi *> _graphLib;
 		std::vector<std::string> _pathGraph;
 		std::vector<void *> _handlers;

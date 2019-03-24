@@ -47,6 +47,7 @@ void arcade::Engine::load(std::string defaultLib)
 
 	for (const std::string &gamePath : tmpGame) {
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
+		_gameName.push_back(findName(gamePath));
 		if (!handleGame)
 			//TODO throw an error
 			return;
