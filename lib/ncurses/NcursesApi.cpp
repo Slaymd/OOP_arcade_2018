@@ -5,7 +5,7 @@
 ** Darius
 */
 
-#include <zconf.h>
+#include <unistd.h>
 #include "NcursesApi.hpp"
 
 /*
@@ -71,7 +71,7 @@ void ui::NcursesApi::init()
 void ui::NcursesApi::render()
 {
 	refresh();
-	usleep(100000);
+	usleep(50000);
 }
 
 void ui::NcursesApi::clear()
