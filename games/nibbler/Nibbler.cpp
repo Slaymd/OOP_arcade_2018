@@ -10,7 +10,7 @@
 void Nibbler::init()
 {
 	_name = new ui::UIText({2, 8}, "TEST");
-	_name->setColor({255, 255, 255});
+	_name->setColor({0, 168, 255});
 
 	_input = new ui::UIText({2, 7}, " viatransit.fr ");
 	_input->setColor({255, 255, 255});
@@ -24,6 +24,15 @@ void Nibbler::init()
 void Nibbler::tick(int event)
 {
 	arcade::Engine::Graphic().clear();
+	if (!_reversed) {
+		_rect->setPosition({_rect->getPosition().x + 1, _rect->getPosition().y});
+		if (_rect->getPosition().x >= 59)
+			_reversed = true;
+	} else {
+		_rect->setPosition({_rect->getPosition().x - 1, _rect->getPosition().y});
+		if (_rect->getPosition().x <= 0)
+			_reversed = false;
+	}
 	arcade::Engine::Graphic().drawRect(*_rect);
 	arcade::Engine::Graphic().drawText(*_name);
 	arcade::Engine::Graphic().drawText(*_input);

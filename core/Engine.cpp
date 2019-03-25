@@ -92,7 +92,6 @@ void arcade::Engine::eventHandler(arcade::event::Key e)
 	switch (e) {
 	case event::ESCAPE:
 		Graphic().close();
-//		getCurrentGraphLib()->close();
 		_isActive = false;
 		break;
 	case event::ARROW_UP:

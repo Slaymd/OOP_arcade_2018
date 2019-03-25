@@ -60,6 +60,8 @@ void ui::QtApi::init()
 	int argc = 0;
 	char *argv[] = {};
 
+	_isActive = true;
+
 	_app = new QApplication(argc, argv);
 
 	_win = new QtApiWindow(this);
@@ -68,7 +70,9 @@ void ui::QtApi::init()
 
 void ui::QtApi::render()
 {
-	_win->show();
+	if (!_isActive)
+		return;
+	_win->update();
 	qApp->processEvents();
 }
 
@@ -78,6 +82,9 @@ void ui::QtApi::clear()
 
 void ui::QtApi::close()
 {
+	_isActive = false;
+	_win->close();
+	_win = nullptr;
 	_app->closingDown();
 }
 
@@ -90,12 +97,16 @@ int ui::QtApi::getEvent()
 
 void ui::QtApi::drawText(ui::UIText text)
 {
-	(void)text;
+	if (!_isActive)
+		return;
+	_win->addText(text);
 }
 
 void ui::QtApi::drawRect(ui::UIRect rect)
 {
-	(void)rect;
+	if (!_isActive)
+		return;
+	_win->addRect(rect);
 }
 
 void ui::QtApi::drawFrame(ui::Frame frame)
@@ -110,12 +121,12 @@ void ui::QtApi::playSound(const std::string &string)
 
 void ui::QtApi::setTitle(const std::string &string)
 {
-	(void)string;
+	_win->setWindowTitle(string.c_str());
 }
 
 bool ui::QtApi::isActive()
 {
-	return false;
+	return _isActive;
 }
 
 /*

@@ -13,10 +13,10 @@ namespace ui {
 	class UIText : public AElement {
 
 		public:
-		UIText(position pos, std::string string) : AElement(pos, {0, 0}), _string(string)
+		UIText(position pos, std::string string) : AElement(pos, {0, 0}), _string(string), _color({255, 255, 255})
 		{
 		}
-		~UIText() = default;
+		virtual ~UIText() = default;
 
 		void setString(std::string string) { _string = string; }
 		std::string getString() { return _string; }

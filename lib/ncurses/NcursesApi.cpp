@@ -5,6 +5,7 @@
 ** Darius
 */
 
+#include <zconf.h>
 #include "NcursesApi.hpp"
 
 /*
@@ -64,15 +65,26 @@ void ui::NcursesApi::init()
 	noecho();
 	cbreak();
 	curs_set(0);
+	refresh();
 }
 
 void ui::NcursesApi::render()
 {
 	refresh();
+	usleep(100000);
 }
 
 void ui::NcursesApi::clear()
 {
+	short colorId = getColorPair({0, 0, 0}, {0, 0, 0});
+
+	for (int y = 0; y < 60; y++) {
+		for (int x = 0; x < 60 * 2; x++) {
+			attron(colorId);
+			mvprintw(y, x, " ");
+			attroff(colorId);
+		}
+	}
 	//Doesnt exist in Ncurses
 }
 
@@ -99,13 +111,18 @@ void ui::NcursesApi::drawRect(ui::UIRect rect)
 {
 	short bgColorId = getColorPair(rect.getBackgroundColor(), rect.getBackgroundColor());
 	short bdColorId = getColorPair(rect.getBorderColor(), rect.getBorderColor());
+	position cursesPosition = {rect.getPosition().x * 2, rect.getPosition().y};
+	size cursesSize = {rect.getSize().width * 2, rect.getSize().height};
+	bool isBorder = false;
 
-	for (int y = rect.getPosition().y; y < rect.getSize().height; y++) {
-		for (int x = rect.getPosition().x; x < rect.getSize().width * 2; x += 2) {
-			attron(COLOR_PAIR(y < rect.getBorderWeight() || y >= rect.getSize().height - rect.getBorderWeight() ? bdColorId : x < rect.getBorderWeight() * 2 || x >= rect.getSize().width * 2 - rect.getBorderWeight() * 2 ? bdColorId : bgColorId));
+	for (int y = cursesPosition.y; y < cursesPosition.y + cursesSize.height; y++) {
+		for (int x = cursesPosition.x; x < cursesPosition.x + cursesSize.width; x += 2) {
+			isBorder = !(y >= cursesPosition.y + rect.getBorderWeight() && y < cursesPosition.y + cursesSize.height - rect.getBorderWeight()
+							&& x >= cursesPosition.x + rect.getBorderWeight() * 2 && x < cursesPosition.x + cursesSize.width - rect.getBorderWeight() * 2);
+			attron(COLOR_PAIR(isBorder ? bdColorId : bgColorId));
 			mvprintw(y, x, " ");
 			mvprintw(y, x+1, " ");
-			attroff(COLOR_PAIR(y < rect.getBorderWeight() || y >= rect.getSize().height - rect.getBorderWeight() ? bdColorId : x < rect.getBorderWeight() * 2 || x >= rect.getSize().width * 2 - rect.getBorderWeight() * 2 ? bdColorId : bgColorId));
+			attroff(COLOR_PAIR(isBorder ? bdColorId : bgColorId));
 		}
 	}
 }
