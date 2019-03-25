@@ -24,9 +24,9 @@ ui::IApi &arcade::Engine::Graphic()
  *      ENGINE MAIN
  */
 
-void arcade::Engine::start(int ac, char **av)
+void arcade::Engine::start(int ac, char *av[])
 {
-	int e;
+	int e = -1;
 
 	if (ac != 2)
 		return; //TODO: exception

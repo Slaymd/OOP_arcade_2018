@@ -27,7 +27,7 @@ namespace arcade {
 
 		static ui::IApi &Graphic();
 
-		void start(int ac, char **av);
+		void start(int ac, char *av[]);
 
 		private:
 		IGameApi *getCurrentGame();

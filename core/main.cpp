@@ -9,7 +9,7 @@
 #include "../lib/IApi.hpp"
 #include <dlfcn.h>
 
-int main(int ac, char **av)
+int main(int ac, char *av[])
 {
 	arcade::Engine::instance().start(ac, av);
 }
