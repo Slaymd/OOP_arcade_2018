@@ -7,6 +7,52 @@
 
 #include "SFMLApi.hpp"
 
+/*
+ * EVENTS
+ */
+
+static const arcade::event::event_t _events[] = {
+	{arcade::event::Key::A, 97},
+	{arcade::event::Key::B, 98},
+	{arcade::event::Key::C, 99},
+	{arcade::event::Key::D, 100},
+	{arcade::event::Key::E, 101},
+	{arcade::event::Key::F, 102},
+	{arcade::event::Key::G, 103},
+	{arcade::event::Key::H, 104},
+	{arcade::event::Key::I, 105},
+	{arcade::event::Key::J, 106},
+	{arcade::event::Key::K, 107},
+	{arcade::event::Key::L, 108},
+	{arcade::event::Key::M, 109},
+	{arcade::event::Key::N, 110},
+	{arcade::event::Key::O, 111},
+	{arcade::event::Key::P, 112},
+	{arcade::event::Key::Q, 113},
+	{arcade::event::Key::R, 114},
+	{arcade::event::Key::S, 115},
+	{arcade::event::Key::T, 116},
+	{arcade::event::Key::U, 117},
+	{arcade::event::Key::V, 118},
+	{arcade::event::Key::W, 119},
+	{arcade::event::Key::X, 120},
+	{arcade::event::Key::Y, 121},
+	{arcade::event::Key::Z, 122},
+	{arcade::event::Key::ARROW_DOWN, 74},
+	{arcade::event::Key::ARROW_UP, 73},
+	{arcade::event::Key::ARROW_LEFT, 71},
+	{arcade::event::Key::ARROW_RIGHT, 72},
+	{arcade::event::Key::ENTER, 33},
+	{arcade::event::Key::SPACE, 32},
+	{arcade::event::Key::BACKSPACE, 8},
+	{arcade::event::Key::ESCAPE, 27},
+	{arcade::event::Key::UNKNOWN, -1}
+};
+
+/*
+ * MAIN FUNCTIONS
+ */
+
 void ui::SFMLApi::init()
 {
 	_win = new sf::RenderWindow(sf::VideoMode(1280, 720), "Arcade");
@@ -24,17 +70,9 @@ void ui::SFMLApi::render()
 
 void ui::SFMLApi::clear()
 {
-	sf::Event event;
-
 	if (_win == nullptr)
 		return;
 	_win->clear(sf::Color::Black);
-	while (_win->pollEvent(event)) //TODO: handle events here
-		if (event.type == sf::Event::Closed) {
-			printf("close\n");
-			return;
-		}
-
 }
 
 void ui::SFMLApi::close()
@@ -48,9 +86,17 @@ void ui::SFMLApi::close()
 
 int ui::SFMLApi::getEvent()
 {
-	int lastEvent = _lastEvent;
-	_lastEvent = 0;
-	return lastEvent;
+	sf::Event event{};
+
+	while (_win->pollEvent(event)) {
+		if (event.type == sf::Event::Closed)
+			return arcade::event::ESCAPE;
+		if (event.type == sf::Event::KeyPressed)
+			return getEventKey(event.key.code);
+		if (event.type == sf::Event::TextEntered && event.text.unicode < 128)
+			return getEventKey(event.text.unicode);
+	}
+	return arcade::event::UNKNOWN;
 }
 
 void ui::SFMLApi::drawText(ui::UIText text)
@@ -59,7 +105,7 @@ void ui::SFMLApi::drawText(ui::UIText text)
 	position pos = text.getPosition();
 
 	sfText.setFont(*_font);
-	sfText.setPosition(pos.x, pos.y);
+	sfText.setPosition(pos.x * _scale, pos.y * _scale);
 	sfText.setString(text.getString());
 	sfText.setColor(getSFMLColor(text.getColor()));
 	if (_win == nullptr)
@@ -71,8 +117,8 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 {
 	sf::RectangleShape sfRect;
 	sf::Texture *sfTexture;
-	position pos = rect.getPosition();
-	size size = rect.getSize();
+	position pos = { rect.getPosition().x * _scale, rect.getPosition().y * _scale };
+	size size = { rect.getSize().width * _scale, rect.getSize().height * _scale };
 	color bgColor = rect.getBackgroundColor();
 	color bdColor = rect.getBorderColor();
 
@@ -84,7 +130,7 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 		sfRect.setTexture(sfTexture);
 	} else
 		sfRect.setFillColor(getSFMLColor(bgColor));
-	sfRect.setOutlineThickness(rect.getBorderWeight());
+	sfRect.setOutlineThickness(rect.getBorderWeight() * _scale);
 	sfRect.setOutlineColor(getSFMLColor(bdColor));
 	if (_win == nullptr)
 		return;
@@ -113,6 +159,10 @@ bool ui::SFMLApi::isActive()
 	return false;
 }
 
+/*
+ *      UTILS
+ */
+
 sf::Texture *ui::SFMLApi::getSFMLTexture(const std::string &path)
 {
 	if (_assets.find(path) == _assets.end()) {
@@ -130,6 +180,15 @@ sf::Color ui::SFMLApi::getSFMLColor(ui::color color)
 	return {static_cast<sf::Uint8>(color.r),
 		static_cast<sf::Uint8>(color.g),
 		static_cast<sf::Uint8>(color.b)};
+}
+
+arcade::event::Key ui::SFMLApi::getEventKey(int sfmlEventCode)
+{
+	for (int i = 0; _events[i].base != -1; i++) {
+		if (_events[i].base == sfmlEventCode)
+			return (_events[i].key);
+	}
+	return (arcade::event::UNKNOWN);
 }
 
 extern "C" ui::IApi *entryPoint()

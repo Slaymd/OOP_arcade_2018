@@ -22,12 +22,13 @@ class Nibbler : public IGameApi {
 
 	//functions
 	void init() override;
-	void tick() override;
+	void tick(int) override;
 	void close() override;
 
 	private:
 	ui::UIText *_name;
 	ui::UIText *_input;
+	ui::UIRect *_rect;
 	arcade::Engine _engine;
 };
 
