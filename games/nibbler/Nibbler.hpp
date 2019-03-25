@@ -24,11 +24,21 @@ class Nibbler : public IGameApi {
 	void init() override;
 	void tick(int) override;
 	void close() override;
+	void autoMove();
+	void generateFood();
+	void moveBody();
+	void displaySnake();
+	void moveSnake(int e);
 
 	private:
 	ui::UIText *_name;
 	ui::UIText *_input;
 	ui::UIRect *_rect;
+	ui::UIRect *_snake;
+	std::vector<ui::position> _snakePos;
+	ui::UIRect *_head;
+	ui::UIRect *_food;
+	int _direction = 1;
 	arcade::Engine _engine;
 };
 
