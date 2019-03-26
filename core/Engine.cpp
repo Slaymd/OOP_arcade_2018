@@ -37,7 +37,6 @@ void arcade::Engine::start(int ac, char **av)
 //	arcade::Engine::instance().getCurrentGame()->init();
 	_menu = arcade::Engine::instance().getCurrentGame();
 	_menu->init();
-	std::cout << "size: " << arcade::Engine::instance()._gameLib.size() << std::endl;
 	while (_isActive) {
 		e = arcade::Engine::instance().getCurrentGraphLib()->getEvent();
 		eventHandler((arcade::event::Key)e);
