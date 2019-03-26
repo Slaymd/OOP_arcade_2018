@@ -20,7 +20,7 @@ NAME	=	lib_arcade_sfml.so
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(SFML) -o $(NAME) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) $(SFML)
 	mv $(NAME) ..
 
 clean:
