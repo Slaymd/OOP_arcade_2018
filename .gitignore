@@ -16,3 +16,5 @@ arcade.cbp
 *.dSYM
 arcade-qt_autogen/
 lib_arcade_menu.so
+.vscode
+arcade.cbp

@@ -6,8 +6,6 @@
 */
 
 #include "Engine.hpp"
-#include "../lib/IApi.hpp"
-#include <dlfcn.h>
 
 int main(int ac, char *av[])
 {
