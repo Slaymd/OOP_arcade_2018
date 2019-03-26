@@ -6,11 +6,8 @@
 */
 
 #include "Engine.hpp"
-#include "../lib/IApi.hpp"
-#include <dlfcn.h>
 
 int main(int ac, char *av[])
 {
-	printf("1\n");
 	arcade::Engine::instance().start(ac, av);
 }

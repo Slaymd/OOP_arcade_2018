@@ -26,13 +26,11 @@ ui::IApi &arcade::Engine::Graphic()
 
 void arcade::Engine::start(int ac, char *av[])
 {
-	printf("2\n");
 	int e = -1;
 
 	if (ac != 2)
 		return; //TODO: exception
-	printf("3\n");
-	arcade::Engine::instance().load(av[1]);
+	arcade::Engine::instance().load(std::string(av[1]));
 	arcade::Engine::instance().Graphic().init();
 	arcade::Engine::instance().getCurrentGame()->init();
 
@@ -61,7 +59,7 @@ void arcade::Engine::load(std::string defaultLib)
 		if (!handleGame)
 			//TODO throw an error
 			return;
-		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
+		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
 		IGameApi *game = gameEntryPoint();
 		_gameLibs.emplace_back(game);
 		_handlers.emplace_back(handleGame);
@@ -71,7 +69,7 @@ void arcade::Engine::load(std::string defaultLib)
 		if (!handleGraph)
 			//TODO throw an error
 			return;
-		graphEntryPoint = reinterpret_cast<ui::IApi *(*)()>(dlsym(handleGraph, "entryPoint"));
+		graphEntryPoint = (ui::IApi *(*)())dlsym(handleGraph, "entryPoint");
 		ui::IApi *api = graphEntryPoint();
 		_graphLibs.emplace_back(api);
 		_handlers.emplace_back(handleGraph);

@@ -7,7 +7,7 @@
 
 CXX		=	g++
 
-CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib -Wl,-undefined,dynamic_lookup
+CXXFLAGS=	-std=c++14 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib
 
 SRC		=	Nibbler.cpp
 

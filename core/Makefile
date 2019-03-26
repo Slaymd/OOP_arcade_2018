@@ -19,7 +19,7 @@ NAME		=	arcade
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -ldl
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -ldl -Wl,-E
 	mv $(NAME) ..
 
 clean:
