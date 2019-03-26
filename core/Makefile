@@ -7,7 +7,7 @@
 
 CXX			=	g++
 
-CXXFLAGS	=	-std=c++11 -Wall -Wextra -W -I. -I../games -I../lib -I../games/menu
+CXXFLAGS	=	-std=c++14 -Wall -Wextra -W -I. -I../games -I../lib -I../games/menu
 
 SRC			=	main.cpp    \
                 Loader.cpp	\

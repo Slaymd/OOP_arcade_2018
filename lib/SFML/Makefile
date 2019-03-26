@@ -7,7 +7,7 @@
 
 CXX		=	g++
 
-CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC -I.. -I.
+CXXFLAGS=	-std=c++14 -Wall -Wextra -shared -fPIC -I.. -I.
 
 SFML	=	-lsfml-graphics -lsfml-system -lsfml-audio -lsfml-window
 

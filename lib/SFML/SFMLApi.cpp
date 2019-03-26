@@ -128,7 +128,8 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 		sfTexture = getSFMLTexture(rect.getBackgroundImage());
 
 		sfRect.setTexture(sfTexture);
-	} else
+	}
+	else
 		sfRect.setFillColor(getSFMLColor(bgColor));
 	sfRect.setOutlineThickness(rect.getBorderWeight() * _scale);
 	sfRect.setOutlineColor(getSFMLColor(bdColor));

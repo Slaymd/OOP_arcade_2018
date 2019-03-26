@@ -18,7 +18,7 @@ class Menu : public IGameApi {
 
 	public:
 	Menu() = default;
-	~Menu() = default;
+	~Menu();
 
 
 	//functions
@@ -31,6 +31,7 @@ class Menu : public IGameApi {
 
 
 	private:
+	bool _menuIsActive;
 	ui::UIText *_menu;
 	std::vector<ui::UIText *> _gameNames;
 	arcade::Engine _engine;

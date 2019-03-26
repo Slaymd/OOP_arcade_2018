@@ -32,6 +32,7 @@ namespace ui {
 		public:
 
 		//POSITION
+//		virtual ~IElement() = 0;
 
 		virtual void setPosition(ui::position) = 0;
 		virtual ui::position getPosition() = 0;

@@ -34,9 +34,10 @@ void arcade::Engine::start(int ac, char **av)
 	arcade::Engine::instance().load(av[1]);
 	arcade::Engine::instance().Graphic().init();
 	arcade::Engine::instance().rotateGames(false);
-//	arcade::Engine::instance().getCurrentGame()->init();
-	_menu = arcade::Engine::instance().getCurrentGame();
-	_menu->init();
+	_gameIndex = 1;
+	arcade::Engine::instance().getCurrentGame()->init();
+//	_menu = arcade::Engine::instance().getCurrentGame();
+//	_menu->init();
 	while (_isActive) {
 		e = arcade::Engine::instance().getCurrentGraphLib()->getEvent();
 		eventHandler((arcade::event::Key)e);
@@ -218,6 +219,7 @@ void arcade::Engine::changeGame(std::string str)
 		_gameIndex = 1;
 	if (str == "menu")
 		_gameIndex = 0;
+	arcade::Engine::instance().getCurrentGame()->close();
 	arcade::Engine::instance().rotateGames(true);
 	arcade::Engine::instance().getCurrentGame()->init();
 }

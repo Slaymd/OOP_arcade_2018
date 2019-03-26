@@ -29,6 +29,7 @@ class Nibbler : public IGameApi {
 	void moveBody();
 	void displaySnake();
 	void moveSnake(int e);
+	void handleScore();
 	void checkDeath();
 
 
@@ -40,6 +41,8 @@ class Nibbler : public IGameApi {
 	std::vector<ui::position> _snakePos;
 	ui::UIRect *_head;
 	ui::UIRect *_food;
+	ui::UIText *_score;
+	int _scoreInt = 0;
 	int _direction = 1;
 	arcade::Engine _engine;
 };

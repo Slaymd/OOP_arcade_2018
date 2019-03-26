@@ -14,8 +14,9 @@ namespace ui {
 	class AElement : public IElement {
 
 		public:
-		AElement(position pos, size size) : _pos(pos), _size(size)
-		{}
+		AElement(position pos, size size) : _pos(pos), _size(size), _borderWeight(0)
+		{
+		}
 		~AElement() = default;
 
 		void setPosition(position pos) override { _pos = pos; }
@@ -40,7 +41,7 @@ namespace ui {
 		size _size;
 		color _backgroundColor = {0, 0, 0};
 		std::string _backgroundImage = "";
-		int _borderWeight ;
+		int _borderWeight;
 		color _borderColor = {0, 0, 0};
 	};
 

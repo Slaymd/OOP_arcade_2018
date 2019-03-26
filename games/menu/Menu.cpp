@@ -23,8 +23,10 @@ void Menu::init()
 	for (size_t i = 0; i < engine.getGames().size(); i++) {
 		_gameNames.push_back(new ui::UIText(pos,
 			engine.getGames()[i]->name));
+		_gameNames[_gameNames.size() - 1]->setColor({0, 0, 0});
 		pos.y += 4;
 	}
+	_menuIsActive = true;
 }
 
 
@@ -38,13 +40,19 @@ void Menu::tick(int e)
 		arcade::Engine::Graphic().drawText(*_gameName);
 	}
 	moveCursor(e);
+	if (!_menuIsActive) {
+		return;
+	}
 	arcade::Engine::Graphic().drawRect(*_cursor);
 	arcade::Engine::Graphic().render();
 }
 
 void Menu::close()
 {
-	//TODO close ce qui a était open
+	_menu = nullptr;
+	_gameNames.clear();
+	_rect = nullptr;
+	_cursor = nullptr;
 }
 
 void Menu::moveCursor(int e)
@@ -62,14 +70,19 @@ void Menu::moveCursor(int e)
 
 void Menu::detectCursorPos()
 {
-	if (_cursor->getPosition().y == 11)
+	if (_cursor->getPosition().y == 11) {
+		_menuIsActive = false;
 		arcade::Engine::instance().changeGame("nibbler");
-	else if (_cursor->getPosition().y == 15)
+	}
+	else if (_cursor->getPosition().y == 15) {
+		_menuIsActive = false;
 		arcade::Engine::instance().changeGame("menu");
-	else
-		std::cout << "raté " << _cursor->getPosition().y << std::endl;
+	}
 }
 
+Menu::~Menu()
+{
+}
 
 extern "C" IGameApi *entryPoint()
 {
