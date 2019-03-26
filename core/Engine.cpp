@@ -26,12 +26,10 @@ ui::IApi &arcade::Engine::Graphic()
 
 void arcade::Engine::start(int ac, char *av[])
 {
-	printf("2\n");
 	int e = -1;
 
 	if (ac != 2)
 		return; //TODO: exception
-	printf("3\n");
 	arcade::Engine::instance().load(av[1]);
 	arcade::Engine::instance().Graphic().init();
 	arcade::Engine::instance().getCurrentGame()->init();

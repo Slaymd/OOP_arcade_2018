@@ -22,6 +22,13 @@ all:
 	$(MAKE_CORE)
 	$(MAKE_QTAPI)
 
+mac:
+	$(MAKE_NIBBLER)
+	$(MAKE_SFMLAPI)
+	$(MAKE_NCURSESAPI)
+	$(MAKE_CORE) mac
+	$(MAKE_QTAPI)
+
 graphicals:
 	$(MAKE_SFMLAPI)
 	$(MAKE_NCURSESAPI)

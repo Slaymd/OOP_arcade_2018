@@ -7,7 +7,7 @@
 
 CXX			=	g++
 
-CXXFLAGS	=	-std=c++11 -Wall -Wextra -W -I. -I../games -I../lib
+CXXFLAGS	=	-std=c++11 -Wall -Wextra -W -I. -I../games -I../lib -ldl
 
 SRC			=	main.cpp    \
                 Engine.cpp
@@ -19,8 +19,11 @@ NAME		=	arcade
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -ldl
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-E
 	mv $(NAME) ..
+
+mac:
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-undefined,dynamic_lookup
 
 clean:
 	rm -f $(OBJ)

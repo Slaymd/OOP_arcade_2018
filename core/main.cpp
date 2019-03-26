@@ -11,6 +11,5 @@
 
 int main(int ac, char *av[])
 {
-	printf("1\n");
 	arcade::Engine::instance().start(ac, av);
 }
