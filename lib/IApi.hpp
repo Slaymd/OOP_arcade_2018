@@ -12,6 +12,7 @@
 #include "UIText.hpp"
 #include "UIRect.hpp"
 #include "Frame.hpp"
+#include "Events.hpp"
 
 namespace ui {
 	class IApi {

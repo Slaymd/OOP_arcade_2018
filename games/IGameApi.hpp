@@ -15,9 +15,8 @@ class IGameApi {
 	~IGameApi() = default;
 
 	virtual void init() = 0;
-	virtual void tick() = 0;
+	virtual void tick(int) = 0;
 	virtual void close() = 0;
-
 };
 
 #endif //ARCADE_IGAMEAPI_HPP

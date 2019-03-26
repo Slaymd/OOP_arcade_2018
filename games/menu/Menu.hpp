@@ -20,16 +20,23 @@ class Menu : public IGameApi {
 	Menu() = default;
 	~Menu() = default;
 
+
 	//functions
 	void init() override;
-	void tick() override;
+	void tick(int) override;
 	void close() override;
+
+	void moveCursor(int e);
+	void detectCursorPos();
+
 
 	private:
 	ui::UIText *_menu;
-	ui::UIText *_option;
-	std::vector<ui::UIText *> _gameName;
+	std::vector<ui::UIText *> _gameNames;
 	arcade::Engine _engine;
+	ui::UIRect *_cursor;
+	std::string _nextGame;
+	ui::UIRect *_rect;
 };
 
 #endif //ARCADE_MENU_HPP
