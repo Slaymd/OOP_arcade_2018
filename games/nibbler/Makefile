@@ -21,6 +21,10 @@ $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
 	mv $(NAME) ..
 
+mac: $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-undefined,dynamic_lookup
+	mv $(NAME) ..
+
 clean:
 	rm -f $(OBJ)
 
