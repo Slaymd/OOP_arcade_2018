@@ -23,7 +23,7 @@ all:
 	$(MAKE_QTAPI)
 
 mac:
-	$(MAKE_NIBBLER)
+	$(MAKE_NIBBLER) mac
 	$(MAKE_SFMLAPI)
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE) mac

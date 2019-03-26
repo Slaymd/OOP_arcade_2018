@@ -7,7 +7,7 @@
 
 CXX		=	g++
 
-CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib -Wl,-undefined,dynamic_lookup
+CXXFLAGS=	-std=c++11 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib
 
 SRC		=	Nibbler.cpp
 
@@ -18,7 +18,11 @@ NAME	=	lib_arcade_nibbler.so
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-E
+	mv $(NAME) ..
+
+mac: $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-undefined,dynamic_lookup
 	mv $(NAME) ..
 
 clean:
