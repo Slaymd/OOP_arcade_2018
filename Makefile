@@ -13,7 +13,7 @@ MAKE_NIBBLER	=	make -C./games/nibbler
 
 MAKE_SFMLAPI	=	make -C./lib/SFML
 MAKE_NCURSESAPI	=	make -C./lib/ncurses
-MAKE_QTAPI		=	cmake ./lib/Qt && make -C./lib/Qt
+MAKE_QTAPI		=	cd ./lib/Qt && cmake . && make && cd -
 
 all:
 	$(MAKE_NIBBLER)
@@ -23,7 +23,7 @@ all:
 	$(MAKE_QTAPI)
 
 mac:
-	$(MAKE_NIBBLER) mac
+	$(MAKE_NIBBLER)
 	$(MAKE_SFMLAPI)
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE) mac
