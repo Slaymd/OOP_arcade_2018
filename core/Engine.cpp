@@ -30,17 +30,17 @@ void arcade::Engine::start(int ac, char *av[])
 
 	if (ac != 2)
 		return; //TODO: exception
+	_menu = new Menu();
 	arcade::Engine::instance().load(std::string(av[1]));
 	arcade::Engine::instance().Graphic().init();
-	arcade::Engine::instance().rotateGames(false);
-	_gameIndex = 1;
 	arcade::Engine::instance().getCurrentGame()->init();
-//	_menu = arcade::Engine::instance().getCurrentGame();
-//	_menu->init();
+
 	while (_isActive) {
 		e = arcade::Engine::instance().getCurrentGraphLib()->getEvent();
 		eventHandler((arcade::event::Key)e);
 
+		if (!_isActive)
+			break;
 		arcade::Engine::instance().getCurrentGame()->tick(e);
 	}
 	arcade::Engine::instance().closeHandlers();
@@ -63,13 +63,9 @@ void arcade::Engine::load(std::string defaultLib)
 			//TODO throw an error
 			return;
 		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
-		auto gameStruct = new game_t;
-		gameStruct->name = arcade::Engine::findName(gamePath);
-		_games.push_back(gameStruct);
-
-		gameEntryPoint = reinterpret_cast<IGameApi *(*)()>(dlsym(handleGame, "entryPoint"));
 		IGameApi *game = gameEntryPoint();
-		_gameLibs.emplace_back(game);
+
+		_gameLibs.emplace_back((game_t){findName(gamePath), game});
 		_handlers.emplace_back(handleGame);
 	}
 	for (const std::string &libPath : tmpLib) {
@@ -79,7 +75,8 @@ void arcade::Engine::load(std::string defaultLib)
 			return;
 		graphEntryPoint = (ui::IApi *(*)())dlsym(handleGraph, "entryPoint");
 		ui::IApi *api = graphEntryPoint();
-		_graphLibs.emplace_back(api);
+
+		_graphLibs.emplace_back((graph_t){findName(libPath), api});
 		_handlers.emplace_back(handleGraph);
 	}
 }
@@ -99,14 +96,20 @@ void arcade::Engine::eventHandler(arcade::event::Key e)
 {
 	switch (e) {
 	case event::ESCAPE:
-		Graphic().close();
-		_isActive = false;
+		getCurrentGame()->close();
+		if (_gameIndex >= 0) {
+			_gameIndex = -1;
+			getCurrentGame()->init();
+		} else {
+			Graphic().close();
+			_isActive = false;
+		}
 		break;
 	case event::ARROW_UP:
 		rotateGraphLibs(true);
 		break;
 	case event::ARROW_DOWN:
-		rotateGraphLibs(true);
+		rotateGraphLibs(false);
 		break;
 	default:
 		break;
@@ -137,6 +140,8 @@ void arcade::Engine::rotateGraphLibs(bool reversed)
 		_graphLibIndex = (int)_graphLibs.size() - 1;
 	else if (_graphLibIndex >= (int)_graphLibs.size())
 		_graphLibIndex = 0;
+
+	printf("graphLibIndex: %d\n", _graphLibIndex);
 
 	getCurrentGraphLib()->init();
 }
@@ -201,23 +206,58 @@ std::string arcade::Engine::findName(std::string path) const
  *      LIB GETTERS
  */
 
-IGameApi *arcade::Engine::getCurrentGame()
+IGameApi *arcade::Engine::getCurrentGame() const
 {
-	return _gameLibs.empty() ? nullptr : _gameLibs[_gameIndex];
+	if (_gameIndex == -1)
+		return _menu;
+	return (_gameLibs.empty() ? nullptr : _gameLibs[_gameIndex].instance);
 }
 
-ui::IApi *arcade::Engine::getCurrentGraphLib()
+ui::IApi *arcade::Engine::getCurrentGraphLib() const
 {
-	return _graphLibs.empty() ? nullptr : _graphLibs[_graphLibIndex];
+	return (_graphLibs.empty() ? nullptr : _graphLibs[_graphLibIndex].instance);
 }
+
+std::vector<arcade::Engine::game_t> arcade::Engine::getGames()
+{
+	return (_gameLibs);
+}
+
+std::vector<arcade::Engine::graph_t> arcade::Engine::getGraphLibs()
+{
+	return (_graphLibs);
+}
+
+/*
+ * LIB SETTERS
+ */
 
 void arcade::Engine::changeGame(std::string str)
 {
-	if (str == "nibbler")
-		_gameIndex = 1;
-	if (str == "menu")
-		_gameIndex = 0;
-	arcade::Engine::instance().getCurrentGame()->close();
-	arcade::Engine::instance().rotateGames(true);
-	arcade::Engine::instance().getCurrentGame()->init();
+	game_t game;
+
+	for (std::size_t i = 0; i < _gameLibs.size(); i++) {
+		game = _gameLibs[i];
+		if (str != game.name)
+			continue;
+		getCurrentGame()->close();
+		_gameIndex = (int)i;
+		getCurrentGame()->init();
+	}
+	//TODO: throw not found
+}
+
+void arcade::Engine::changeGraphLib(std::string str)
+{
+	graph_t lib;
+
+	for (std::size_t i = 0; i < _graphLibs.size(); i++) {
+		lib = _graphLibs[i];
+		if (str != lib.name)
+			continue;
+		getCurrentGraphLib()->close();
+		_graphLibIndex = (int)i;
+		getCurrentGraphLib()->init();
+	}
+	//TODO: throw not found
 }

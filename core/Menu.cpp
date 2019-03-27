@@ -22,7 +22,7 @@ void Menu::init()
 
 	for (size_t i = 0; i < engine.getGames().size(); i++) {
 		_gameNames.push_back(new ui::UIText(pos,
-			engine.getGames()[i]->name));
+			engine.getGames()[i].name));
 		_gameNames[_gameNames.size() - 1]->setColor({0, 0, 0});
 		pos.y += 4;
 	}
@@ -32,7 +32,6 @@ void Menu::init()
 
 void Menu::tick(int e)
 {
-	auto arcade = arcade::Engine::instance();
 	arcade::Engine::Graphic().clear();
 	arcade::Engine::Graphic().drawRect(*_rect);
 	arcade::Engine::Graphic().drawText(*_menu);

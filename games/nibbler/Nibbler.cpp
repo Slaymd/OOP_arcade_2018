@@ -32,7 +32,7 @@ void Nibbler::init()
 	_food->setBackgroundColor({255, 0, 0});
 
 	srand(time(nullptr));
-	_food->setPosition({(int)rand() % 30, (int)rand() % 30});
+	_food->setPosition({(int)rand() % 60, (int)rand() % 60});
 }
 
 void Nibbler::tick(int event)
@@ -115,7 +115,7 @@ void Nibbler::close()
 void Nibbler::generateFood()
 {
 	if (_head->getPosition().x == _food->getPosition().x && _head->getPosition().y == _food->getPosition().y) {
-		_food->setPosition({(int)random() % 30, (int)random() % 30});
+		_food->setPosition({(int)random() % 60, (int)random() % 60});
 		_snakePos.push_back({_snakePos[_snakePos.size() - 1]});
 		_scoreInt += 1;
 	}
@@ -135,7 +135,7 @@ void Nibbler::displaySnake()
 
 void Nibbler::checkDeath()
 {
-	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 30) {
+	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 60) {
 		close();
 		exit(0);
 	}

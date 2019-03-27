@@ -34,7 +34,6 @@ class Menu : public IGameApi {
 	bool _menuIsActive;
 	ui::UIText *_menu;
 	std::vector<ui::UIText *> _gameNames;
-	arcade::Engine _engine;
 	ui::UIRect *_cursor;
 	std::string _nextGame;
 	ui::UIRect *_rect;

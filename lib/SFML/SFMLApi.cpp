@@ -42,7 +42,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, 73},
 	{arcade::event::Key::ARROW_LEFT, 71},
 	{arcade::event::Key::ARROW_RIGHT, 72},
-	{arcade::event::Key::ENTER, 33},
+	{arcade::event::Key::ENTER, sf::Keyboard::Key::Return},
 	{arcade::event::Key::SPACE, 32},
 	{arcade::event::Key::BACKSPACE, 8},
 	{arcade::event::Key::ESCAPE, 27},
@@ -107,7 +107,7 @@ void ui::SFMLApi::drawText(ui::UIText text)
 	sfText.setFont(*_font);
 	sfText.setPosition(pos.x * _scale, pos.y * _scale);
 	sfText.setString(text.getString());
-	sfText.setColor(getSFMLColor(text.getColor()));
+	sfText.setFillColor(getSFMLColor(text.getColor()));
 	if (_win == nullptr)
 		return;
 	_win->draw(sfText);
@@ -140,8 +140,13 @@ void ui::SFMLApi::drawRect(ui::UIRect rect)
 
 void ui::SFMLApi::drawFrame(ui::Frame frame)
 {
-	(void)frame;
-	printf("SFML: drawFrame not implemented.\n");
+	for (int y = 0; y < FRAMEHEIGHT; y++) {
+		for (int x = 0; x < FRAMEWIDTH; x++) {
+			UIRect rect = frame.getElement(frame.getPixel({x, y}));
+
+			drawRect(rect);
+		}
+	}
 }
 
 void ui::SFMLApi::playSound(const std::string &string)
