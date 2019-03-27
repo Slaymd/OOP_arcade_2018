@@ -20,7 +20,7 @@ NAME	=	lib_arcade_ncurses.so
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(NCURSES) -o $(NAME) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) $(NCURSES)
 	mv $(NAME) ..
 
 clean:

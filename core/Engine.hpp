@@ -34,7 +34,7 @@ namespace arcade {
 
 		static ui::IApi &Graphic();
 
-		void start(int ac, char **av);
+		void start(int ac, char *av[]);
 
 		struct game_t {
 			std::string name;
@@ -60,12 +60,12 @@ namespace arcade {
 
 		IGameApi *getGameLib()
 		{
-			return _gameLib[0];
+			return _gameLibs[0];
 		};
 
 		ui::IApi *getGraphLib()
 		{
-			return _graphLib[0];
+			return _graphLibs[0];
 		};
 
 		void closeHandlers();
@@ -75,8 +75,8 @@ namespace arcade {
 		std::vector<std::string> getSharedLibPaths(const std::string &pathToDirectory,  std::string defaultPath = "") const;
 		std::string findName(std::string) const;
 
-		std::vector<IGameApi *> _gameLib;
-		std::vector<ui::IApi *> _graphLib;
+		std::vector<IGameApi *> _gameLibs;
+		std::vector<ui::IApi *> _graphLibs;
 		std::vector<arcade::Engine::game_t *> _games;
 		std::vector<void *> _handlers;
 		IGameApi *_menu;

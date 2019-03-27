@@ -7,7 +7,7 @@
 
 CXX		=	g++
 
-CXXFLAGS=	-std=c++14 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib -Wl,-undefined,dynamic_lookup
+CXXFLAGS=	-std=c++14 -Wall -Wextra -shared -fPIC -I../../core -I.. -I. -I../../lib
 
 SRC		=	Nibbler.cpp
 
@@ -19,6 +19,10 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
+	mv $(NAME) ..
+
+mac: $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) -Wl,-undefined,dynamic_lookup
 	mv $(NAME) ..
 
 clean:

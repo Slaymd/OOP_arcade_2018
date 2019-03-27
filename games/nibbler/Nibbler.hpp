@@ -34,6 +34,7 @@ class Nibbler : public IGameApi {
 
 
 	private:
+	bool _reversed = false;
 	ui::UIText *_name;
 	ui::UIText *_input;
 	ui::UIRect *_rect;

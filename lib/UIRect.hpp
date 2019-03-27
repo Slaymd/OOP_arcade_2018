@@ -17,7 +17,8 @@ namespace ui {
 		{
 			setBackgroundColor({200, 200, 200});
 		}
-		~UIRect() = default;
+
+		virtual ~UIRect() = default;
 	};
 }
 
