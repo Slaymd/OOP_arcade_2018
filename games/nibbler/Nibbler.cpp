@@ -51,13 +51,13 @@ void Nibbler::tick(int event)
 
 void Nibbler::moveSnake(int e)
 {
-	if (e == arcade::event::A && _direction == 1)
+	if (e == arcade::event::Q && _direction == 1)
 		_direction = 4;
-	else if (e == arcade::event::A && _direction == 4)
+	else if (e == arcade::event::Q && _direction == 4)
 		_direction = 3;
-	else if (e == arcade::event::A && _direction == 3)
+	else if (e == arcade::event::Q && _direction == 3)
 		_direction = 2;
-	else if (e == arcade::event::A && _direction == 2)
+	else if (e == arcade::event::Q && _direction == 2)
 		_direction = 1;
 	else if (e == arcade::event::D && _direction == 1)
 		_direction = 2;
@@ -103,19 +103,18 @@ void Nibbler::autoMove()
 
 void Nibbler::close()
 {
-	_name = nullptr;
-	_input = nullptr;
-	_rect = nullptr;
-	_snake = nullptr;
-	_snakePos.clear();
-	_head = nullptr;
-	_food = nullptr;
+//	_name = nullptr;
+//	_input = nullptr;
+//	_rect = nullptr;
+//	_snake = nullptr;
+//	_snakePos.clear();
+//	_head = nullptr;
+//	_food = nullptr;
 }
 
 void Nibbler::generateFood()
 {
-	if ((_head->getPosition().x == _food->getPosition().x && _head->getPosition().y == _food->getPosition().y) || (_head->getPosition().x - 1  == _food->getPosition().x && _head->getPosition().y - 1 == _food->getPosition().y) || (_head->getPosition().x   == _food->getPosition().x && _head->getPosition().y - 1 == _food->getPosition().y) ||
-(_head->getPosition().x - 1  == _food->getPosition().x && _head->getPosition().y == _food->getPosition().y)) {
+	if (_head->getPosition().x == _food->getPosition().x && _head->getPosition().y == _food->getPosition().y) {
 		_food->setPosition({(int)random() % 30, (int)random() % 30});
 		_snakePos.push_back({_snakePos[_snakePos.size() - 1]});
 		_scoreInt += 1;
