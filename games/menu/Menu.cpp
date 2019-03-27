@@ -58,13 +58,13 @@ void Menu::close()
 void Menu::moveCursor(int e)
 {
 	ui::position pos = _cursor->getPosition();
-	if (e == arcade::event::W) {
+	if (e == arcade::event::Z) {
 		if (_cursor->getPosition().y > 14)
 			_cursor->setPosition({pos.x, pos.y - 4});
 	} else if (e == arcade::event::S) {
 		if (_cursor->getPosition().y < 14)
 			_cursor->setPosition({pos.x, pos.y + 4});
-	} else if (e == arcade::event::L)
+	} else if (e == arcade::event::ENTER)
 		detectCursorPos();
 }
 
