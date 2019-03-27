@@ -7,10 +7,11 @@
 
 CXX			=	g++
 
-CXXFLAGS	=	-std=c++14 -Wall -Wextra -W -I. -I../games -I../lib -I../games/menu
+CXXFLAGS	=	-std=c++14 -Wall -Wextra -W -I. -I../games -I../lib
 
 SRC			=	main.cpp    \
-                Engine.cpp
+                Engine.cpp	\
+                Menu.cpp
 
 OBJ			=	$(SRC:.cpp=.o)
 

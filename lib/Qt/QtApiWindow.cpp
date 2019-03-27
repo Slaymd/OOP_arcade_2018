@@ -58,10 +58,13 @@ void ui::QtApiWindow::displayRect(QPainter &painter, ui::UIRect rect)
 
 	qRect.setRect(rect.getPosition().x * _scale, rect.getPosition().y * _scale,
 		rect.getSize().width * _scale, rect.getSize().height * _scale);
-	pen.setWidth(rect.getBorderWeight() * _scale);
-	pen.setColor(getQtColor(rect.getBorderColor()));
-	pen.setStyle(Qt::SolidLine);
-	pen.setJoinStyle(Qt::MiterJoin);
+	if (rect.getBorderWeight() != 0) {
+		pen.setWidth(rect.getBorderWeight() * _scale);
+		pen.setColor(getQtColor(rect.getBorderColor()));
+		pen.setStyle(Qt::SolidLine);
+		pen.setJoinStyle(Qt::MiterJoin);
+	} else
+		pen = Qt::NoPen;
 	painter.setPen(pen);
 	painter.fillRect(qRect, getQtColor(rect.getBackgroundColor()));
 	painter.drawRect(qRect);

@@ -44,7 +44,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, Qt::Key::Key_Up},
 	{arcade::event::Key::ARROW_LEFT, Qt::Key::Key_Left},
 	{arcade::event::Key::ARROW_RIGHT, Qt::Key::Key_Right},
-	{arcade::event::Key::ENTER, Qt::Key::Key_Enter},
+	{arcade::event::Key::ENTER, Qt::Key::Key_Return},
 	{arcade::event::Key::SPACE, Qt::Key::Key_Space},
 	{arcade::event::Key::BACKSPACE, Qt::Key::Key_Backspace},
 	{arcade::event::Key::ESCAPE, Qt::Key::Key_Escape},

@@ -34,10 +34,8 @@ class Nibbler : public IGameApi {
 
 
 	private:
-	bool _reversed = false;
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
-	ui::UIRect *_rect;
 	ui::UIRect *_snake;
 	std::vector<ui::position> _snakePos;
 	ui::UIRect *_head;

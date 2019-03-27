@@ -13,6 +13,7 @@
 #include "AElement.hpp"
 #include "IGameApi.hpp"
 #include "Engine.hpp"
+#include <tuple>
 
 class Menu : public IGameApi {
 
@@ -28,24 +29,23 @@ class Menu : public IGameApi {
 
 	void moveCursor(int e);
 	void detectCursorPos();
-	void chooseLib(int e);
-	void setCursorColorTop(int);
-	void setCursorColorDown(int);
+	void setCursorColorUp();
+	void setCursorColorDown();
 
+	typedef struct lib_s {
+		ui::UIText *_name;
+		ui::IApi *instanceLib;
+		IGameApi *instanceGame;
+		std::string _nameString;
+		bool isGame;
+	} lib_t;
 
 
 	private:
 	bool _menuIsActive;
 	ui::UIText *_menu;
-	ui::UIText *_textNcurses;
-	ui::UIText *_textSfml;
-	ui::UIText *_textQt;
-
-	std::vector<ui::UIText *> _gameNames;
-
-	arcade::Engine _engine;
-	int _cursor = 9;
-	std::string _nextGame;
+	std::vector<lib_t> _libs;
+	int _cursor = 0;
 	ui::UIRect *_rect;
 };
 
