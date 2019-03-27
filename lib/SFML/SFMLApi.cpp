@@ -109,7 +109,7 @@ void ui::SFMLApi::drawText(ui::UIText text)
 	sfText.setFont(*_font);
 	sfText.setPosition(pos.x * _scale, pos.y * _scale);
 	sfText.setString(text.getString());
-	sfText.setFillColor(getSFMLColor(text.getColor()));
+	sfText.setColor(getSFMLColor(text.getColor()));
 	if (_win == nullptr)
 		return;
 	_win->draw(sfText);
