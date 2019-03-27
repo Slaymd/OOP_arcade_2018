@@ -54,7 +54,7 @@ namespace ui {
 
 		void render() override;
 
-		void clear() override;
+		void clean() override;
 
 		void close() override;
 

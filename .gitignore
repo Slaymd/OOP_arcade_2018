@@ -1,6 +1,7 @@
 .idea
 cmake-build-debug/
 *.o
+*.icloud
 a.out
 .DS_Store
 arcade

@@ -236,6 +236,7 @@ void arcade::Engine::changeGame(std::string str)
 {
 	game_t game;
 
+	std::cout << "changeGame: " << str << std::endl;
 	for (std::size_t i = 0; i < _gameLibs.size(); i++) {
 		game = _gameLibs[i];
 		if (str != game.name)
@@ -244,6 +245,7 @@ void arcade::Engine::changeGame(std::string str)
 		_gameIndex = (int)i;
 		getCurrentGame()->init();
 	}
+	std::cout << str << " not found\n";
 	//TODO: throw not found
 }
 
@@ -259,5 +261,6 @@ void arcade::Engine::changeGraphLib(std::string str)
 		_graphLibIndex = (int)i;
 		getCurrentGraphLib()->init();
 	}
+	std::cout << str << " not found\n";
 	//TODO: throw not found
 }

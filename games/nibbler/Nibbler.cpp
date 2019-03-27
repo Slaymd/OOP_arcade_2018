@@ -17,7 +17,10 @@ void Nibbler::init()
 	_name = new ui::UIText({30, 0}, "NIBBLER");
 	_name->setColor({255, 255, 255});
 
-	_score = new ui::UIText({3, 0}, "0");
+	_scoreText = new ui::UIText({3, 0}, "SCORE : ");
+	_scoreText->setColor({255, 255, 255});
+
+	_score = new ui::UIText({9, 0}, "0");
 	_score->setColor({255, 255, 255});
 
 	_snakePos = {{31, 17}, {31, 18}, {31, 19}};
@@ -48,10 +51,11 @@ void Nibbler::init()
 
 void Nibbler::tick(int event)
 {
-	std::this_thread::sleep_for(std::chrono::milliseconds(30));
-	arcade::Engine::Graphic().clear();
+	arcade::Engine::Graphic().clean();
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	arcade::Engine::Graphic().drawFrame(*_frame);
 	arcade::Engine::Graphic().drawText(*_name);
+	arcade::Engine::Graphic().drawText(*_scoreText);
 	handleScore();
 	generateFood();
 	moveSnake(event);
