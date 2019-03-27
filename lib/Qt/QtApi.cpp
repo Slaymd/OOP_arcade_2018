@@ -76,7 +76,7 @@ void ui::QtApi::render()
 	qApp->processEvents();
 }
 
-void ui::QtApi::clear()
+void ui::QtApi::clean()
 {
 }
 

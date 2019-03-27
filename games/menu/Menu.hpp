@@ -18,7 +18,7 @@ class Menu : public IGameApi {
 
 	public:
 	Menu() = default;
-	~Menu();
+	~Menu() = default;
 
 
 	//functions
@@ -28,14 +28,23 @@ class Menu : public IGameApi {
 
 	void moveCursor(int e);
 	void detectCursorPos();
+	void chooseLib(int e);
+	void setCursorColorTop(int);
+	void setCursorColorDown(int);
+
 
 
 	private:
 	bool _menuIsActive;
 	ui::UIText *_menu;
+	ui::UIText *_textNcurses;
+	ui::UIText *_textSfml;
+	ui::UIText *_textQt;
+
 	std::vector<ui::UIText *> _gameNames;
+
 	arcade::Engine _engine;
-	ui::UIRect *_cursor;
+	int _cursor = 9;
 	std::string _nextGame;
 	ui::UIRect *_rect;
 };

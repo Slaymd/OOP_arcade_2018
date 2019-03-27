@@ -35,8 +35,6 @@ void arcade::Engine::start(int ac, char *av[])
 	arcade::Engine::instance().rotateGames(false);
 	_gameIndex = 1;
 	arcade::Engine::instance().getCurrentGame()->init();
-//	_menu = arcade::Engine::instance().getCurrentGame();
-//	_menu->init();
 	while (_isActive) {
 		e = arcade::Engine::instance().getCurrentGraphLib()->getEvent();
 		eventHandler((arcade::event::Key)e);
@@ -220,4 +218,17 @@ void arcade::Engine::changeGame(std::string str)
 	arcade::Engine::instance().getCurrentGame()->close();
 	arcade::Engine::instance().rotateGames(true);
 	arcade::Engine::instance().getCurrentGame()->init();
+}
+
+void arcade::Engine::changeLib(std::string str)
+{
+	if (str == "ncurses")
+		_graphLibIndex = 1;
+	if (str == "sfml")
+		_graphLibIndex = 0;
+	if (str == "qt")
+		_graphLibIndex = 0;
+	arcade::Engine::instance().getCurrentGraphLib()->close();
+	arcade::Engine::instance().rotateGraphLibs(true);
+	arcade::Engine::instance().getCurrentGraphLib()->init();
 }

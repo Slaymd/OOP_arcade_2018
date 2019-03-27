@@ -74,18 +74,9 @@ void ui::NcursesApi::render()
 	usleep(50000);
 }
 
-void ui::NcursesApi::clear()
+void ui::NcursesApi::clean()
 {
-	short colorId = getColorPair({0, 0, 0}, {0, 0, 0});
-
-	for (int y = 0; y < 60; y++) {
-		for (int x = 0; x < 60 * 2; x++) {
-			attron(colorId);
-			mvprintw(y, x, " ");
-			attroff(colorId);
-		}
-	}
-	//Doesnt exist in Ncurses
+	clear();
 }
 
 void ui::NcursesApi::close()

@@ -19,7 +19,7 @@ namespace ui {
 
 		void render(void) override;
 
-		void clear(void) override;
+		void clean(void) override;
 
 		void close(void) override;
 

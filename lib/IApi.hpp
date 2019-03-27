@@ -24,7 +24,7 @@ namespace ui {
 
 		virtual void render() = 0;
 
-		virtual void clear() = 0;
+		virtual void clean() = 0;
 
 		virtual void close() = 0;
 

@@ -43,6 +43,7 @@ namespace arcade {
 		std::vector<arcade::Engine::game_t *> getGames() {
 			return _games; };
 		void changeGame(std::string);
+		void changeLib(std::string);
 
 
 		private:

@@ -68,7 +68,7 @@ void ui::SFMLApi::render()
 	_win->display();
 }
 
-void ui::SFMLApi::clear()
+void ui::SFMLApi::clean()
 {
 	if (_win == nullptr)
 		return;
