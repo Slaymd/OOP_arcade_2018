@@ -31,6 +31,17 @@ void Nibbler::init()
 	_food = new ui::UIRect({0, 0}, {1, 1});
 	_food->setBackgroundColor({255, 0, 0});
 
+	ui::UIRect bgRect({20, 20}, {1, 1});
+	bgRect.setBackgroundColor({255, 145, 0});
+
+	_frame = new ui::Frame();
+	_frame->setElement(1, bgRect);
+	for (int i = 0; i < 10; i++) {
+		_frame->setPixel({20 -1, 20 + i}, 1);
+		_frame->setPixel({20, 20 + i}, 1);
+		_frame->setPixel({20 + 1, 20 + i}, 1);
+	}
+
 	srand(time(nullptr));
 	_food->setPosition({(int)rand() % 60, (int)rand() % 60});
 }
@@ -39,6 +50,7 @@ void Nibbler::tick(int event)
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(30));
 	arcade::Engine::Graphic().clear();
+	arcade::Engine::Graphic().drawFrame(*_frame);
 	arcade::Engine::Graphic().drawText(*_name);
 	handleScore();
 	generateFood();

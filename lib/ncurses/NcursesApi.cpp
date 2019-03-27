@@ -43,7 +43,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, KEY_UP},
 	{arcade::event::Key::ARROW_LEFT, KEY_LEFT},
 	{arcade::event::Key::ARROW_RIGHT, KEY_RIGHT},
-	{arcade::event::Key::ENTER, KEY_ENTER},
+	{arcade::event::Key::ENTER, 10},
 	{arcade::event::Key::SPACE, ' '},
 	{arcade::event::Key::BACKSPACE, KEY_BACKSPACE},
 	{arcade::event::Key::ESCAPE, 27},
@@ -57,6 +57,7 @@ static const arcade::event::event_t _events[] = {
 void ui::NcursesApi::init()
 {
 	initscr();
+	_isActive = true;
 	if (!can_change_color() || !has_colors())
 		throw std::exception();
 	nodelay(stdscr, TRUE);
@@ -70,6 +71,8 @@ void ui::NcursesApi::init()
 
 void ui::NcursesApi::render()
 {
+	if (!_isActive)
+		return;
 	refresh();
 	usleep(50000);
 }
@@ -85,21 +88,26 @@ void ui::NcursesApi::clear()
 			attroff(colorId);
 		}
 	}
-	//Doesnt exist in Ncurses
 }
 
 void ui::NcursesApi::close()
 {
+	_isActive = false;
+	curs_set(1);
+	clear();
 	endwin();
 }
 
 int ui::NcursesApi::getEvent()
-{
+{	if (!_isActive)
+		return (-1);
 	return getEventKey(getch());
 }
 
 void ui::NcursesApi::drawText(ui::UIText text)
 {
+	if (!_isActive)
+		return;
 	short colorId = getColorPair(text.getColor(), text.getBackgroundColor());
 
 	attron(COLOR_PAIR(colorId));
@@ -109,6 +117,8 @@ void ui::NcursesApi::drawText(ui::UIText text)
 
 void ui::NcursesApi::drawRect(ui::UIRect rect)
 {
+	if (!_isActive)
+		return;
 	short bgColorId = getColorPair(rect.getBackgroundColor(), rect.getBackgroundColor());
 	short bdColorId = getColorPair(rect.getBorderColor(), rect.getBorderColor());
 	position cursesPosition = {rect.getPosition().x * 2, rect.getPosition().y};
@@ -129,8 +139,19 @@ void ui::NcursesApi::drawRect(ui::UIRect rect)
 
 void ui::NcursesApi::drawFrame(ui::Frame frame)
 {
-	(void)frame;
-	printf("ncurses: drawFrame not implemented.\n");
+	if (!_isActive)
+		return;
+	for (int y = 0; y < FRAMEHEIGHT; y++) {
+		for (int x = 0; x < FRAMEWIDTH; x++) {
+			if (frame.getPixel({x, y}) == 0)
+				continue;
+			UIRect rect = frame.getElement(frame.getPixel({x, y}));
+			rect.setPosition({x, y});
+			rect.setSize({1, 1});
+
+			drawRect(rect);
+		}
+	}
 }
 
 void ui::NcursesApi::playSound(const std::string &string)
@@ -147,7 +168,7 @@ void ui::NcursesApi::setTitle(const std::string &string)
 
 bool ui::NcursesApi::isActive()
 {
-	return false;
+	return _isActive;
 }
 
 /*

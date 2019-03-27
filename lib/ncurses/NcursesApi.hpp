@@ -47,6 +47,7 @@ namespace ui {
 		arcade::event::Key getEventKey(int);
 		short getColorPair(color fgColor, color bgColor);
 		void initColor(short, color);
+		bool _isActive = true;
 
 		std::vector<color_asset> _colorAssets;
 	};

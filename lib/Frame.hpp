@@ -19,8 +19,12 @@ namespace ui {
 	class Frame {
 		public:
 
-		Frame() : _pixels(FRAMEWIDTH, std::vector<int>(FRAMEHEIGHT))
-		{};
+		Frame() : _pixels(FRAMEWIDTH, std::vector<int>(FRAMEHEIGHT, 0))
+		{
+			UIRect noRect({0, 0}, {20, 20});
+			noRect.setBackgroundColor({0, 0, 0});
+			setElement(0, noRect);
+		};
 
 		~Frame() = default;
 
@@ -31,6 +35,9 @@ namespace ui {
 
 		UIRect getElement(int key)
 		{
+			if (_elements.find(key) == _elements.end()) {
+				return UIRect({0, 0}, {0, 0}); //TODO: throw an error
+			}
 			return (_elements.find(key)->second);
 		}
 

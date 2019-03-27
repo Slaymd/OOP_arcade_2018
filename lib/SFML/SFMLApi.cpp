@@ -55,7 +55,7 @@ static const arcade::event::event_t _events[] = {
 
 void ui::SFMLApi::init()
 {
-	_win = new sf::RenderWindow(sf::VideoMode(1280, 720), "Arcade");
+	_win = new sf::RenderWindow(sf::VideoMode(FRAMEWIDTH * _scale, FRAMEHEIGHT * _scale), "Arcade");
 	_win->setFramerateLimit(60);
 	_font = new sf::Font();
 	_font->loadFromFile("assets/UbuntuMono-B.ttf");
@@ -79,6 +79,8 @@ void ui::SFMLApi::close()
 {
 	if (_win == nullptr)
 		return;
+	delete _font;
+	_font = nullptr;
 	_win->close();
 	delete _win;
 	_win = nullptr;
@@ -142,7 +144,11 @@ void ui::SFMLApi::drawFrame(ui::Frame frame)
 {
 	for (int y = 0; y < FRAMEHEIGHT; y++) {
 		for (int x = 0; x < FRAMEWIDTH; x++) {
+			if (frame.getPixel({x, y}) == 0)
+				continue;
 			UIRect rect = frame.getElement(frame.getPixel({x, y}));
+			rect.setPosition({x, y});
+			rect.setSize({1, 1});
 
 			drawRect(rect);
 		}

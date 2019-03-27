@@ -62,7 +62,8 @@ void ui::QtApi::init()
 
 	_isActive = true;
 
-	_app = new QApplication(argc, argv);
+	if (_app == nullptr)
+		_app = new QApplication(argc, argv);
 
 	_win = new QtApiWindow(this);
 	_win->show();
@@ -86,6 +87,9 @@ void ui::QtApi::close()
 	_win->close();
 	_win = nullptr;
 	_app->closingDown();
+	delete _app;
+	_app = nullptr;
+	_lastEvent = -1;
 }
 
 int ui::QtApi::getEvent()
@@ -111,7 +115,19 @@ void ui::QtApi::drawRect(ui::UIRect rect)
 
 void ui::QtApi::drawFrame(ui::Frame frame)
 {
-	(void)frame;
+	if (!_isActive)
+		return;
+	for (int y = 0; y < FRAMEHEIGHT; y++) {
+		for (int x = 0; x < FRAMEWIDTH; x++) {
+			if (frame.getPixel({x, y}) == 0)
+				continue;
+			UIRect rect = frame.getElement(frame.getPixel({x, y}));
+			rect.setPosition({x, y});
+			rect.setSize({1, 1});
+
+			drawRect(rect);
+		}
+	}
 }
 
 void ui::QtApi::playSound(const std::string &string)
@@ -121,6 +137,8 @@ void ui::QtApi::playSound(const std::string &string)
 
 void ui::QtApi::setTitle(const std::string &string)
 {
+	if (!_isActive)
+		return;
 	_win->setWindowTitle(string.c_str());
 }
 
