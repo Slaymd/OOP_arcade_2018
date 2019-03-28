@@ -59,6 +59,7 @@ void ui::SFMLApi::init()
 	_win->setFramerateLimit(60);
 	_font = new sf::Font();
 	_font->loadFromFile("assets/UbuntuMono-B.ttf");
+	_isActive = true;
 }
 
 void ui::SFMLApi::render()
@@ -79,6 +80,7 @@ void ui::SFMLApi::close()
 {
 	if (_win == nullptr)
 		return;
+	_isActive = false;
 	delete _font;
 	_font = nullptr;
 	_win->close();
@@ -168,7 +170,7 @@ void ui::SFMLApi::setTitle(const std::string &string)
 
 bool ui::SFMLApi::isActive()
 {
-	return false;
+	return _isActive;
 }
 
 /*

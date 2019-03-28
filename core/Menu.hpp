@@ -42,7 +42,6 @@ class Menu : public IGameApi {
 
 
 	private:
-	bool _menuIsActive;
 	ui::UIText *_menu;
 	std::vector<lib_t> _libs;
 	int _cursor = 0;

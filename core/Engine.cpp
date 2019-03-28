@@ -122,12 +122,16 @@ void arcade::Engine::eventHandler(arcade::event::Key e)
 
 void arcade::Engine::rotateGames(bool reversed)
 {
+	getCurrentGame()->close();
+
 	_gameIndex += reversed ? -1 : 1;
 
 	if (_gameIndex < 0)
 		_gameIndex = (int)_gameLibs.size() - 1;
 	else if (_gameIndex >= (int)_gameLibs.size())
 		_gameIndex = 0;
+
+	getCurrentGame()->init();
 }
 
 void arcade::Engine::rotateGraphLibs(bool reversed)
@@ -140,8 +144,6 @@ void arcade::Engine::rotateGraphLibs(bool reversed)
 		_graphLibIndex = (int)_graphLibs.size() - 1;
 	else if (_graphLibIndex >= (int)_graphLibs.size())
 		_graphLibIndex = 0;
-
-	printf("graphLibIndex: %d\n", _graphLibIndex);
 
 	getCurrentGraphLib()->init();
 }
@@ -236,14 +238,15 @@ void arcade::Engine::changeGame(std::string str)
 {
 	game_t game;
 
-	std::cout << "changeGame: " << str << std::endl;
 	for (std::size_t i = 0; i < _gameLibs.size(); i++) {
 		game = _gameLibs[i];
 		if (str != game.name)
 			continue;
+		std::cout << "Change game to " << game.name << "." << std::endl;
 		getCurrentGame()->close();
 		_gameIndex = (int)i;
 		getCurrentGame()->init();
+		return;
 	}
 	std::cout << str << " not found\n";
 	//TODO: throw not found
@@ -257,9 +260,12 @@ void arcade::Engine::changeGraphLib(std::string str)
 		lib = _graphLibs[i];
 		if (str != lib.name)
 			continue;
+		std::cout << "Change graph lib to " << lib.name << "." << std::endl;
+		std::cout << "* " << (int)i << std::endl;
 		getCurrentGraphLib()->close();
 		_graphLibIndex = (int)i;
 		getCurrentGraphLib()->init();
+		return;
 	}
 	std::cout << str << " not found\n";
 	//TODO: throw not found
