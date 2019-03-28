@@ -48,6 +48,7 @@ namespace ui {
 		sf::Font *_font = nullptr;
 		std::unordered_map<std::string, sf::Texture> _assets;
 		int _scale = 20;
+		bool _isActive = true;
 	};
 }
 

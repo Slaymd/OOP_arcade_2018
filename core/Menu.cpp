@@ -57,17 +57,14 @@ void Menu::tick(int e)
 	arcade::Engine::Graphic().drawText(*_menu);
 	for (auto &_gameName : _libs)
 		arcade::Engine::Graphic().drawText(*_gameName._name);
-	moveCursor(e);
-	if (!_menuIsActive) {
-		return;
-	}
 	arcade::Engine::Graphic().render();
+	moveCursor(e);
 }
 
 void Menu::close()
 {
 //	_menu = nullptr;
-	_libs.clear();
+//	_libs.clear();
 //	_rect = nullptr;
 	_cursor = 0;
 }
@@ -78,7 +75,7 @@ void Menu::moveCursor(int e)
 		setCursorColorUp();
 	else if (e == arcade::event::S && _cursor + 1 < (int) _libs.size())
 		setCursorColorDown();
-	else if (e == arcade::event::L)
+	else if (e == arcade::event::Key::ENTER)
 		detectCursorPos();
 }
 
@@ -86,11 +83,14 @@ void Menu::detectCursorPos()
 {
 	_menuIsActive = false;
 	if (_libs[_cursor].isGame) {
+		std::cout << "$ changeGame()" << std::endl;
 		arcade::Engine::instance().changeGame(_libs[_cursor]._nameString);
-		close();
+//		close();
 	} else {
+
+		std::cout << "$ changeGraphLib()" << std::endl;
 		arcade::Engine::instance().changeGraphLib(_libs[_cursor]._nameString);
-		close();
+//		close();
 	}
 
 }
