@@ -11,6 +11,8 @@ MAKE_CORE		=	make -C./core
 
 MAKE_NIBBLER	=	make -C./games/nibbler
 
+MAKE_SOLAR	=	make -C./games/solarfox
+
 MAKE_SFMLAPI	=	make -C./lib/SFML
 MAKE_NCURSESAPI	=	make -C./lib/ncurses
 
@@ -22,6 +24,7 @@ FCLEAN_QTAPI	=	cd ./lib/Qt && rm -rf arcade-qt_autogen ; rm -rf CMakeFiles ; rm 
 
 all:
 	$(MAKE_NIBBLER)
+	$(MAKE_SOLAR)
 	$(MAKE_SFMLAPI)
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE)
@@ -30,6 +33,7 @@ all:
 mac:
 	$(MAKE_NIBBLER) mac
 	$(MAKE_SFMLAPI)
+	$(MAKE_SOLAR) mac
 	$(MAKE_NCURSESAPI)
 	$(MAKE_CORE) mac
 	$(MAKE_QTAPI_MAC)
@@ -41,6 +45,7 @@ graphicals:
 
 game:
 	$(MAKE_NIBBLER)
+	$(MAKE_SOLAR)
 
 
 clean:
@@ -49,6 +54,7 @@ clean:
 	$(MAKE_NCURSESAPI) clean
 	$(MAKE_NIBBLER) clean
 	$(CLEAN_QTAPI)
+	$(MAKE_SOLAR) clean
 
 fclean: clean
 	$(MAKE_CORE) fclean
@@ -56,5 +62,6 @@ fclean: clean
 	$(MAKE_NCURSESAPI) fclean
 	$(MAKE_NIBBLER) fclean
 	$(FCLEAN_QTAPI)
+	$(MAKE_SOLAR) fclean
 
 re: fclean all

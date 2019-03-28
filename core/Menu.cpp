@@ -43,7 +43,7 @@ void Menu::init()
 		_libs[_libs.size() - 1]._name->setBackgroundColor({255, 160, 134});
 		pos.y += 4;
 	}
-	
+
 	_libs[0]._name->setColor({255, 255, 0});
 
 	_menuIsActive = true;
@@ -78,7 +78,7 @@ void Menu::moveCursor(int e)
 		setCursorColorUp();
 	else if (e == arcade::event::S && _cursor + 1 < (int) _libs.size())
 		setCursorColorDown();
-	else if (e == arcade::event::L)
+	else if (e == arcade::event::ENTER)
 		detectCursorPos();
 }
 
