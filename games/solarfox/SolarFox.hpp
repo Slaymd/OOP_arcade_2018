@@ -30,10 +30,13 @@ class SolarFox : public IGameApi {
 	void handleEnnemyShot();
 	void handleFood();
 	void handleScore();
+	void handleCollisionLeft();
+	void handleCollisionRight();
+	void handleCollisionUp();
+	void handleCollisionDown();
+	void handleCollision();
 	void drawShip();
-	void drawEnemy();
 	void moveEnemy();
-	void checkDeath();
 
 
 	private:
