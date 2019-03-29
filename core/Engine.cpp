@@ -7,7 +7,6 @@
 
 #include "Engine.hpp"
 
-
 arcade::Engine &arcade::Engine::instance()
 {
 	static arcade::Engine instance;
@@ -29,7 +28,7 @@ void arcade::Engine::start(int ac, char *av[])
 	int e = -1;
 
 	if (ac != 2)
-		return; //TODO: exception
+		throw EngineException("start: not enough.");
 	_menu = new Menu();
 	arcade::Engine::instance().load(std::string(av[1]));
 	arcade::Engine::instance().Graphic().init();
@@ -60,8 +59,7 @@ void arcade::Engine::load(std::string defaultLib)
 	for (const std::string &gamePath : tmpGame) {
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
 		if (!handleGame)
-			//TODO throw an error
-			return;
+			throw EngineException("load: dlopen of " + gamePath + " failed.");
 		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
 		IGameApi *game = gameEntryPoint();
 
@@ -71,8 +69,7 @@ void arcade::Engine::load(std::string defaultLib)
 	for (const std::string &libPath : tmpLib) {
 		void *handleGraph = dlopen(libPath.c_str(), RTLD_LAZY);
 		if (!handleGraph)
-			//TODO throw an error
-			return;
+			throw EngineException("load: dlopen of " + libPath + " failed.");
 		graphEntryPoint = (ui::IApi *(*)())dlsym(handleGraph, "entryPoint");
 		ui::IApi *api = graphEntryPoint();
 
@@ -193,14 +190,12 @@ std::string arcade::Engine::findName(std::string path) const
 	i = path.size();
 	for(; i > 0 && path[i - 1] != '_'; i--);
 	if (i == 0)
-		//TODO throw an error
-		return nullptr;
+		throw EngineException("findName: failed.");
 	for (size_t j = 0; path[i] != '.' && path[i]; i++, j++) {
 		name.insert(j, 1, path[i]);
 	}
 	if (!path[i])
-		//TODO throw an error
-		return nullptr;
+		throw EngineException("findName: failed.");
 	return name;
 }
 
@@ -242,14 +237,14 @@ void arcade::Engine::changeGame(std::string str)
 		game = _gameLibs[i];
 		if (str != game.name)
 			continue;
-		std::cout << "Change game to " << game.name << "." << std::endl;
+		if (_gameIndex == (int)i)
+			return;
 		getCurrentGame()->close();
 		_gameIndex = (int)i;
 		getCurrentGame()->init();
 		return;
 	}
-	std::cout << str << " not found\n";
-	//TODO: throw not found
+	throw EngineException("changeGame: not found.");
 }
 
 void arcade::Engine::changeGraphLib(std::string str)
@@ -260,13 +255,27 @@ void arcade::Engine::changeGraphLib(std::string str)
 		lib = _graphLibs[i];
 		if (str != lib.name)
 			continue;
-		std::cout << "Change graph lib to " << lib.name << "." << std::endl;
-		std::cout << "* " << (int)i << std::endl;
+		if (_graphLibIndex == (int)i)
+			return;
 		getCurrentGraphLib()->close();
 		_graphLibIndex = (int)i;
 		getCurrentGraphLib()->init();
 		return;
 	}
-	std::cout << str << " not found\n";
-	//TODO: throw not found
+	throw EngineException("changeGame: not found.");
+}
+
+std::string &arcade::Engine::getPlayerName()
+{
+	return _playerName;
+}
+
+std::map<std::string, std::vector<arcade::Engine::player_t>> &arcade::Engine::getRanking()
+{
+	return _ranking;
+}
+
+void arcade::Engine::addScore(int val)
+{
+	_ranking["lol"].push_back({_playerName, val});
 }

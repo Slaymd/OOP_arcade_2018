@@ -54,6 +54,7 @@ QColor ui::QtApiWindow::getQtColor(ui::color color)
 void ui::QtApiWindow::displayRect(QPainter &painter, ui::UIRect rect)
 {
 	QRect qRect;
+	QImage qImage;
 	QPen pen;
 
 	qRect.setRect(rect.getPosition().x * _scale, rect.getPosition().y * _scale,
@@ -66,6 +67,13 @@ void ui::QtApiWindow::displayRect(QPainter &painter, ui::UIRect rect)
 	} else
 		pen = Qt::NoPen;
 	painter.setPen(pen);
+	if (rect.getBackgroundImage().size() > 0) {
+		if (qImage.load(rect.getBackgroundImage().c_str())) {
+			painter.drawImage(qRect, qImage);
+			painter.setPen(Qt::NoPen);
+			return;
+		}
+	}
 	painter.fillRect(qRect, getQtColor(rect.getBackgroundColor()));
 	painter.drawRect(qRect);
 	painter.setPen(Qt::NoPen);

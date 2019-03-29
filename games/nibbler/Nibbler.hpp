@@ -34,7 +34,6 @@ class Nibbler : public IGameApi {
 
 
 	private:
-	bool _reversed = false;
 	ui::Frame *_frame;
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
@@ -45,7 +44,6 @@ class Nibbler : public IGameApi {
 	ui::UIText *_score;
 	int _scoreInt = 0;
 	int _direction = 1;
-	arcade::Engine _engine;
 };
 
 #endif //ARCADE_NIBBLER_HPP

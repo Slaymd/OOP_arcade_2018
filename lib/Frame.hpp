@@ -35,9 +35,11 @@ namespace ui {
 
 		UIRect getElement(int key)
 		{
-			if (_elements.find(key) == _elements.end()) {
-				return UIRect({0, 0}, {0, 0}); //TODO: throw an error
-			}
+			if (_elements.find(key) == _elements.end())
+				throw ui::UIException("Frame::getElement: "
+			  "Element with key " + std::to_string(key)
+			  + " not found.");
+
 			return (_elements.find(key)->second);
 		}
 
@@ -45,7 +47,10 @@ namespace ui {
 		{
 			if (pos.x < 0 || pos.y < 0 || pos.x >= FRAMEWIDTH ||
 			pos.y >= FRAMEHEIGHT)
-				return; // TODO: throw an error
+				throw ui::UIException("Frame::setPixel: "
+			  "<position x=" + std::to_string(pos.x) + " y=" +
+			  std::to_string(pos.y) + "> out of frame.");
+
 			_pixels[pos.x][pos.y] = key;
 		}
 
@@ -53,7 +58,9 @@ namespace ui {
 		{
 			if (pos.x < 0 || pos.y < 0 || pos.x >= FRAMEWIDTH ||
 				pos.y >= FRAMEHEIGHT)
-				return (-1); //TODO: throw an error
+				throw ui::UIException("Frame::getPixel: "
+			  "<position x=" + std::to_string(pos.x) + " y=" +
+			  std::to_string(pos.y) + "> out of frame.");
 			return _pixels[pos.x][pos.y];
 		}
 

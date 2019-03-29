@@ -10,10 +10,10 @@
 void Menu::init()
 {
 	auto engine = arcade::Engine::instance();
-	ui::position pos = {31, 8};
+	ui::position pos = {31, 9};
 	lib_t lib;
 
-	_menu = new ui::UIText({31, 4}, "MENU");
+	_menu = new ui::UIText({31, 5}, "MENU");
 	_menu->setColor({255, 255, 255});
 	_menu->setBackgroundColor({255, 160, 134});
 
@@ -53,6 +53,11 @@ void Menu::init()
 void Menu::tick(int e)
 {
 	arcade::Engine::Graphic().clean();
+	ui::UIText text({0, 0}, "bonjour");
+
+	arcade::Engine::Graphic().drawText(text);
+
+
 	arcade::Engine::Graphic().drawRect(*_rect);
 	arcade::Engine::Graphic().drawText(*_menu);
 	for (auto &_gameName : _libs)
@@ -97,6 +102,7 @@ void Menu::detectCursorPos()
 
 void Menu::setCursorColorUp()
 {
+	arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
 	_libs[_cursor - 1]._name->setColor({255, 255, 0});
 	_libs[_cursor]._name->setColor({0, 0, 0});
 	_cursor -= 1;
@@ -104,6 +110,7 @@ void Menu::setCursorColorUp()
 
 void Menu::setCursorColorDown()
 {
+	arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
 	_libs[_cursor + 1]._name->setColor({255, 255, 0});
 	_libs[_cursor]._name->setColor({0, 0, 0});
 	_cursor += 1;

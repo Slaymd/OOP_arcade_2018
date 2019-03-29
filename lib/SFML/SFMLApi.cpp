@@ -45,7 +45,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ENTER, sf::Keyboard::Key::Return},
 	{arcade::event::Key::SPACE, 32},
 	{arcade::event::Key::BACKSPACE, 8},
-	{arcade::event::Key::ESCAPE, 27},
+	{arcade::event::Key::ESCAPE, sf::Keyboard::Key::Escape},
 	{arcade::event::Key::UNKNOWN, -1}
 };
 
@@ -157,10 +157,17 @@ void ui::SFMLApi::drawFrame(ui::Frame frame)
 	}
 }
 
-void ui::SFMLApi::playSound(const std::string &string)
+void ui::SFMLApi::playSound(const std::string &path)
 {
-	(void)string;
-	printf("SFML: playSound not implemented.\n");
+	if (_soundBuffer == nullptr)
+		_soundBuffer = new sf::SoundBuffer;
+	if (!_soundBuffer->loadFromFile(path))
+		return;
+	if (_sound == nullptr)
+		_sound = new sf::Sound;
+	_sound->stop();
+	_sound->setBuffer(*_soundBuffer);
+	_sound->play();
 }
 
 void ui::SFMLApi::setTitle(const std::string &string)

@@ -36,8 +36,8 @@ namespace ui {
 		int getBorderWeight() override { return _borderWeight; }
 
 		private:
-		position _pos;
-		size _size;
+		position _pos = {0, 0};
+		size _size = {0, 0};
 		color _backgroundColor = {0, 0, 0};
 		std::string _backgroundImage = "";
 		int _borderWeight = 0;

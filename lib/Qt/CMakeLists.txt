@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -fPIC")
 
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Multimedia REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
@@ -21,4 +22,4 @@ if (APPLE)
     set_property(TARGET arcade-qt PROPERTY SUFFIX "")
 endif()
 
-target_link_libraries(arcade-qt Qt5::Widgets Qt5::Core)
+target_link_libraries(arcade-qt Qt5::Widgets Qt5::Multimedia Qt5::Core)

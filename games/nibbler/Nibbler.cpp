@@ -45,6 +45,8 @@ void Nibbler::init()
 		_frame->setPixel({20 + 1, 20 + i}, 1);
 	}
 
+	_head->setBackgroundImage("assets/viatransit_180x180.png");
+
 	srand(time(nullptr));
 	_food->setPosition({(int)rand() % 60, (int)rand() % 60});
 }
@@ -119,18 +121,23 @@ void Nibbler::autoMove()
 
 void Nibbler::close()
 {
-//	_name = nullptr;
-//	_input = nullptr;
-//	_rect = nullptr;
-//	_snake = nullptr;
-//	_snakePos.clear();
-//	_head = nullptr;
-//	_food = nullptr;
+	//TODO: free that
+	delete _frame;
+	delete _name;
+	delete _score;
+	delete _scoreText;
+	delete _snake;
+	_snakePos.clear();
+	delete _head;
+	delete _food;
+	_scoreInt = 0;
+	_direction = 1;
 }
 
 void Nibbler::generateFood()
 {
 	if (_head->getPosition().x == _food->getPosition().x && _head->getPosition().y == _food->getPosition().y) {
+		arcade::Engine::Graphic().playSound("assets/mc_eat.wav");
 		_food->setPosition({(int)random() % 60, (int)random() % 60});
 		_snakePos.push_back({_snakePos[_snakePos.size() - 1]});
 		_scoreInt += 1;
@@ -153,13 +160,13 @@ void Nibbler::checkDeath()
 {
 	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 60) {
 		close();
-		exit(0);
+		init();
 	}
 
 	for (auto _snakePo : _snakePos)
 		if (_head->getPosition().x == _snakePo.x && _head->getPosition().y == _snakePo.y) {
 			close();
-			exit(0);
+			init();
 		}
 }
 

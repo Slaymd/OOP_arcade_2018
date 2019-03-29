@@ -4,10 +4,12 @@
 ** File description:
 ** .cpp
 */
+
 #ifndef ARCADE_CORE_HPP
 #define ARCADE_CORE_HPP
 
 #include "IGameApi.hpp"
+#include "EngineExceptions.hpp"
 #include "IApi.hpp"
 #include "Menu.hpp"
 #include <iostream>
@@ -15,10 +17,17 @@
 #include <dlfcn.h>
 #include <algorithm>
 #include <cstring>
+#include <map>
+#include <vector>
 
 namespace arcade {
 
 	class Engine {
+
+		typedef struct player {
+			std::string name;
+			int score;
+		} player_t;
 
 		struct game_t {
 			std::string name;
@@ -42,6 +51,11 @@ namespace arcade {
 
 		std::vector<arcade::Engine::game_t> getGames();
 		std::vector<arcade::Engine::graph_t> getGraphLibs();
+
+		std::string &getPlayerName();
+		std::map<std::string, std::vector<player_t>> &getRanking();
+
+		void addScore(int);
 
 		void changeGame(std::string);
 		void changeGraphLib(std::string);
@@ -69,6 +83,9 @@ namespace arcade {
 		std::vector<graph_t> _graphLibs;
 		std::vector<void *> _handlers;
 		IGameApi *_menu = nullptr;
+
+		std::map<std::string, std::vector<player_t>> _ranking;
+		std::string _playerName = "default";
 		//Indexes
 
 		int _gameIndex = -1;

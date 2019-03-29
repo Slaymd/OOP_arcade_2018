@@ -7,6 +7,7 @@
 
 #include <QPushButton>
 #include <QMainWindow>
+#include <QSound>
 #include "QtApi.hpp"
 
 /*
@@ -83,13 +84,13 @@ void ui::QtApi::clean()
 
 void ui::QtApi::close()
 {
-	_isActive = false;
-	_win->close();
-	_win = nullptr;
-	_app->closingDown();
-	delete _app;
-	_app = nullptr;
-	_lastEvent = -1;
+//	_isActive = false;
+//	_win->close();
+//	_win = nullptr;
+//	_app->closingDown();
+//	delete _app;
+//	_app = nullptr;
+//	_lastEvent = -1;
 }
 
 int ui::QtApi::getEvent()
@@ -132,7 +133,7 @@ void ui::QtApi::drawFrame(ui::Frame frame)
 
 void ui::QtApi::playSound(const std::string &string)
 {
-	(void)string;
+	QSound::play(string.c_str());
 }
 
 void ui::QtApi::setTitle(const std::string &string)

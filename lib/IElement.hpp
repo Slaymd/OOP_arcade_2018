@@ -7,6 +7,7 @@
 #ifndef ARCADE_IELEMENT_HPP
 #define ARCADE_IELEMENT_HPP
 
+#include "UIExceptions.hpp"
 #include <string>
 
 namespace ui {
