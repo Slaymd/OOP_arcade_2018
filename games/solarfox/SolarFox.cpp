@@ -14,6 +14,8 @@
 
 void SolarFox::init()
 {
+
+	ui::position tmpFood = {static_cast<int>(random()) % 50 + 10, static_cast<int>(random()) % 50 + 10};
 	//Init text
 	_name = new ui::UIText({30, 0}, "SOLARFOX");
 	_name->setColor({255, 255, 255});
@@ -47,7 +49,12 @@ void SolarFox::init()
 	_enemyDown.push_back(ui::UIRect({30, 54}, {3, 1}));
 	_enemyDown.push_back(ui::UIRect({31, 53}, {1, 1}));
 
-
+	for (int i = 0; i < 20; i++) {
+		ui::UIRect food = ui::UIRect(tmpFood, {1, 1});
+		food.setBackgroundColor({120, 56, 31});
+		_foods.push_back(food);
+		tmpFood = {static_cast<int>(random()) % 40 + 10, static_cast<int>(random()) % 40 + 10};
+	}
 	//set ennemy color
 	_enemyLeft[0].setBackgroundColor({220, 20, 60});
 	_enemyLeft[1].setBackgroundColor({220, 20, 60});
@@ -78,12 +85,24 @@ void SolarFox::tick(int e)
 	arcade::Engine::Graphic().drawText(*_score);
 	handleShot();
 	moveShip(e);
-	drawShip();
 	moveEnemy();
+	handleFood();
 	handleEnnemyShot();
 	drawEnemy();
+	drawShip();
 	arcade::Engine::Graphic().drawRect(*_shot);
 	arcade::Engine::Graphic().render();
+}
+
+void SolarFox::handleFood()
+{
+	for (auto &_food : _foods) {
+		if (_food.getPosition().x == _shot->getPosition().x && _food.getPosition().y == _shot->getPosition().y)
+			_food.setPosition({0, 0});
+	}
+	for (const auto &_food : _foods) {
+		arcade::Engine::Graphic().drawRect(_food);
+	}
 }
 
 
@@ -146,11 +165,11 @@ void SolarFox::moveShip(int e)
 		_lastDirection = _direction;
 		_direction = 1;
 		break;
-	case arcade::event::Z :
+	case arcade::event::W :
 		_lastDirection = _direction;
 		_direction = 2;
 		break;
-	case arcade::event::Q :
+	case arcade::event::A :
 		_lastDirection = _direction;
 		_direction = 3;
 		break;
@@ -211,16 +230,6 @@ void SolarFox::moveEnemy()
 
 void SolarFox::close()
 {
-}
-
-void SolarFox::generateFood()
-{
-}
-
-
-void SolarFox::checkDeath()
-{
-
 }
 
 void SolarFox::handleScore()
@@ -306,7 +315,6 @@ void SolarFox::autoMove()
 
 	}
 }
-
 
 extern "C" IGameApi *entryPoint()
 {

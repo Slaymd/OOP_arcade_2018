@@ -28,7 +28,7 @@ class SolarFox : public IGameApi {
 	void autoMove();
 	void moveShip(int e);
 	void handleEnnemyShot();
-	void generateFood();
+	void handleFood();
 	void handleScore();
 	void drawShip();
 	void drawEnemy();
@@ -57,7 +57,7 @@ class SolarFox : public IGameApi {
 	std::vector<ui::position> _enemyUpShot;
 	std::vector<ui::position> _enemyDownShot;
 
-	//	std::vector<ui::UIRect *> _foods;
+	std::vector<ui::UIRect> _foods;
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
 	ui::UIText *_score;
