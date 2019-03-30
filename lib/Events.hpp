@@ -41,6 +41,7 @@ namespace arcade {
 			ARROW_UP,
 			ARROW_LEFT,
 			ARROW_RIGHT,
+			TAB,
 			ENTER,
 			SPACE,
 			BACKSPACE,

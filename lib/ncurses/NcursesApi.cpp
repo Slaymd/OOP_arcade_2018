@@ -43,6 +43,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, KEY_UP},
 	{arcade::event::Key::ARROW_LEFT, KEY_LEFT},
 	{arcade::event::Key::ARROW_RIGHT, KEY_RIGHT},
+	{arcade::event::Key::TAB, '\t'},
 	{arcade::event::Key::ENTER, 10},
 	{arcade::event::Key::SPACE, ' '},
 	{arcade::event::Key::BACKSPACE, KEY_BACKSPACE},
@@ -180,6 +181,10 @@ short ui::NcursesApi::getColorPair(ui::color fgColor, ui::color bgColor)
 	static short lastColorId = 9;
 	static short lastPairId = 0;
 
+	if (lastPairId == 256) {
+		lastPairId = 0;
+		lastColorId = 9;
+	}
 	for (color_asset asset : _colorAssets) {
 		if (asset.fgColor.b == fgColor.b && asset.fgColor.g == fgColor.g && asset.fgColor.r == fgColor.r &&
 		asset.bgColor.b == bgColor.b && asset.bgColor.g == bgColor.g && asset.bgColor.r == bgColor.r)

@@ -42,6 +42,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, 73},
 	{arcade::event::Key::ARROW_LEFT, 71},
 	{arcade::event::Key::ARROW_RIGHT, 72},
+	{arcade::event::Key::TAB, sf::Keyboard::Key::Tab},
 	{arcade::event::Key::ENTER, sf::Keyboard::Key::Return},
 	{arcade::event::Key::SPACE, 32},
 	{arcade::event::Key::BACKSPACE, 8},
@@ -90,9 +91,9 @@ void ui::SFMLApi::close()
 
 int ui::SFMLApi::getEvent()
 {
-	sf::Event event{};
+	sf::Event event;
 
-	while (_win->pollEvent(event)) {
+	while (_win != nullptr && _win->pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			return arcade::event::ESCAPE;
 		if (event.type == sf::Event::KeyPressed)
@@ -109,7 +110,7 @@ void ui::SFMLApi::drawText(ui::UIText text)
 	position pos = text.getPosition();
 
 	sfText.setFont(*_font);
-	sfText.setPosition(pos.x * _scale, pos.y * _scale);
+	sfText.setPosition(pos.x * _scale, pos.y * _scale - 10);
 	sfText.setString(text.getString());
 	sfText.setColor(getSFMLColor(text.getColor()));
 	if (_win == nullptr)

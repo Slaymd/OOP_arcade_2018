@@ -82,7 +82,7 @@ void ui::QtApiWindow::displayRect(QPainter &painter, ui::UIRect rect)
 void ui::QtApiWindow::displayText(QPainter &painter, ui::UIText text)
 {
 	painter.setPen(getQtColor(text.getColor()));
-	painter.drawText(text.getPosition().x * _scale, text.getPosition().y * _scale, text.getString().c_str());
+	painter.drawText(text.getPosition().x * _scale, text.getPosition().y * _scale + 10, text.getString().c_str());
 }
 
 void ui::QtApiWindow::addRect(ui::UIRect rect)

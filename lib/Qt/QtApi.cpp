@@ -45,6 +45,7 @@ static const arcade::event::event_t _events[] = {
 	{arcade::event::Key::ARROW_UP, Qt::Key::Key_Up},
 	{arcade::event::Key::ARROW_LEFT, Qt::Key::Key_Left},
 	{arcade::event::Key::ARROW_RIGHT, Qt::Key::Key_Right},
+	{arcade::event::Key::TAB, Qt::Key::Key_Tab},
 	{arcade::event::Key::ENTER, Qt::Key::Key_Return},
 	{arcade::event::Key::SPACE, Qt::Key::Key_Space},
 	{arcade::event::Key::BACKSPACE, Qt::Key::Key_Backspace},
@@ -84,13 +85,13 @@ void ui::QtApi::clean()
 
 void ui::QtApi::close()
 {
-//	_isActive = false;
-//	_win->close();
-//	_win = nullptr;
-//	_app->closingDown();
-//	delete _app;
-//	_app = nullptr;
-//	_lastEvent = -1;
+	_isActive = false;
+	_win->close();
+	_win = nullptr;
+	_app->closingDown();
+	delete _app;
+	_app = nullptr;
+	_lastEvent = -1;
 }
 
 int ui::QtApi::getEvent()
