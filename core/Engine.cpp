@@ -25,10 +25,14 @@ ui::IApi &arcade::Engine::Graphic()
 
 void arcade::Engine::start(int ac, char *av[])
 {
-	int e = -1;
+	int e;
 
-	if (ac != 2)
-		throw EngineException("start: not enough.");
+	if (ac != 2) {
+		std::cout << "Usage:" << std::endl;
+		std::cout << "\t" << av[0] << " <path_to_graph_lib.so>"
+		<< std::endl;
+		return;
+	}
 	_menu = new Menu();
 	arcade::Engine::instance().load(std::string(av[1]));
 	arcade::Engine::instance().Graphic().init();
@@ -43,6 +47,7 @@ void arcade::Engine::start(int ac, char *av[])
 		arcade::Engine::instance().getCurrentGame()->tick(e);
 	}
 	arcade::Engine::instance().closeHandlers();
+	saveScores();
 }
 
 /*
@@ -59,8 +64,10 @@ void arcade::Engine::load(std::string defaultLib)
 	for (const std::string &gamePath : tmpGame) {
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
 		if (!handleGame)
-			throw EngineException("load: dlopen of " + gamePath + " failed.");
+			throw EngineException("load: dlopen of " + gamePath + " failed: " + dlerror());
 		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
+		if (!gameEntryPoint)
+			throw EngineException("load: dlsym of " + gamePath + " failed: " + dlerror());
 		IGameApi *game = gameEntryPoint();
 
 		_gameLibs.emplace_back((game_t){findName(gamePath), game});
@@ -69,13 +76,16 @@ void arcade::Engine::load(std::string defaultLib)
 	for (const std::string &libPath : tmpLib) {
 		void *handleGraph = dlopen(libPath.c_str(), RTLD_LAZY);
 		if (!handleGraph)
-			throw EngineException("load: dlopen of " + libPath + " failed.");
+			throw EngineException("load: dlopen of " + libPath + " failed: " + dlerror());
 		graphEntryPoint = (ui::IApi *(*)())dlsym(handleGraph, "entryPoint");
+		if (!graphEntryPoint)
+			throw EngineException("load: dlsym of " + libPath + " failed: " + dlerror());
 		ui::IApi *api = graphEntryPoint();
 
 		_graphLibs.emplace_back((graph_t){findName(libPath), api});
 		_handlers.emplace_back(handleGraph);
 	}
+	loadScores();
 }
 
 void arcade::Engine::closeHandlers()
@@ -94,19 +104,31 @@ void arcade::Engine::eventHandler(arcade::event::Key e)
 	switch (e) {
 	case event::ESCAPE:
 		getCurrentGame()->close();
-		if (_gameIndex >= 0) {
-			_gameIndex = -1;
-			getCurrentGame()->init();
-		} else {
-			Graphic().close();
-			_isActive = false;
-		}
+		Graphic().close();
+		_isActive = false;
+		break;
+	case event::M:
+		if (_gameIndex == -1)
+			break;
+		getCurrentGame()->close();
+		_gameIndex = -1;
+		getCurrentGame()->init();
+		break;
+	case event::ARROW_LEFT:
+		rotateGames(true);
+		break;
+	case event::ARROW_RIGHT:
+		rotateGames(false);
 		break;
 	case event::ARROW_UP:
 		rotateGraphLibs(true);
 		break;
 	case event::ARROW_DOWN:
 		rotateGraphLibs(false);
+		break;
+	case event::SPACE:
+		getCurrentGame()->close();
+		getCurrentGame()->init();
 		break;
 	default:
 		break;
@@ -178,7 +200,8 @@ std::vector<std::string> arcade::Engine::getSharedLibPaths(
 	}
 	defaultExist = defaultPath.length() == 0 ? true : defaultExist;
 	if (!defaultExist)
-		throw std::exception();
+		throw EngineException("load: graph lib `" + defaultPath +
+		"` doesn't exist.");
 	return sharedLibs;
 }
 
@@ -265,10 +288,15 @@ void arcade::Engine::changeGraphLib(std::string str)
 	throw EngineException("changeGame: not found.");
 }
 
+/*
+ * SCORES
+ */
+
 std::string &arcade::Engine::getPlayerName()
 {
 	return _playerName;
 }
+
 
 std::map<std::string, std::vector<arcade::Engine::player_t>> &arcade::Engine::getRanking()
 {
@@ -277,5 +305,60 @@ std::map<std::string, std::vector<arcade::Engine::player_t>> &arcade::Engine::ge
 
 void arcade::Engine::addScore(int val)
 {
-	_ranking["lol"].push_back({_playerName, val});
+	if (_playerName.size() == 0)
+		return;
+	std::vector<player_t> players = _ranking[getGames()[_gameIndex].name];
+	players.emplace_back((player_t){_playerName, val});
+	std::sort(players.begin(), players.end());
+	std::reverse(players.begin(), players.end());
+
+	_ranking[getGames()[_gameIndex].name] = players;
+}
+
+void arcade::Engine::saveScores()
+{
+	for (auto const &score : _ranking) {
+		std::ofstream scoreFile("games/" + score.first + ".score");
+
+		for (auto const &player : score.second) {
+			if (player.name.size() > 0)
+				scoreFile << player.name << ":" << player.score
+				<< std::endl;
+		}
+	}
+}
+
+void arcade::Engine::loadScores()
+{
+	int lastGameIndex = _gameIndex;
+	int gameIndex = 0;
+
+	for (auto const &game : getGames()) {
+		_gameIndex = gameIndex;
+		std::ifstream scoreFile("games/" + game.name + ".score");
+		std::string line;
+
+		size_t sep;
+
+		if (scoreFile.fail())
+			continue;
+		while (std::getline(scoreFile, line)) {
+			if (line.empty())
+				continue;
+			sep = line.find(':');
+			if (sep == std::string::npos)
+				continue;
+			try {
+				_playerName = line.substr(0, sep);
+				if (_playerName.size() > 0)
+					addScore(std::atoi(
+					line.substr(sep + 1).c_str()));
+			} catch (std::exception ex) {
+				continue;
+			}
+		}
+		gameIndex++;
+	}
+	_gameIndex = lastGameIndex;
+	_playerName = "";
 }

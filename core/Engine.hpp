@@ -19,6 +19,7 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <fstream>
 
 namespace arcade {
 
@@ -27,6 +28,11 @@ namespace arcade {
 		typedef struct player {
 			std::string name;
 			int score;
+
+			bool operator < (const struct player &otherPlayer) const
+			{
+				return (score < otherPlayer.score);
+			}
 		} player_t;
 
 		struct game_t {
@@ -49,13 +55,17 @@ namespace arcade {
 
 		void start(int ac, char *av[]);
 
-		std::vector<arcade::Engine::game_t> getGames();
-		std::vector<arcade::Engine::graph_t> getGraphLibs();
+		void addScore(int);
 
 		std::string &getPlayerName();
 		std::map<std::string, std::vector<player_t>> &getRanking();
 
-		void addScore(int);
+		void saveScores();
+		void loadScores();
+
+
+		std::vector<arcade::Engine::game_t> getGames();
+		std::vector<arcade::Engine::graph_t> getGraphLibs();
 
 		void changeGame(std::string);
 		void changeGraphLib(std::string);

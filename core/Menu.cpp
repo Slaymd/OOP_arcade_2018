@@ -195,8 +195,31 @@ void Menu::dispGraphicsTab()
 
 void Menu::dispHighscoresSection()
 {
+	std::string gameName = arcade::Engine::instance()
+		.getGames()[_gameIndex].name;
+	ui::UIText text({12, 39}, "");
+	int i = 0;
+
+	text.setColor({0, 0, 0});
+	text.setBackgroundColor(_bgColor);
+	_highscoresText->setString(gameName + " highscores:");
 	_highscoresText->setBackgroundColor(_bgColor);
 	arcade::Engine::Graphic().drawText(*_highscoresText);
+	for (const auto &player : arcade::Engine::instance()
+	.getRanking()[gameName]) {
+		if (i == 0)
+			text.setColor({183, 21, 64});
+		else
+			text.setColor({52, 73, 94});
+		text.setString(std::to_string(i + 1) + ". " + player.name +
+		" : " + std::to_string(player.score));
+		arcade::Engine::Graphic().drawText(text);
+		text.setPosition({text.getPosition().x,
+			text.getPosition().y + 2});
+		i++;
+		if (i == 4)
+			break;
+	}
 }
 
 /*
@@ -206,23 +229,21 @@ void Menu::dispHighscoresSection()
 void Menu::eventHandler(arcade::event::Key key)
 {
 	std::string &playerName = arcade::Engine::instance().getPlayerName();
-	printf("key: %d\n", key);
-	if (key >= 'A' && key <= 'Z' && _tabIndex == 0) {
+	if (key >= 'A' && key <= 'Z' && _tabIndex == 0 && _welcomeTicks <= 0) {
 		if (playerName.size() < 6)
 			playerName += (char)key;
 		else
 			_usernameFieldError = true;
 	} else if (key == arcade::event::Key::BACKSPACE && !playerName.empty()
-	&& _tabIndex == 0)
+	&& _tabIndex == 0 && _welcomeTicks <= 0)
 		playerName = playerName.substr(0, playerName.size() - 1);
 	else if (key == arcade::event::Key::TAB) {
 		if (!(_tabIndex == 0 && playerName.empty()))
 			_tabIndex = _tabIndex == 2 ? 0 : _tabIndex + 1;
 		else
 			_usernameFieldError = true;
-	} else {
+	} else
 		selectsEventHandler(key);
-	}
 }
 
 void Menu::selectsEventHandler(arcade::event::Key key)
