@@ -23,9 +23,17 @@ void Nibbler::init()
 	_score = new ui::UIText({9, 0}, "0");
 	_score->setColor({255, 255, 255});
 
-	_snakePos = {{31, 17}, {31, 18}, {31, 19}};
+	_winLose = new ui::UIText({27, 29}, "Game Over");
+	_winLose->setColor({255, 255, 255});
 
-	_head = new ui::UIRect({31, 16}, {1, 1});
+	_endgame = new ui::UIRect({15, 15}, {30, 30});
+	_endgame->setBackgroundColor({10, 10, 10});
+
+	_isActive = true;
+
+	_snakePos = {{31, 29}, {31, 30}, {31, 31}};
+
+	_head = new ui::UIRect({31, 28}, {1, 1});
 	_head->setBackgroundColor({124, 252, 0});
 
 	_snake = new ui::UIRect(_snakePos[0], {1, 1});
@@ -37,16 +45,6 @@ void Nibbler::init()
 	ui::UIRect bgRect({20, 20}, {1, 1});
 	bgRect.setBackgroundColor({255, 145, 0});
 
-	_frame = new ui::Frame();
-	_frame->setElement(1, bgRect);
-	for (int i = 0; i < 10; i++) {
-		_frame->setPixel({20 -1, 20 + i}, 1);
-		_frame->setPixel({20, 20 + i}, 1);
-		_frame->setPixel({20 + 1, 20 + i}, 1);
-	}
-
-	_head->setBackgroundImage("assets/viatransit_180x180.png");
-
 	srand(time(nullptr));
 	_food->setPosition({(int)rand() % 60, (int)rand() % 60});
 }
@@ -54,16 +52,26 @@ void Nibbler::init()
 void Nibbler::tick(int event)
 {
 	arcade::Engine::Graphic().clean();
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	arcade::Engine::Graphic().drawFrame(*_frame);
-	arcade::Engine::Graphic().drawText(*_name);
-	arcade::Engine::Graphic().drawText(*_scoreText);
-	handleScore();
-	generateFood();
-	moveSnake(event);
-	displaySnake();
-	arcade::Engine::Graphic().drawText(*_score);
-	arcade::Engine::Graphic().drawRect(*_food);
+	if (_isActive) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		arcade::Engine::Graphic().drawText(*_name);
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		handleScore();
+		generateFood();
+		moveSnake(event);
+		displaySnake();
+		arcade::Engine::Graphic().drawText(*_score);
+		arcade::Engine::Graphic().drawRect(*_food);
+	} else {
+		arcade::Engine::Graphic().drawRect(*_endgame);
+		arcade::Engine::Graphic().drawText(*_score);
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		arcade::Engine::Graphic().drawText(*_winLose);
+		if (event == arcade::event::ENTER) {
+			close();
+			init();
+		}
+	}
 	arcade::Engine::Graphic().render();
 }
 
@@ -132,6 +140,7 @@ void Nibbler::close()
 	delete _food;
 	_scoreInt = 0;
 	_direction = 1;
+	_isActive = false;
 }
 
 void Nibbler::generateFood()
@@ -185,6 +194,12 @@ void Nibbler::moveBody()
 void Nibbler::handleScore()
 {
 	_score->setString(std::to_string(_scoreInt));
+}
+
+void Nibbler::restart()
+{
+	init();
+	close();
 }
 
 extern "C" IGameApi *entryPoint()

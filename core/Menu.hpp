@@ -23,6 +23,7 @@ class Menu : public IGameApi {
 	void init() override;
 	void tick(int i) override;
 	void close() override;
+	void restart() override;
 
 	private:
 

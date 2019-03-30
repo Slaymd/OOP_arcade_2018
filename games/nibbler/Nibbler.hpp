@@ -24,6 +24,8 @@ class Nibbler : public IGameApi {
 	void init() override;
 	void tick(int) override;
 	void close() override;
+	void restart() override;
+
 	void autoMove();
 	void generateFood();
 	void moveBody();
@@ -37,12 +39,15 @@ class Nibbler : public IGameApi {
 	ui::Frame *_frame;
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
+	ui::UIText *_winLose;
 	ui::UIRect *_snake;
 	std::vector<ui::position> _snakePos;
 	ui::UIRect *_head;
 	ui::UIRect *_food;
 	ui::UIText *_score;
+	ui::UIRect *_endgame;
 	int _scoreInt = 0;
+	bool _isActive;
 	int _direction = 1;
 };
 

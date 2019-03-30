@@ -285,3 +285,9 @@ int Menu::randomBetween(int a, int b)
 
 	return (std::rand() % b + a);
 }
+
+void Menu::restart()
+{
+	init();
+	close();
+}

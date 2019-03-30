@@ -17,6 +17,7 @@ class IGameApi {
 	virtual void init() = 0;
 	virtual void tick(int) = 0;
 	virtual void close() = 0;
+	virtual void restart() = 0;
 };
 
 #endif //ARCADE_IGAMEAPI_HPP

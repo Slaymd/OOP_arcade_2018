@@ -127,8 +127,8 @@ void arcade::Engine::eventHandler(arcade::event::Key e)
 		rotateGraphLibs(false);
 		break;
 	case event::SPACE:
-		getCurrentGame()->close();
-		getCurrentGame()->init();
+		if (_gameIndex != -1)
+			getCurrentGame()->restart();
 		break;
 	default:
 		break;
@@ -331,14 +331,16 @@ void arcade::Engine::saveScores()
 void arcade::Engine::loadScores()
 {
 	int lastGameIndex = _gameIndex;
-	int gameIndex = 0;
+	int gameIndex = -1;
 
 	for (auto const &game : getGames()) {
+		gameIndex++;
 		_gameIndex = gameIndex;
 		std::ifstream scoreFile("games/" + game.name + ".score");
 		std::string line;
-
 		size_t sep;
+
+		_ranking.insert({game.name, std::vector<player_t>()});
 
 		if (scoreFile.fail())
 			continue;
@@ -357,7 +359,6 @@ void arcade::Engine::loadScores()
 				continue;
 			}
 		}
-		gameIndex++;
 	}
 	_gameIndex = lastGameIndex;
 	_playerName = "";
