@@ -1,122 +1,266 @@
 /*
-** EPITECH PROJECT, 2018
-** Aiguier Maxime
+** EPITECH PROJECT, 2022
+** arcade
 ** File description:
-** .cpp
+** Darius
 */
 
 #include "Menu.hpp"
 
+/*
+ * BASE FUNCTIONS
+ */
+
 void Menu::init()
 {
-	auto engine = arcade::Engine::instance();
-	ui::position pos = {31, 9};
-	lib_t lib;
+	_header = new ui::UIRect({0, 0}, {60, 3});
+	_bg = new ui::UIRect({0, 3}, {60, 60});
 
-	_menu = new ui::UIText({31, 5}, "MENU");
-	_menu->setColor({255, 255, 255});
-	_menu->setBackgroundColor({255, 160, 134});
+	_header->setBackgroundColor({0, 0, 0});
 
-	_rect = new ui::UIRect({18, 3}, {30, 30});
-	_rect->setBackgroundColor({255, 160, 134});
-	_rect->setBorders(1, {255, 255, 255});
+	_lightColors = new std::vector<ui::color>({{116, 185, 255}, {255, 234, 167}, {162, 155, 254}, {85, 239, 196}, {250, 177, 160}});
+	_darkColors = new std::vector<ui::color>({{0, 168, 255}, {140, 122, 230},{225, 177, 44}, {68, 189, 50}, {232, 65, 24}, {6, 82, 221}});
+	_particles = new std::vector<ui::UIText>();
 
-	for (size_t i = 0; i < engine.getGames().size(); i++) {
-		lib._name = new ui::UIText(pos, engine.getGames()[i].name);
-		lib.instanceGame = arcade::Engine::instance().getGames()[i].instance;
-		lib.isGame = true;
-		lib._nameString = engine.getGames()[i].name;
-		std::cout << i << lib._nameString << std::endl;
-		_libs.push_back(lib);
-		_libs[_libs.size() - 1]._name->setColor({0, 0, 0});
-		_libs[_libs.size() - 1]._name->setBackgroundColor({255, 160, 134});
-		pos.y += 4;
-	}
-	for (size_t i = 0; i < engine.getGraphLibs().size(); i++) {
-		lib._name = new ui::UIText(pos, engine.getGraphLibs()[i].name);
-		lib.instanceLib = arcade::Engine::instance().getGraphLibs()[i].instance;
-		lib.isGame = false;
-		lib._nameString = engine.getGraphLibs()[i].name;
-		std::cout << i << lib._nameString << std::endl;
-		_libs.push_back(lib);
-		_libs[_libs.size() - 1]._name->setColor({0, 0, 0});
-		_libs[_libs.size() - 1]._name->setBackgroundColor({255, 160, 134});
-		pos.y += 4;
-	}
-	
-	_libs[0]._name->setColor({255, 255, 0});
+	_headerText = new ui::UIText({25, 1}, "Chargement ...");
+	_headerText->setBackgroundColor({0, 0, 0});
+	_headerText->setColor({255, 255, 255});
 
-	_menuIsActive = true;
+	_playerTab = new ui::UIRect({10, 10}, {40, 3});
+	_playerTab->setBackgroundColor({0, 0, 0});
+	_playerTab->setBorders(1, {255, 255, 255});
+
+	_usernameText = new ui::UIText({12, 11}, "username:");
+	_usernameText->setColor({255, 255, 255});
+	_usernameText->setBackgroundColor({0, 0, 0});
+
+	_usernameField = new ui::UIText({40, 11}, "_ _ _ _ _ _");
+	_usernameField->setColor({255, 255, 255});
+	_usernameField->setBackgroundColor({0, 0, 0});
+
+	_gamesTab = new ui::UIRect({10, 18}, {40, 5});
+	_gamesTab->setBackgroundColor({0, 0, 0});
+	_gamesTab->setBorders(1, {0, 0, 0});
+
+	_graphicsTab = new ui::UIRect({10, 27}, {40, 5});
+	_graphicsTab->setBackgroundColor({0, 0, 0});
+	_graphicsTab->setBorders(1, {0, 0, 0});
+
+	_highscoresText = new ui::UIText({11, 36}, "highscores:");
+	_highscoresText->setBackgroundColor(_bgColor);
+	_highscoresText->setColor({0, 0, 0});
+
+	_welcomeTicks = 25;
+	_tabIndex = 0;
 }
 
-
-void Menu::tick(int e)
+void Menu::tick(int i)
 {
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	generateBackground();
 	arcade::Engine::Graphic().clean();
-	ui::UIText text({0, 0}, "bonjour");
-
-	arcade::Engine::Graphic().drawText(text);
-
-
-	arcade::Engine::Graphic().drawRect(*_rect);
-	arcade::Engine::Graphic().drawText(*_menu);
-	for (auto &_gameName : _libs)
-		arcade::Engine::Graphic().drawText(*_gameName._name);
+	//Background
+	arcade::Engine::Graphic().drawRect(*_header);
+	arcade::Engine::Graphic().drawRect(*_bg);
+	for (const auto &particle : *_particles)
+		arcade::Engine::Graphic().drawText(particle);
+	//Header
+	if (_welcomeTicks == 0) {
+		_headerText->setString("Menu");
+		_headerText->setPosition({28, 1});
+	}
+	arcade::Engine::Graphic().drawText(*_headerText);
+	//Tabs
+	if (_welcomeTicks <= 0) {
+		dispUserTab();
+		dispGamesTab();
+		dispGraphicsTab();
+		dispHighscoresSection();
+	}
 	arcade::Engine::Graphic().render();
-	moveCursor(e);
+	eventHandler((arcade::event::Key)i);
+	if (_welcomeTicks >= 0)
+		_welcomeTicks--;
 }
 
 void Menu::close()
 {
-//	_menu = nullptr;
-//	_libs.clear();
-//	_rect = nullptr;
-	_cursor = 0;
 }
 
-void Menu::moveCursor(int e)
-{
-	if (e == arcade::event::Z && _cursor > 0)
-		setCursorColorUp();
-	else if (e == arcade::event::S && _cursor + 1 < (int) _libs.size())
-		setCursorColorDown();
-	else if (e == arcade::event::Key::ENTER)
-		detectCursorPos();
-}
+/*
+ * DISPLAY
+ */
 
-void Menu::detectCursorPos()
+void Menu::generateBackground()
 {
-	_menuIsActive = false;
-	if (_libs[_cursor].isGame) {
-		std::cout << "$ changeGame()" << std::endl;
-		arcade::Engine::instance().changeGame(_libs[_cursor]._nameString);
-//		close();
-	} else {
+	static int state = 0;
+	static int bgIndex = 0;
+	static int fgIndex = -1;
 
-		std::cout << "$ changeGraphLib()" << std::endl;
-		arcade::Engine::instance().changeGraphLib(_libs[_cursor]._nameString);
-//		close();
+	if (state == 0) {
+		bgIndex = randomBetween(0, (int)_lightColors->size());
+		state = 30;
 	}
+	_bgColor = (*_lightColors)[bgIndex];
+	_bg->setBackgroundColor(_bgColor);
+	if (state % 15 == 0 || fgIndex == -1) {
+		_particles->clear();
+		fgIndex = randomBetween(0, (int)_darkColors->size());
+		for (int i = 0; i < 20; i++) {
+			ui::position pos = {randomBetween(0, 60),
+				randomBetween(3, 60)};
+			int pcRd = randomBetween(0, 3);
+			ui::UIText text(pos, pcRd == 0 ? "*" : pcRd == 1 ? "." : "#");
 
+			text.setBackgroundColor(_bgColor);
+			text.setColor((*_darkColors)[fgIndex]);
+			_particles->emplace_back(text);
+		}
+	}
+	state--;
 }
 
-void Menu::setCursorColorUp()
+void Menu::dispUserTab()
 {
-	arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
-	_libs[_cursor - 1]._name->setColor({255, 255, 0});
-	_libs[_cursor]._name->setColor({0, 0, 0});
-	_cursor -= 1;
+	std::string realPlayerName = arcade::Engine::instance().getPlayerName();
+	std::string UIPlayerName;
+
+	for (int i = 0, oi = 0; i < 6; i++) {
+		if (6 - i > (int)realPlayerName.size())
+			UIPlayerName += "_ ";
+		else {
+			UIPlayerName += realPlayerName[oi];
+			UIPlayerName += " ";
+			oi++;
+		}
+	}
+	if (_usernameFieldError)
+		_playerTab->setBorders(1, {231, 76, 60});
+	else if (_tabIndex == 0)
+		_playerTab->setBorders(1, {255, 255, 255});
+	else if (_tabIndex != 0)
+		_playerTab->setBorders(1, {0, 0, 0});
+	arcade::Engine::Graphic().drawRect(*_playerTab);
+	arcade::Engine::Graphic().drawText(*_usernameText);
+	_usernameField->setString(UIPlayerName);
+	arcade::Engine::Graphic().drawText(*_usernameField);
+	_usernameFieldError = false;
 }
 
-void Menu::setCursorColorDown()
+void Menu::dispGamesTab()
 {
-	arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
-	_libs[_cursor + 1]._name->setColor({255, 255, 0});
-	_libs[_cursor]._name->setColor({0, 0, 0});
-	_cursor += 1;
+	if (_tabIndex == 1)
+		_gamesTab->setBorders(1, {255, 255, 255});
+	else
+		_gamesTab->setBorders(1, {0, 0, 0});
+	arcade::Engine::Graphic().drawRect(*_gamesTab);
+	ui::UIText gameText({4, 20}, "");
+	gameText.setBackgroundColor({0, 0, 0});
+	int i = 0;
+	for (auto const &game : arcade::Engine::instance().getGames()) {
+		gameText.setPosition({gameText.getPosition().x + 8,
+			gameText.getPosition().y});
+		gameText.setString(game.name);
+		if (_gameIndex == i)
+			gameText.setColor({241, 196, 15});
+		else
+			gameText.setColor({189, 195, 199});
+		arcade::Engine::Graphic().drawText(gameText);
+		i++;
+	}
 }
 
-extern "C" IGameApi *entryPoint()
+void Menu::dispGraphicsTab()
 {
-	return new Menu;
+	if (_tabIndex == 2)
+		_graphicsTab->setBorders(1, {255, 255, 255});
+	else
+		_graphicsTab->setBorders(1, {0, 0, 0});
+	arcade::Engine::Graphic().drawRect(*_graphicsTab);
+	ui::UIText graphicText({4, 29}, "");
+	graphicText.setBackgroundColor({0, 0, 0});
+	int i = 0;
+	for (auto const &lib : arcade::Engine::instance().getGraphLibs()) {
+		graphicText.setPosition({graphicText.getPosition().x + 8,
+			graphicText.getPosition().y});
+		graphicText.setString(lib.name);
+		if (_graphicIndex == i)
+			graphicText.setColor({241, 196, 15});
+		else
+			graphicText.setColor({189, 195, 199});
+		arcade::Engine::Graphic().drawText(graphicText);
+		i++;
+	}
+}
+
+void Menu::dispHighscoresSection()
+{
+	_highscoresText->setBackgroundColor(_bgColor);
+	arcade::Engine::Graphic().drawText(*_highscoresText);
+}
+
+/*
+ * ACTIONS
+ */
+
+void Menu::eventHandler(arcade::event::Key key)
+{
+	std::string &playerName = arcade::Engine::instance().getPlayerName();
+	printf("key: %d\n", key);
+	if (key >= 'A' && key <= 'Z' && _tabIndex == 0) {
+		if (playerName.size() < 6)
+			playerName += (char)key;
+		else
+			_usernameFieldError = true;
+	} else if (key == arcade::event::Key::BACKSPACE && !playerName.empty()
+	&& _tabIndex == 0)
+		playerName = playerName.substr(0, playerName.size() - 1);
+	else if (key == arcade::event::Key::TAB) {
+		if (!(_tabIndex == 0 && playerName.empty()))
+			_tabIndex = _tabIndex == 2 ? 0 : _tabIndex + 1;
+		else
+			_usernameFieldError = true;
+	} else {
+		selectsEventHandler(key);
+	}
+}
+
+void Menu::selectsEventHandler(arcade::event::Key key)
+{
+	if (key == arcade::event::Key::D && _tabIndex > 0) {
+		_gameIndex = _tabIndex == 1 ? _gameIndex ==
+			(int)arcade::Engine::instance().getGames().size() - 1
+			? 0 : _gameIndex + 1 : _gameIndex;
+		_graphicIndex = _tabIndex == 2 ? _graphicIndex ==
+			(int)arcade::Engine::instance().getGraphLibs().size()
+				- 1 ? 0 : _graphicIndex + 1 : _graphicIndex;
+		arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
+	} else if (key == arcade::event::Key::Q && _tabIndex > 0) {
+		_gameIndex = _tabIndex == 1 ? _gameIndex == 0
+			? (int)arcade::Engine::instance().getGames().size()
+			- 1 : _gameIndex - 1 : _gameIndex;
+		_graphicIndex = _tabIndex == 2 ? _graphicIndex == 0
+			? (int)arcade::Engine::instance().getGraphLibs().size()
+			- 1 : _graphicIndex - 1 : _graphicIndex;
+		arcade::Engine::Graphic().playSound("assets/mc_hit.wav");
+	} else if (key == arcade::event::Key::ENTER && _tabIndex > 0) {
+		if (_tabIndex == 1)
+			arcade::Engine::instance().changeGame(arcade::Engine::
+			instance().getGames()[_gameIndex].name);
+		else if (_tabIndex == 2)
+			arcade::Engine::instance().changeGraphLib(arcade::
+			Engine::instance().getGraphLibs()[_graphicIndex].name);
+	}
+}
+
+/*
+ * UTILS
+ */
+
+int Menu::randomBetween(int a, int b)
+{
+	if (a + b == 0)
+		throw arcade::EngineException("randomBetween: a + b = 0.");
+
+	return (std::rand() % b + a);
 }

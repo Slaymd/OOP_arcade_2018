@@ -6,8 +6,12 @@
 */
 
 #include "Engine.hpp"
+#include <cstdlib>
+#include <iostream>
+#include <ctime>
 
 int main(int ac, char *av[])
 {
+	std::srand(std::time(nullptr));
 	arcade::Engine::instance().start(ac, av);
 }

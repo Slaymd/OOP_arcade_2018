@@ -85,7 +85,7 @@ namespace arcade {
 		IGameApi *_menu = nullptr;
 
 		std::map<std::string, std::vector<player_t>> _ranking;
-		std::string _playerName = "default";
+		std::string _playerName = "";
 		//Indexes
 
 		int _gameIndex = -1;

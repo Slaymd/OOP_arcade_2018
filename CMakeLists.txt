@@ -13,6 +13,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 file(GLOB SRCFILES *.cpp)
 file(GLOB HSRCFILES *.hpp)
 
-add_executable(arcade ${SRCFILES} ${HSRCFILES} core/main.cpp games/nibbler/Nibbler.cpp games/nibbler/Nibbler.hpp lib/Frame.hpp lib/IElement.hpp lib/AElement.hpp lib/UIRect.hpp lib/UIText.hpp lib/IApi.hpp lib/SFML/SFMLApi.cpp lib/SFML/SFMLApi.hpp core/Engine.hpp games/IGameApi.hpp core/Engine.cpp lib/ncurses/NcursesApi.hpp lib/ncurses/NcursesApi.cpp lib/Events.hpp lib/Qt/QtApi.cpp lib/Qt/QtApi.hpp lib/Qt/QtApiWindow.cpp core/Menu.cpp core/Menu.hpp core/EngineExceptions.hpp lib/UIExceptions.hpp)
+add_executable(arcade ${SRCFILES} ${HSRCFILES} core/main.cpp games/nibbler/Nibbler.cpp games/nibbler/Nibbler.hpp lib/Frame.hpp lib/IElement.hpp lib/AElement.hpp lib/UIRect.hpp lib/UIText.hpp lib/IApi.hpp lib/SFML/SFMLApi.cpp lib/SFML/SFMLApi.hpp core/Engine.hpp games/IGameApi.hpp core/Engine.cpp lib/ncurses/NcursesApi.hpp lib/ncurses/NcursesApi.cpp lib/Events.hpp lib/Qt/QtApi.cpp lib/Qt/QtApi.hpp lib/Qt/QtApiWindow.cpp core/EngineExceptions.hpp lib/UIExceptions.hpp core/Menu.cpp core/Menu.hpp)
 
 target_link_libraries(arcade Qt5::Widgets Qt5::Multimedia)
