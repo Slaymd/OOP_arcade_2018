@@ -150,13 +150,11 @@ void ui::NcursesApi::drawFrame(ui::Frame frame)
 void ui::NcursesApi::playSound(const std::string &string)
 {
 	(void)string;
-	printf("ncurses: playSound not implemented.\n");
 }
 
 void ui::NcursesApi::setTitle(const std::string &string)
 {
 	(void)string;
-	printf("ncurses: setTitle not implemented.\n");
 }
 
 bool ui::NcursesApi::isActive()
