@@ -5,63 +5,56 @@
 ## Build Makefile.
 ##
 
-NAME			=	arcade
+MAC			=	mac
 
-MAKE_CORE		=	make -C./core
+CORE		=	core
 
-MAKE_NIBBLER	=	make -C./games/nibbler
+GAMES		=	games
 
-MAKE_SOLAR	=	make -C./games/solarfox
+GRAPHICALS	=	graphicals
 
-MAKE_SFMLAPI	=	make -C./lib/SFML
-MAKE_NCURSESAPI	=	make -C./lib/ncurses
+all: $(CORE) $(GAMES) $(GRAPHICALS)
 
-MAKE_QTAPI		=	cd ./lib/Qt && cmake . && make && cd -
-MAKE_QTAPI_MAC	=	cd ./lib/Qt && cmake -DCMAKE_PREFIX_PATH=/Users/$(USER)/Qt/5.12.2/clang_64/lib/cmake . && make && cd -
+$(MAC):
+	make -C./games/nibbler mac
+	make -C./games/solarfox mac
+	make -C./lib/SFML
+	make -C./lib/ncurses
+	make -C./core mac
+	cd ./lib/Qt && cmake -DCMAKE_PREFIX_PATH=/Users/$(USER)/Qt/5.12.2/clang_64/lib/cmake . && make && cd -
 
-CLEAN_QTAPI		=	cd ./lib/Qt && rm -rf arcade-qt_autogen ; rm -rf CMakeFiles ; rm -rf cmake_install.cmake ; rm -rf CMakeCache.txt ; rm -rf Makefile
-FCLEAN_QTAPI	=	cd ./lib/Qt && rm -rf arcade-qt_autogen ; rm -rf CMakeFiles ; rm -rf cmake_install.cmake ; rm -rf CMakeCache.txt ; rm -rf Makefile ; rm -rf ../lib_arcade_qt.so
+$(CORE): make_core
 
-all:
-	$(MAKE_NIBBLER)
-	$(MAKE_SOLAR)
-	$(MAKE_SFMLAPI)
-	$(MAKE_NCURSESAPI)
-	$(MAKE_CORE)
-	$(MAKE_QTAPI)
+$(GAMES): make_games
 
-mac:
-	$(MAKE_NIBBLER) mac
-	$(MAKE_SFMLAPI)
-	$(MAKE_SOLAR) mac
-	$(MAKE_NCURSESAPI)
-	$(MAKE_CORE) mac
-	$(MAKE_QTAPI_MAC)
+$(GRAPHICALS): make_graphicals
 
-graphicals:
-	$(MAKE_SFMLAPI)
-	$(MAKE_NCURSESAPI)
-	$(MAKE_QTAPI)
+make_core:
+	make -C./core
 
-game:
-	$(MAKE_NIBBLER)
-	$(MAKE_SOLAR)
+make_games:
+	make -C./games/nibbler
+	make -C./games/solarfox
 
+make_graphicals:
+	make -C./lib/ncurses
+	make -C./lib/SFML
+	cd ./lib/Qt && cmake . && make && cd -
 
 clean:
-	$(MAKE_CORE) clean
-	$(MAKE_SFMLAPI) clean
-	$(MAKE_NCURSESAPI) clean
-	$(MAKE_NIBBLER) clean
-	$(CLEAN_QTAPI)
-	$(MAKE_SOLAR) clean
+	make -C./games/nibbler clean
+	make -C./games/solarfox clean
+	make -C./lib/SFML clean
+	make -C./lib/ncurses clean
+	make -C./core clean
+	cd ./lib/Qt && rm -rf arcade-qt_autogen ; rm -rf CMakeFiles ; rm -rf cmake_install.cmake ; rm -rf CMakeCache.txt ; rm -rf Makefile
 
 fclean: clean
-	$(MAKE_CORE) fclean
-	$(MAKE_SFMLAPI) fclean
-	$(MAKE_NCURSESAPI) fclean
-	$(MAKE_NIBBLER) fclean
-	$(FCLEAN_QTAPI)
-	$(MAKE_SOLAR) fclean
+	make -C./games/nibbler fclean
+	make -C./games/solarfox fclean
+	make -C./lib/SFML fclean
+	make -C./lib/ncurses fclean
+	make -C./core fclean
+	cd ./lib/Qt && rm -rf arcade-qt_autogen ; rm -rf CMakeFiles ; rm -rf cmake_install.cmake ; rm -rf CMakeCache.txt ; rm -rf Makefile ; rm -rf ../lib_arcade_qt.so
 
 re: fclean all
