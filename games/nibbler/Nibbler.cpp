@@ -157,7 +157,7 @@ void Nibbler::displaySnake()
 
 void Nibbler::checkDeath()
 {
-	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 60) {
+	if (_head->getPosition().x <= 0 || _head->getPosition().x >= 60 || _head->getPosition().y <= 0 || _head->getPosition().y >= 60) {
 		_isActive = false;
 	}
 
