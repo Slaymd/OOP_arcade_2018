@@ -59,7 +59,7 @@ void ui::SFMLApi::init()
 	_win = new sf::RenderWindow(sf::VideoMode(FRAMEWIDTH * _scale, FRAMEHEIGHT * _scale), "Arcade");
 	_win->setFramerateLimit(60);
 	_font = new sf::Font();
-	_font->loadFromFile("assets/UbuntuMono-B.ttf");
+	_font->loadFromFile("assets/font.ttf");
 	_isActive = true;
 }
 
