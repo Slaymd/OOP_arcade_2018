@@ -36,14 +36,16 @@ class Nibbler : public IGameApi {
 	private:
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
+	ui::UIText *_winLose;
 	ui::UIRect *_snake;
 	std::vector<ui::position> _snakePos;
 	ui::UIRect *_head;
 	ui::UIRect *_food;
 	ui::UIText *_score;
+	ui::UIRect *_endgame;
 	int _scoreInt = 0;
+	bool _isActive;
 	int _direction = 1;
-	arcade::Engine _engine;
 };
 
 #endif //ARCADE_NIBBLER_HPP

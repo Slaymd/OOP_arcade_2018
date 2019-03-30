@@ -23,9 +23,17 @@ void Nibbler::init()
 	_score = new ui::UIText({9, 0}, "0");
 	_score->setColor({255, 255, 255});
 
-	_snakePos = {{31, 17}, {31, 18}, {31, 19}};
+	_winLose = new ui::UIText({27, 29}, "Game Over");
+	_winLose->setColor({255, 255, 255});
 
-	_head = new ui::UIRect({31, 16}, {1, 1});
+	_endgame = new ui::UIRect({15, 15}, {30, 30});
+	_endgame->setBackgroundColor({10, 10, 10});
+
+	_isActive = true;
+
+	_snakePos = {{31, 29}, {31, 30}, {31, 31}};
+
+	_head = new ui::UIRect({31, 28}, {1, 1});
 	_head->setBackgroundColor({124, 252, 0});
 
 	_snake = new ui::UIRect(_snakePos[0], {1, 1});
@@ -44,15 +52,26 @@ void Nibbler::init()
 void Nibbler::tick(int event)
 {
 	arcade::Engine::Graphic().clean();
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	arcade::Engine::Graphic().drawText(*_name);
-	arcade::Engine::Graphic().drawText(*_scoreText);
-	handleScore();
-	generateFood();
-	moveSnake(event);
-	displaySnake();
-	arcade::Engine::Graphic().drawText(*_score);
-	arcade::Engine::Graphic().drawRect(*_food);
+	if (_isActive) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		arcade::Engine::Graphic().drawText(*_name);
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		handleScore();
+		generateFood();
+		moveSnake(event);
+		displaySnake();
+		arcade::Engine::Graphic().drawText(*_score);
+		arcade::Engine::Graphic().drawRect(*_food);
+	} else {
+		arcade::Engine::Graphic().drawRect(*_endgame);
+		arcade::Engine::Graphic().drawText(*_score);
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		arcade::Engine::Graphic().drawText(*_winLose);
+		if (event == arcade::event::ENTER) {
+			close();
+			init();
+		}
+	}
 	arcade::Engine::Graphic().render();
 }
 
@@ -110,13 +129,9 @@ void Nibbler::autoMove()
 
 void Nibbler::close()
 {
-//	_name = nullptr;
-//	_input = nullptr;
-//	_rect = nullptr;
-//	_snake = nullptr;
-//	_snakePos.clear();
-//	_head = nullptr;
-//	_food = nullptr;
+	_snakePos.clear();
+	_scoreInt = 0;
+	_direction = 1;
 }
 
 void Nibbler::generateFood()
@@ -143,15 +158,12 @@ void Nibbler::displaySnake()
 void Nibbler::checkDeath()
 {
 	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 60) {
-		close();
-		exit(0);
+		_isActive = false;
 	}
 
 	for (auto _snakePo : _snakePos)
-		if (_head->getPosition().x == _snakePo.x && _head->getPosition().y == _snakePo.y) {
-			close();
-			exit(0);
-		}
+		if (_head->getPosition().x == _snakePo.x && _head->getPosition().y == _snakePo.y)
+			_isActive = false;
 }
 
 void Nibbler::moveBody()
