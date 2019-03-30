@@ -31,7 +31,7 @@ void arcade::Engine::start(int ac, char *av[])
 		std::cout << "Usage:" << std::endl;
 		std::cout << "\t" << av[0] << " <path_to_graph_lib.so>"
 		<< std::endl;
-		return;
+		exit(84);
 	}
 	_menu = new Menu();
 	arcade::Engine::instance().load(std::string(av[1]));
@@ -200,8 +200,7 @@ std::vector<std::string> arcade::Engine::getSharedLibPaths(
 	}
 	defaultExist = defaultPath.length() == 0 ? true : defaultExist;
 	if (!defaultExist)
-		throw EngineException("load: graph lib `" + defaultPath +
-		"` doesn't exist.");
+		exit(84);
 	return sharedLibs;
 }
 
