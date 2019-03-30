@@ -84,10 +84,10 @@ void SolarFox::tick(int e)
 	handleScore();
 	arcade::Engine::Graphic().drawText(*_scoreText);
 	arcade::Engine::Graphic().drawText(*_score);
+	handleFood();
 	handleShot();
 	moveShip(e);
 	moveEnemy();
-	handleFood();
 	handleEnnemyShot();
 	drawShip();
 	handleCollision();
@@ -101,6 +101,10 @@ void SolarFox::tick(int e)
 //4 == bas
 void SolarFox::handleCollision()
 {
+	if (_canon.x >= 49 || _canon.y >= 49 || _canon.x <= 10 || _canon.y <= 10) {
+		close();
+		init();
+	}
 	switch (_direction) {
 	case 1 :
 		handleCollisionRight();
@@ -123,7 +127,7 @@ void SolarFox::handleCollision()
 void SolarFox::handleFood()
 {
 	for (auto &_food : _foods) {
-		if (_food.getPosition().x == _shot->getPosition().x && _food.getPosition().y == _shot->getPosition().y) {
+		if ((_food.getPosition().x == _shot->getPosition().x && _food.getPosition().y == _shot->getPosition().y) || (_food.getPosition().x == _canon.x && _food.getPosition().y == _canon.y)) {
 			_food.setPosition({0, 0});
 			_scoreInt += 1;
 		}
@@ -354,7 +358,7 @@ void SolarFox::autoMove()
 void SolarFox::handleCollisionLeft()
 {
 	for (auto &shot : _enemyLeftShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipLeft)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -363,7 +367,7 @@ void SolarFox::handleCollisionLeft()
 			}
 	}
 	for (auto &shot : _enemyRightShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipLeft)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -372,7 +376,7 @@ void SolarFox::handleCollisionLeft()
 			}
 	}
 	for (auto &shot : _enemyUpShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipLeft)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -381,7 +385,7 @@ void SolarFox::handleCollisionLeft()
 			}
 	}
 	for (auto &shot : _enemyDownShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipLeft)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -394,7 +398,7 @@ void SolarFox::handleCollisionLeft()
 void SolarFox::handleCollisionRight()
 {
 	for (auto &shot : _enemyRightShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipRight)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -403,7 +407,7 @@ void SolarFox::handleCollisionRight()
 			}
 	}
 	for (auto &shot : _enemyLeftShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipRight)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -412,7 +416,7 @@ void SolarFox::handleCollisionRight()
 			}
 	}
 	for (auto &shot : _enemyUpShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipRight)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -421,7 +425,7 @@ void SolarFox::handleCollisionRight()
 			}
 	}
 	for (auto &shot : _enemyDownShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipRight)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -434,7 +438,7 @@ void SolarFox::handleCollisionRight()
 void SolarFox::handleCollisionUp()
 {
 	for (auto &shot : _enemyUpShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipUp)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -443,7 +447,7 @@ void SolarFox::handleCollisionUp()
 			}
 	}
 	for (auto &shot : _enemyRightShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipUp)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -452,7 +456,7 @@ void SolarFox::handleCollisionUp()
 			}
 	}
 	for (auto &shot : _enemyLeftShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipUp)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -461,7 +465,7 @@ void SolarFox::handleCollisionUp()
 			}
 	}
 	for (auto &shot : _enemyDownShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipUp)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -474,7 +478,7 @@ void SolarFox::handleCollisionUp()
 void SolarFox::handleCollisionDown()
 {
 	for (auto &shot : _enemyDownShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipDown)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -483,7 +487,7 @@ void SolarFox::handleCollisionDown()
 			}
 	}
 	for (auto &shot : _enemyUpShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipDown)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -492,7 +496,7 @@ void SolarFox::handleCollisionDown()
 			}
 	}
 	for (auto &shot : _enemyLeftShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipDown)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
@@ -501,7 +505,7 @@ void SolarFox::handleCollisionDown()
 			}
 	}
 	for (auto &shot : _enemyRightShot) {
-		if (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y)
+		if ((_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {0, 0};
 		for (const auto &ship : _shipDown)
 			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
