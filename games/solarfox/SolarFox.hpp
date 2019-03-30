@@ -36,7 +36,9 @@ class SolarFox : public IGameApi {
 	void handleCollisionDown();
 	void handleCollision();
 	void drawShip();
+	void closeLose();
 	void moveEnemy();
+	void handleWin();
 
 
 	private:
@@ -49,6 +51,7 @@ class SolarFox : public IGameApi {
 
 	ui::position _canon;
 	ui::UIRect *_area;
+	ui::UIRect *_endGame;
 	ui::UIRect *_shot;
 
 	std::vector<ui::UIRect> _enemyRight;
@@ -64,6 +67,8 @@ class SolarFox : public IGameApi {
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
 	ui::UIText *_score;
+	ui::UIText *_win;
+	ui::UIText *_loose;
 	int _scoreInt = 0;
 	int _lastDirextion = 2;
 	int _moveRight = 1;
