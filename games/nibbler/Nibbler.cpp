@@ -129,7 +129,6 @@ void Nibbler::autoMove()
 
 void Nibbler::close()
 {
-	//TODO: free that
 	delete _frame;
 	delete _name;
 	delete _score;
@@ -167,7 +166,7 @@ void Nibbler::displaySnake()
 
 void Nibbler::checkDeath()
 {
-	if (_head->getPosition().x < 0 || _head->getPosition().x > 60 || _head->getPosition().y < 0 || _head->getPosition().y > 60) {
+	if (_head->getPosition().x <= 0 || _head->getPosition().x >= 60 || _head->getPosition().y <= 0 || _head->getPosition().y >= 60) {
 		arcade::Engine::instance().addScore(_scoreInt);
 		close();
 		init();
