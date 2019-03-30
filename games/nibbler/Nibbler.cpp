@@ -201,7 +201,7 @@ void Nibbler::restart()
 	close();
 }
 
-extern "C" IGameApi *entryPoint()
+extern "C" IGameApi *entryPointGame()
 {
 	return new Nibbler();
 }

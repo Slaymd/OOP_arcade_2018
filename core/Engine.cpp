@@ -65,7 +65,7 @@ void arcade::Engine::load(std::string defaultLib)
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
 		if (!handleGame)
 			throw EngineException("load: dlopen of " + gamePath + " failed: " + dlerror());
-		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
+		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPointGame");
 		if (!gameEntryPoint)
 			throw EngineException("load: dlsym of " + gamePath + " failed: " + dlerror());
 		IGameApi *game = gameEntryPoint();
