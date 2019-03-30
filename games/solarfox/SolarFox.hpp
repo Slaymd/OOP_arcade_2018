@@ -36,13 +36,12 @@ class SolarFox : public IGameApi {
 	void handleCollisionDown();
 	void handleCollision();
 	void drawShip();
-	void closeLose();
 	void moveEnemy();
 	void handleWin();
+	void handleLose();
 
 
 	private:
-	ui::Frame *_frame;
 	std::vector<ui::position> _shipRight;
 	std::vector<ui::position> _shipLeft;
 	std::vector<ui::position> _shipUp;
@@ -67,20 +66,18 @@ class SolarFox : public IGameApi {
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
 	ui::UIText *_score;
-	ui::UIText *_win;
-	ui::UIText *_loose;
+	ui::UIText *_winLose;
 	int _scoreInt = 0;
-	int _lastDirextion = 2;
 	int _moveRight = 1;
 	int _moveLeft = -1;
 	int _moveUp = -1;
 	int _moveDown = 1;
+	bool _isActive;
 
 	int _shotRange = 0;
 	int _direction;
 
 	int _lastDirection = 2;
-	arcade::Engine _engine;
 };
 
 #endif //ARCADE_SOLARFOX_HPP

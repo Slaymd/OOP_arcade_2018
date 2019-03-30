@@ -18,24 +18,23 @@ void SolarFox::init()
 	ui::position tmpFood = {static_cast<int>(random()) % 50 + 10, static_cast<int>(random()) % 50 + 10};
 	//Init text
 	_name = new ui::UIText({30, 0}, "SOLARFOX");
-	_name->setColor({255, 255, 255});
+	_name->setColor({155, 155, 155});
 
-	_win = new ui::UIText({25, 30}, "YOU WIN");
-	_win->setColor({255, 255, 255});
+	_winLose = new ui::UIText({27, 29}, "Press Enter");
+	_winLose->setColor({255, 255, 255});
 
-	_loose = new ui::UIText({25, 30}, "YOU LOOSE");
-	_loose->setColor({255, 255, 255});
+	_endGame = new ui::UIRect({15, 15}, {30, 30});
+	_endGame->setBackgroundColor({10, 10, 10});
 
 	_scoreText = new ui::UIText({3, 0}, "SCORE : ");
-	_scoreText->setColor({255, 255, 255});
+	_scoreText->setColor({155, 155, 155});
 
-	_endGame = new ui::UIRect({20, 20}, {10, 10});
-	_endGame->setBackgroundColor({124, 252, 5});
 
 	_score = new ui::UIText({9, 0}, "0");
-	_score->setColor({255, 255, 255});
+	_score->setColor({155, 155, 155});
 
 	_direction = 2; //haut
+	_isActive = true;
 
 	//set rect
 	_ship = new ui::UIRect({30, 30}, {1, 1});
@@ -62,7 +61,7 @@ void SolarFox::init()
 		ui::UIRect food = ui::UIRect(tmpFood, {1, 1});
 		food.setBackgroundColor({120, 56, 31});
 		_foods.push_back(food);
-		tmpFood = {static_cast<int>(random()) % 40 + 6, static_cast<int>(random()) % 40 + 6};
+		tmpFood = {static_cast<int>(random()) % 35 + 6, static_cast<int>(random()) % 35 + 6};
 	}
 	//set ennemy color
 	_enemyLeft[0].setBackgroundColor({220, 20, 60});
@@ -73,7 +72,6 @@ void SolarFox::init()
 	_enemyUp[1].setBackgroundColor({220, 20, 60});
 	_enemyDown[0].setBackgroundColor({220, 20, 60});
 	_enemyDown[1].setBackgroundColor({220, 20, 60});
-
 
 
 	_area = new ui::UIRect({2, 2}, {56, 56});
@@ -87,21 +85,33 @@ void SolarFox::init()
 void SolarFox::tick(int e)
 {
 	arcade::Engine::Graphic().clean();
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	arcade::Engine::Graphic().drawRect(*_area);
-	arcade::Engine::Graphic().drawText(*_name);
-	handleScore();
-	handleCollision();
-	arcade::Engine::Graphic().drawText(*_scoreText);
-	arcade::Engine::Graphic().drawText(*_score);
-	handleFood();
-	moveShip(e);
-	moveEnemy();
-	handleEnnemyShot();
-	drawShip();
-	handleShot();
-	arcade::Engine::Graphic().drawRect(*_shot);
-	handleWin();
+	if (_isActive) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		arcade::Engine::Graphic().drawRect(*_area);
+		arcade::Engine::Graphic().drawText(*_name);
+		handleScore();
+		handleCollision();
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		arcade::Engine::Graphic().drawText(*_score);
+		handleFood();
+		moveShip(e);
+		moveEnemy();
+		handleEnnemyShot();
+		drawShip();
+		handleShot();
+		arcade::Engine::Graphic().drawRect(*_shot);
+		handleWin();
+	} else {
+		arcade::Engine::Graphic().drawRect(*_endGame);
+		arcade::Engine::Graphic().drawText(*_winLose);
+		arcade::Engine::Graphic().drawText(*_scoreText);
+		arcade::Engine::Graphic().drawText(*_score);
+		if (e == arcade::event::ENTER) {
+			_isActive = true;
+			close();
+			init();
+		}
+	}
 	arcade::Engine::Graphic().render();
 }
 
@@ -111,10 +121,8 @@ void SolarFox::tick(int e)
 //4 == bas
 void SolarFox::handleCollision()
 {
-	if (_canon.x >= 56 || _canon.y >= 56 || _canon.x <= 3 || _canon.y <= 3) {
-		close();
-		init();
-	}
+	if (_canon.x >= 56 || _canon.y >= 56 || _canon.x <= 3 || _canon.y <= 3)
+		handleLose();
 	switch (_direction) {
 	case 1 :
 		handleCollisionRight();
@@ -280,7 +288,6 @@ void SolarFox::close()
 	_enemyDownShot.clear();
 	_foods.clear();
 	_scoreInt = 0;
-	_lastDirextion = 2;
 	_moveRight = 1;
 	_moveLeft = -1;
 	_moveUp = -1;
@@ -297,7 +304,7 @@ void SolarFox::handleScore()
 
 void SolarFox::handleShot()
 {
-	if (_shotRange > 3) {
+	if (_shotRange > 2) {
 		_shotRange = 0;
 		_shot->setPosition({_canon.x, _canon.y});
 	}
@@ -380,37 +387,29 @@ void SolarFox::handleCollisionLeft()
 		if ((_canon.x - 2 == shot.x && _canon.y == shot.y) || (_canon.x - 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipLeft)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyRightShot) {
 		if ((_canon.x - 2 == shot.x && _canon.y == shot.y) || (_canon.x - 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipLeft)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyUpShot) {
 		if ((_canon.x - 2 == shot.x && _canon.y == shot.y) || (_canon.x - 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipLeft)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyDownShot) {
 		if ((_canon.x - 2 == shot.x && _canon.y == shot.y) || (_canon.x - 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipLeft)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 }
 
@@ -420,37 +419,29 @@ void SolarFox::handleCollisionRight()
 		if ((_canon.x + 2 == shot.x && _canon.y == shot.y) || (_canon.x + 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipRight)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyLeftShot) {
 		if ((_canon.x + 2 == shot.x && _canon.y == shot.y) || (_canon.x + 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipRight)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyUpShot) {
 		if ((_canon.x + 2 == shot.x && _canon.y == shot.y) || (_canon.x + 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipRight)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyDownShot) {
 		if ((_canon.x + 2 == shot.x && _canon.y == shot.y) || (_canon.x + 1 == shot.x && _canon.y == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipRight)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 }
 
@@ -460,37 +451,29 @@ void SolarFox::handleCollisionUp()
 		if ((_canon.x == shot.x && _canon.y - 1 == shot.y) || (_canon.x == shot.x && _canon.y - 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipUp)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyRightShot) {
 		if ((_canon.x == shot.x && _canon.y - 1 == shot.y) || (_canon.x == shot.x && _canon.y - 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipUp)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyLeftShot) {
 		if ((_canon.x == shot.x && _canon.y - 1 == shot.y) || (_canon.x == shot.x && _canon.y - 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipUp)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyDownShot) {
 		if ((_canon.x == shot.x && _canon.y - 1 == shot.y) || (_canon.x == shot.x && _canon.y - 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipUp)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 }
 
@@ -500,82 +483,47 @@ void SolarFox::handleCollisionDown()
 		if ((_canon.x == shot.x && _canon.y + 1 == shot.y) || (_canon.x == shot.x && _canon.y + 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipDown)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyUpShot) {
 		if ((_canon.x == shot.x && _canon.y + 1 == shot.y) || (_canon.x == shot.x && _canon.y + 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipDown)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyLeftShot) {
 		if ((_canon.x == shot.x && _canon.y + 1 == shot.y) || (_canon.x == shot.x && _canon.y + 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipDown)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 	for (auto &shot : _enemyRightShot) {
 		if ((_canon.x == shot.x && _canon.y + 1 == shot.y) || (_canon.x == shot.x && _canon.y + 2 == shot.y) || (_shot->getPosition().x == shot.x && _shot->getPosition().y == shot.y) || (_canon.x == shot.x && _canon.y == shot.y))
 			shot = {-1, -1};
 		for (const auto &ship : _shipDown)
-			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y) {
-				closeLose();
-				init();
-			}
+			if (ship.x + _ship->getPosition().x == shot.x && ship.y + _ship->getPosition().y == shot.y)
+				handleLose();
 	}
 }
 
 void SolarFox::handleWin()
 {
-	if (_foods.empty()) {
-		arcade::Engine::Graphic().clean();
-		arcade::Engine::Graphic().drawRect(*_endGame);
-		arcade::Engine::Graphic().drawText(*_win);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		arcade::Engine::Graphic().render();
-		close();
-		init();
+	int i = 0;
+
+	for (; i < (int)_foods.size() && _foods[i].getPosition().x == -1 && _foods[i].getPosition().y == -1; i++);
+	if (i == (int)_foods.size()) {
+		_isActive = false;
+		_winLose->setString("YOU WIN");
 	}
 }
 
-void SolarFox::closeLose()
+void SolarFox::handleLose()
 {
-	_shipRight.clear();
-	_shipLeft.clear();
-	_shipUp.clear();
-	_shipDown.clear();
-	_enemyRight.clear();
-	_enemyLeft.clear();
-	_enemyUp.clear();
-	_enemyDown.clear();
-	_enemyRightShot.clear();
-	_enemyLeftShot.clear();
-	_enemyUpShot.clear();
-	_enemyDownShot.clear();
-	_foods.clear();
-	_scoreInt = 0;
-	_lastDirextion = 2;
-	_moveRight = 1;
-	_moveLeft = -1;
-	_moveUp = -1;
-	_moveDown = 1;
-	_shotRange = 0;
-	_direction = 2;
-	_lastDirection = 2;
-	arcade::Engine::Graphic().clean();
-	arcade::Engine::Graphic().drawRect(*_endGame);
-	arcade::Engine::Graphic().drawText(*_loose);
-	arcade::Engine::Graphic().render();
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	_winLose->setString("YOU LOSE");
+	_isActive = false;
 }
 
 extern "C" IGameApi *entryPoint()
