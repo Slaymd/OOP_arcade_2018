@@ -214,11 +214,11 @@ void SolarFox::moveShip(int e)
 		_lastDirection = _direction;
 		_direction = 1;
 		break;
-	case arcade::event::W :
+	case arcade::event::Z :
 		_lastDirection = _direction;
 		_direction = 2;
 		break;
-	case arcade::event::A :
+	case arcade::event::Q :
 		_lastDirection = _direction;
 		_direction = 3;
 		break;
