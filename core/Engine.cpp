@@ -31,7 +31,7 @@ void arcade::Engine::start(int ac, char *av[])
 		std::cout << "Usage:" << std::endl;
 		std::cout << "\t" << av[0] << " <path_to_graph_lib.so>"
 		<< std::endl;
-		return;
+		exit(84);
 	}
 	_menu = new Menu();
 	arcade::Engine::instance().load(std::string(av[1]));
@@ -65,7 +65,7 @@ void arcade::Engine::load(std::string defaultLib)
 		void *handleGame = dlopen(gamePath.c_str(), RTLD_LAZY);
 		if (!handleGame)
 			throw EngineException("load: dlopen of " + gamePath + " failed: " + dlerror());
-		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPoint");
+		gameEntryPoint = (IGameApi *(*)())dlsym(handleGame, "entryPointGame");
 		if (!gameEntryPoint)
 			throw EngineException("load: dlsym of " + gamePath + " failed: " + dlerror());
 		IGameApi *game = gameEntryPoint();
@@ -200,8 +200,7 @@ std::vector<std::string> arcade::Engine::getSharedLibPaths(
 	}
 	defaultExist = defaultPath.length() == 0 ? true : defaultExist;
 	if (!defaultExist)
-		throw EngineException("load: graph lib `" + defaultPath +
-		"` doesn't exist.");
+		exit(84);
 	return sharedLibs;
 }
 
