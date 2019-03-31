@@ -36,7 +36,6 @@ class Nibbler : public IGameApi {
 
 
 	private:
-	ui::Frame *_frame;
 	ui::UIText *_name;
 	ui::UIText *_scoreText;
 	ui::UIText *_winLose;

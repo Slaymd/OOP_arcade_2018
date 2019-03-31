@@ -31,6 +31,9 @@ void Nibbler::init()
 
 	_isActive = true;
 
+	_scoreInt = 0;
+	_direction = 1;
+
 	_snakePos = {{31, 29}, {31, 30}, {31, 31}};
 
 	_head = new ui::UIRect({31, 28}, {1, 1});
@@ -46,7 +49,7 @@ void Nibbler::init()
 	bgRect.setBackgroundColor({255, 145, 0});
 
 	srand(time(nullptr));
-	_food->setPosition({(int)rand() % 60, (int)rand() % 60});
+	_food->setPosition({(int)rand() % 59, (int)rand() % 59});
 }
 
 void Nibbler::tick(int event)
@@ -93,8 +96,8 @@ void Nibbler::moveSnake(int e)
 		_direction = 4;
 	else if (e == arcade::event::D && _direction == 4)
 		_direction = 1;
-	checkDeath();
 	autoMove();
+	checkDeath();
 
 
 }
@@ -129,7 +132,6 @@ void Nibbler::autoMove()
 
 void Nibbler::close()
 {
-	delete _frame;
 	delete _name;
 	delete _score;
 	delete _scoreText;
@@ -168,17 +170,13 @@ void Nibbler::checkDeath()
 {
 	if (_head->getPosition().x <= 0 || _head->getPosition().x >= 60 || _head->getPosition().y <= 0 || _head->getPosition().y >= 60) {
 		arcade::Engine::instance().addScore(_scoreInt);
-		close();
-		init();
-		return;
+		_isActive = false;
 	}
 
 	for (auto _snakePo : _snakePos)
 		if (_head->getPosition().x == _snakePo.x && _head->getPosition().y == _snakePo.y) {
 			arcade::Engine::instance().addScore(_scoreInt);
-			close();
-			init();
-			return;
+			_isActive = false;
 		}
 }
 
@@ -197,8 +195,8 @@ void Nibbler::handleScore()
 
 void Nibbler::restart()
 {
-	init();
 	close();
+	init();
 }
 
 extern "C" IGameApi *entryPoint()
