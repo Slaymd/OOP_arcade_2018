@@ -19,21 +19,21 @@ namespace ui {
 		~AElement() = default;
 
 		void setPosition(position pos) override { _pos = pos; }
-		position getPosition() override { return _pos; }
+		position getPosition() const override { return _pos; }
 
 		void setSize(size size) override { _size = size; }
-		size getSize() override { return _size; }
+		size getSize() const override { return _size; }
 
 		void setBackgroundColor(color color) override { _backgroundColor = color; }
-		color getBackgroundColor() override { return _backgroundColor; }
+		color getBackgroundColor() const override { return _backgroundColor; }
 		void setBackgroundImage(std::string string) override { _backgroundImage = string; }
-		std::string getBackgroundImage() override { return _backgroundImage; }
+		std::string getBackgroundImage() const override { return _backgroundImage; }
 
 		void setBorders(int weight, color color) override { _borderWeight = weight; _borderColor = color; }
 		void setBorderColor(color color) override { _borderColor = color; }
-		color getBorderColor() override { return _borderColor; }
+		color getBorderColor() const override { return _borderColor; }
 		void setBorderWeight(int weight) override { _borderWeight = weight; }
-		int getBorderWeight() override { return _borderWeight; }
+		int getBorderWeight() const override { return _borderWeight; }
 
 		private:
 		position _pos = {0, 0};

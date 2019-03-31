@@ -11,6 +11,7 @@ lib_arcade_nibbler.so
 lib_arcade_ncurses.so
 lib_arcade_qt.so
 lib_arcade_solarfox.so
+lib_arcade_*.so
 CMakeFiles
 CMakeCache.txt
 cmake_install.cmake
