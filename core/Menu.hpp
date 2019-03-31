@@ -34,6 +34,7 @@ class Menu : public IGameApi {
 	void dispGamesTab();
 	void dispGraphicsTab();
 	void dispHighscoresSection();
+	void dispHelpTab();
 
 	/* ACTIONS */
 
@@ -68,9 +69,14 @@ class Menu : public IGameApi {
 	//Highscores section
 	ui::UIText *_highscoresText = nullptr;
 
-	int _welcomeTicks = 25;
+	//Help tab
+	ui::UIText *_howToText = nullptr;
+	ui::UIRect *_helpTab = nullptr;
+	//TODO: help elements here
 
+	int _welcomeTicks = 25;
 	int _tabIndex = 0;
+	bool _helpDisplayed = false;
 
 	std::vector<ui::color> *_darkColors = nullptr;
 	std::vector<ui::color> *_lightColors = nullptr;

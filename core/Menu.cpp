@@ -50,6 +50,14 @@ void Menu::init()
 	_highscoresText->setBackgroundColor(_bgColor);
 	_highscoresText->setColor({0, 0, 0});
 
+	_helpTab = new ui::UIRect({10, 10}, {40, 40});
+	_helpTab->setBackgroundColor({0, 0, 0});
+	_helpTab->setBorders(1, {255, 255, 255});
+
+	_howToText = new ui::UIText({10, 55}, "press SPACE to show help.");
+	_howToText->setBackgroundColor({0, 0, 0});
+	_howToText->setColor({0, 0, 0});
+
 	_welcomeTicks = 25;
 	_tabIndex = 0;
 }
@@ -65,18 +73,24 @@ void Menu::tick(int i)
 	for (const auto &particle : *_particles)
 		arcade::Engine::Graphic().drawText(particle);
 	//Header
-	if (_welcomeTicks == 0) {
+	if (_welcomeTicks <= 0) {
 		_headerText->setString("Menu");
 		_headerText->setPosition({28, 1});
 	}
-	arcade::Engine::Graphic().drawText(*_headerText);
 	//Tabs
 	if (_welcomeTicks <= 0) {
-		dispUserTab();
-		dispGamesTab();
-		dispGraphicsTab();
-		dispHighscoresSection();
+		if (_helpDisplayed) {
+			dispHelpTab();
+		} else {
+			dispUserTab();
+			dispGamesTab();
+			dispGraphicsTab();
+			dispHighscoresSection();
+			_howToText->setBackgroundColor(_bgColor);
+			arcade::Engine::Graphic().drawText(*_howToText);
+		}
 	}
+	arcade::Engine::Graphic().drawText(*_headerText);
 	arcade::Engine::Graphic().render();
 	eventHandler((arcade::event::Key)i);
 	if (_welcomeTicks >= 0)
@@ -222,6 +236,12 @@ void Menu::dispHighscoresSection()
 	}
 }
 
+void Menu::dispHelpTab()
+{
+	_headerText->setString("Help");
+	arcade::Engine::Graphic().drawRect(*_helpTab);
+}
+
 /*
  * ACTIONS
  */
@@ -242,7 +262,10 @@ void Menu::eventHandler(arcade::event::Key key)
 			_tabIndex = _tabIndex == 2 ? 0 : _tabIndex + 1;
 		else
 			_usernameFieldError = true;
-	} else
+	} else if (_welcomeTicks <= 0 &&
+	key == arcade::event::Key::SPACE)
+		_helpDisplayed = !_helpDisplayed;
+	else
 		selectsEventHandler(key);
 }
 

@@ -62,8 +62,6 @@ void ui::QtApi::init()
 
 	_isActive = true;
 
-	printf("Qt init\n");
-
 	if (_app == nullptr)
 		_app = new QApplication(argc, argv);
 
@@ -91,7 +89,6 @@ void ui::QtApi::close()
 {
 	if (!_isActive)
 		return;
-	printf("Qt close\n");
 	_isActive = false;
 	_win->close();
 	qApp->closingDown();
