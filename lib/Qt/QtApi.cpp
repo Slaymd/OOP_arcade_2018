@@ -5,9 +5,7 @@
 ** Darius
 */
 
-#include <QPushButton>
 #include <QMainWindow>
-#include <QSound>
 #include "QtApi.hpp"
 
 /*
@@ -64,19 +62,32 @@ void ui::QtApi::init()
 
 	_isActive = true;
 
+	printf("Qt init\n");
+
 	if (_app == nullptr)
 		_app = new QApplication(argc, argv);
 
+			printf("Qt init window\n");
+
 	_win = new QtApiWindow(this);
 	_win->show();
+
+		printf("Qt end init\n");
 }
 
 void ui::QtApi::render()
 {
 	if (!_isActive)
 		return;
+			printf("Qt render update\n");
 	_win->update();
-	qApp->processEvents();
+		printf("Qt render processEvents\n");
+	try {
+		qApp->processEvents();
+	} catch (...) {
+		printf("bad alloc\n");
+	}
+		printf("Qt end render\n");
 }
 
 void ui::QtApi::clean()
@@ -85,17 +96,24 @@ void ui::QtApi::clean()
 
 void ui::QtApi::close()
 {
+	if (!_isActive)
+		return;
+	printf("Qt close\n");
 	_isActive = false;
 	_win->close();
-	_win = nullptr;
-	_app->closingDown();
+		printf("Qt closingdown\n");
+	qApp->closingDown();
+		printf("Qt end close\n");
 	delete _app;
+	delete _win;
 	_app = nullptr;
+	_win = nullptr;
 	_lastEvent = -1;
 }
 
 int ui::QtApi::getEvent()
 {
+		printf("Qt getEvent\n");
 	int lastEvent = _lastEvent;
 	_lastEvent = -1;
 	return lastEvent;
@@ -103,6 +121,7 @@ int ui::QtApi::getEvent()
 
 void ui::QtApi::drawText(ui::UIText text)
 {
+		printf("Qt drawText\n");
 	if (!_isActive)
 		return;
 	_win->addText(text);
@@ -110,6 +129,7 @@ void ui::QtApi::drawText(ui::UIText text)
 
 void ui::QtApi::drawRect(ui::UIRect rect)
 {
+		printf("Qt drawRect\n");
 	if (!_isActive)
 		return;
 	_win->addRect(rect);
@@ -134,7 +154,8 @@ void ui::QtApi::drawFrame(ui::Frame frame)
 
 void ui::QtApi::playSound(const std::string &string)
 {
-	QSound::play(string.c_str());
+	(void)string;
+	//QSound::play(string.c_str());
 }
 
 void ui::QtApi::setTitle(const std::string &string)

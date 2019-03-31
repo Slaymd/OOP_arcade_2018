@@ -47,8 +47,8 @@ namespace ui {
 
 		sf::RenderWindow *_win = nullptr;
 		sf::Font *_font = nullptr;
-		sf::SoundBuffer *_soundBuffer = nullptr;
-		sf::Sound *_sound = nullptr;
+		// sf::SoundBuffer *_soundBuffer = nullptr;
+		// sf::Sound *_sound = nullptr;
 		std::unordered_map<std::string, sf::Texture> _assets;
 		int _scale = 20;
 		bool _isActive = true;

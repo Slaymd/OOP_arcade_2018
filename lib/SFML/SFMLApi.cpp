@@ -160,15 +160,16 @@ void ui::SFMLApi::drawFrame(ui::Frame frame)
 
 void ui::SFMLApi::playSound(const std::string &path)
 {
-	if (_soundBuffer == nullptr)
-		_soundBuffer = new sf::SoundBuffer;
-	if (!_soundBuffer->loadFromFile(path))
-		return;
-	if (_sound == nullptr)
-		_sound = new sf::Sound;
-	_sound->stop();
-	_sound->setBuffer(*_soundBuffer);
-	_sound->play();
+	(void)path;
+	// if (_soundBuffer == nullptr)
+	// 	_soundBuffer = new sf::SoundBuffer;
+	// if (!_soundBuffer->loadFromFile(path))
+	// 	return;
+	// if (_sound == nullptr)
+	// 	_sound = new sf::Sound;
+	// _sound->stop();
+	// _sound->setBuffer(*_soundBuffer);
+	// _sound->play();
 }
 
 void ui::SFMLApi::setTitle(const std::string &string)

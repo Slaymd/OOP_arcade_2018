@@ -46,7 +46,7 @@ void arcade::Engine::start(int ac, char *av[])
 			break;
 		arcade::Engine::instance().getCurrentGame()->tick(e);
 	}
-	arcade::Engine::instance().closeHandlers();
+	// arcade::Engine::instance().closeHandlers();
 	saveScores();
 }
 
