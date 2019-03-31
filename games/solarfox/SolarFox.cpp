@@ -276,6 +276,7 @@ void SolarFox::moveEnemy()
 
 void SolarFox::close()
 {
+	arcade::Engine::instance().addScore(_scoreInt);
 	_shipRight.clear();
 	_shipLeft.clear();
 	_shipUp.clear();
@@ -515,7 +516,6 @@ void SolarFox::handleCollisionDown()
 void SolarFox::handleWin()
 {
 	int i = 0;
-	arcade::Engine::instance().addScore(_scoreInt);
 
 	for (; i < (int)_foods.size() && _foods[i].getPosition().x == -1 && _foods[i].getPosition().y == -1; i++);
 	if (i == (int)_foods.size()) {
@@ -526,7 +526,6 @@ void SolarFox::handleWin()
 
 void SolarFox::handleLose()
 {
-	arcade::Engine::instance().addScore(_scoreInt);
 	_winLose->setString("YOU LOSE");
 	_isActive = false;
 }
