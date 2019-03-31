@@ -168,7 +168,7 @@ void Nibbler::displaySnake()
 
 void Nibbler::checkDeath()
 {
-	if (_head->getPosition().x <= 0 || _head->getPosition().x >= 60 || _head->getPosition().y <= 0 || _head->getPosition().y >= 60) {
+	if (_head->getPosition().x < 0 || _head->getPosition().x >= 60 || _head->getPosition().y < 0 || _head->getPosition().y >= 60) {
 		arcade::Engine::instance().addScore(_scoreInt);
 		_isActive = false;
 	}
